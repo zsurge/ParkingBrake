@@ -1,0 +1,15 @@
+"..\HEX\STARTUP.obj",
+"..\HEX\autorun.obj",
+"..\HEX\Main.obj",
+"..\HEX\buzz.obj",
+"..\HEX\err.obj",
+"..\HEX\output.obj",
+"..\HEX\clk.obj",
+"..\HEX\USART.obj",
+"..\HEX\input.obj",
+"..\HEX\motor.obj",
+"..\HEX\run.obj",
+"..\HEX\EEPROM.obj",
+"..\HEX\romtest.obj" 
+TO "..\HEX\LJDZ" 
+PRINT(".\LJDZ.m51") RAMSIZE(256) 

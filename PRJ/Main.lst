@@ -1,0 +1,60 @@
+C51 COMPILER V9.01   MAIN                                                                  03/01/2019 15:37:16 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN ..\HEX\Main.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\SCR\Main.c BROWSE INCDIR(..\INC) DEBUG OBJECTEXTEND PRINT(.\Main.lst) OB
+                    -JECT(..\HEX\Main.obj)
+
+line level    source
+
+   1          /****************************************************************************
+   2          * File:                 main.c                                                                                                          *
+   3          * Created:              2017-04-25                                                                                                      *
+   4          * Last Change:                                                                                                                          *
+   5          * Author:               chen zhi peng                                                                                           *
+   6          * Description:                                                                                                                          *
+   7          ****************************************************************************/
+   8          #include "main.h"
+   9          
+  10          //设备程序版本号                         
+  11          u8 const code PG_Version[]={VER0, VER1, VER2, YEAR, MOON, DATE};
+  12          
+  13          //存储器写识别码
+  14          u8 const code eight=((YEAR | MOON | DATE | BAIZHA)+DATE+3);
+  15          
+  16          
+  17          
+  18           
+  19           /******************** 主函数**************************/
+  20          void main()
+  21          {
+  22   1              sysint();
+  23   1              while (1)
+  24   1              {
+  25   2                      clk();
+  26   2                      InputTask();
+  27   2                      iTaskControl();
+  28   2                      mTaskControl();
+  29   2                      err_task();
+  30   2                      Buzz_task(BuzzMode);            //蜂鸣器任务
+  31   2                      OPutTask();
+  32   2                      uart_aly();
+  33   2                      AtRun();
+  34   2                      WDT_reset(7);
+  35   2              }
+  36   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     40    ----
+   CONSTANT SIZE    =      7    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

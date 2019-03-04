@@ -1,0 +1,91 @@
+C51 COMPILER V9.01   OUTPUT                                                                03/01/2019 15:37:16 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE OUTPUT
+OBJECT MODULE PLACED IN ..\HEX\output.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\SCR\output.c BROWSE INCDIR(..\INC) DEBUG OBJECTEXTEND PRINT(.\output.lst
+                    -) OBJECT(..\HEX\output.obj)
+
+line level    source
+
+   1          /****************************************************************************
+   2          * File:                 Output.c                                                                                                        *
+   3          * Created:              2015-07-13                                                                                                      *
+   4          * Last Change:                                                                                                                          *
+   5          * Author:               chen zhi peng                                                                                           *
+   6          * Description:  输出控制                                                                                                        *
+   7          ****************************************************************************/
+   8          #include "Output.h"
+   9          
+  10          
+  11          
+  12          u8 data DZPnum;
+  13          u8 data DlyBrakeNum;
+  14          u16 data BrakeNum;
+  15          u8 data BrakeSta;
+  16          
+  17          
+  18          
+  19          
+  20          
+  21          void intOut()   { DZPnum=0; DlyBrakeNum=0; BrakeNum=0; BrakeSta=0; }
+  22          void DZP_clk()  { if(DZPnum)    DZPnum--; }             //道闸反馈信号时钟
+  23          void BrakeClk() { if(BrakeNum) BrakeNum--;  if(DlyBrakeNum) DlyBrakeNum--; }
+  24          
+  25          
+  26          void BrakeClr() { KK=1; BrakeNum=0; DlyBrakeNum=0; BrakeSta=0; }
+  27          
+  28          void OPutTask()
+  29          {
+  30   1              if(mTask== MTASK_UP1) 
+  31   1                      {
+  32   2                              RG= KK_GRE;
+  33   2                              if(!BM3 && (iTask==ITASK_DG_UP || iTask==ITASK_FZ_UP || iTask==ITASK_DRAG_UP || iTask== ITASK_INER_DW))
+             - { DZP_CL; }
+  34   2                              else { DZP_UP;}
+  35   2                              DZPnum=DZP_TIME;
+  36   2                      }
+  37   1              else if(mTask== MTASK_DW1)
+  38   1                      {
+  39   2                              RG= KK_RED;
+  40   2                              DZP_DW;
+  41   2                              DZPnum= DZP_TIME;
+  42   2                      }
+  43   1              else if(!DZPnum) DZP_CL;
+  44   1      
+  45   1              switch(BrakeSta)
+  46   1                      {
+  47   2                              case 0:
+  48   2                                      if(mTask/10==MTASK_DS || mTask/10==MTASK_US){ DlyBrakeNum=DLYBRAKETIME; BrakeSta++; }
+  49   2                                      break;
+  50   2                                      
+  51   2                              case 1:
+  52   2                                      if(!DlyBrakeNum) { KK=0; BrakeNum=BRAKETIME; BrakeSta++; }
+  53   2                                      break;
+C51 COMPILER V9.01   OUTPUT                                                                03/01/2019 15:37:16 PAGE 2   
+
+  54   2                                      
+  55   2                              case 2:
+  56   2                                      if(!BrakeNum) { KK=1; BrakeSta++; }
+  57   2                                      break;
+  58   2                                      
+  59   2                              case 3: break;
+  60   2                                      
+  61   2                              default: break;
+  62   2                      }
+  63   1      }
+  64          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    190    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      5    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

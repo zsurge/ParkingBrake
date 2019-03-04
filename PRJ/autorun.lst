@@ -1,0 +1,98 @@
+C51 COMPILER V9.01   AUTORUN                                                               03/01/2019 15:37:16 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE AUTORUN
+OBJECT MODULE PLACED IN ..\HEX\autorun.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\SCR\autorun.c BROWSE INCDIR(..\INC) DEBUG OBJECTEXTEND PRINT(.\autorun.l
+                    -st) OBJECT(..\HEX\autorun.obj)
+
+line level    source
+
+   1          /****************************************************************************
+   2          * File:                 autorun.c                                                                                                       *
+   3          * Created:              2015-02-13                                                                                                      *
+   4          * Last Change:                                                                                                                          *
+   5          * Author:               chen zhi peng                                                                                           *
+   6          * Description:                                                                                                                          *
+   7          ****************************************************************************/
+   8          #include "AUTORUN.h"
+   9          
+  10          u8 xdata aLine;         //自动运行流程
+  11          u8  data AtNum;         //自动运行计时
+  12          u8 xdata hafTest;       //半坡抬闸测试
+  13          u8 xdata Atctr;         //自动控制
+  14          
+  15          
+  16          void intAtRun() { aLine=0; AtNum=0; hafTest=0; Atctr=0; }
+  17          void AtRun_clk() { if(AtNum) AtNum--; }         //自动运行时钟
+  18          
+  19          void AtRun()
+  20          {
+  21   1      
+  22   1              switch(aLine)
+  23   1                      {
+  24   2                              case 0:         break;
+  25   2                              case 1:         
+  26   2                                      if(iTask== ITASK_NA) { AtNum= GAPTIME; aLine=2; }
+  27   2                                      
+  28   2                                      break;  
+  29   2                              
+  30   2                              case 2:
+  31   2                                      if(AtNum)break;
+  32   2                                      Event(ITASK_AUTO_UP); 
+  33   2                                      aLine=3;
+  34   2                                      break;
+  35   2                                      
+  36   2                              case 3:
+  37   2                                      if(iTask== ITASK_NA) { AtNum= GAPTIME; aLine=4; }
+  38   2                                      break;
+  39   2      
+  40   2                              case 4:
+  41   2                                      if(AtNum)break;
+  42   2                                      Event(ITASK_AUTO_DW);
+  43   2                                      hafTest++;
+  44   2                                      aLine=5;
+  45   2                                      break;
+  46   2                                      
+  47   2                              case 5:
+  48   2                                      switch(hafTest)
+  49   2                                              {
+  50   3                                                      case 2: if(SpeRinN > DwSlo/4*1) { Event(ITASK_AUTO_UP);  aLine=3; } break;
+  51   3                                                      case 4: if(SpeRinN > DwSlo/4*2) { Event(ITASK_AUTO_UP);  aLine=3; } break;
+  52   3                                                      case 6: if(SpeRinN > DwSlo/4*3) { Event(ITASK_AUTO_UP);  aLine=3; } break;
+  53   3                                                      
+  54   3                                                      case 1:
+C51 COMPILER V9.01   AUTORUN                                                               03/01/2019 15:37:16 PAGE 2   
+
+  55   3                                                      case 3:
+  56   3                                                      case 5: if(iTask== ITASK_NA) { AtNum= GAPTIME; aLine=2; } break;
+  57   3      
+  58   3                                                      case 7: if(iTask== ITASK_NA) { AtNum= GAPTIME; aLine=2; hafTest=0;} break;
+  59   3                                                              
+  60   3                                                      default:
+  61   3                                                              aLine=2; hafTest=0; AtNum=0;
+  62   3                                                              break;
+  63   3                                              }
+  64   2                                      break;
+  65   2                                      
+  66   2                              default:
+  67   2                                      aLine=0; hafTest=0; AtNum=0;
+  68   2                                      break;
+  69   2                      }
+  70   1              
+  71   1      }
+  72          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    290    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      3    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

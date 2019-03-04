@@ -1,0 +1,5 @@
+---- BUZZ_B Matches (4 in 3 files) ----
+Buzz.c (d:\work\道闸\力矩道闸\力矩道闸程序\v10.0.0\scr):			case BUZZ_B:			//哔(只响一声，用于按键操作)	
+Buzz.h (d:\work\道闸\力矩道闸\力矩道闸程序\v10.0.0\inc):#define BUZZ_B					2			//哔(只响一声，用于按键操作)
+Err.c (d:\work\道闸\力矩道闸\力矩道闸程序\v10.0.0\scr):				Buzz_task(BUZZ_B);
+Err.c (d:\work\道闸\力矩道闸\力矩道闸程序\v10.0.0\scr):				Buzz_task(BUZZ_B);
