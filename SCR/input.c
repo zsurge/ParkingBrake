@@ -83,7 +83,7 @@ u8 posing()		//限位开关防抖--变0和1都防抖
 	switch(PosLin)
 		{
 			case 0:
-				if(!VER && !HOR) PosLin= 4;
+				if(!VER && !HOR) PosLin= 4;  //说明在抬杆或者落标缓冲区间 surge
 				else if(!VER || !HOR) { PosLin=1; PosNum= POS_ON_TIME; }
 				else  PosRal= POS_INT;
 				break;

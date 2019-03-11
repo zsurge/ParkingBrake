@@ -1,34 +1,34 @@
-C51 COMPILER V9.01   EEPROM                                                                03/01/2019 15:37:17 PAGE 1   
+C51 COMPILER V9.00   EEPROM                                                                03/11/2019 18:42:03 PAGE 1   
 
 
-C51 COMPILER V9.01, COMPILATION OF MODULE EEPROM
+C51 COMPILER V9.00, COMPILATION OF MODULE EEPROM
 OBJECT MODULE PLACED IN ..\HEX\EEPROM.obj
-COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\SCR\EEPROM.c BROWSE INCDIR(..\INC) DEBUG OBJECTEXTEND PRINT(.\EEPROM.lst
-                    -) OBJECT(..\HEX\EEPROM.obj)
+COMPILER INVOKED BY: c:\Keil\C51\BIN\C51.EXE ..\SCR\EEPROM.c BROWSE INCDIR(..\INC) DEBUG OBJECTEXTEND PRINT(.\EEPROM.lst
+                    -) TABS(2) OBJECT(..\HEX\EEPROM.obj)
 
 line level    source
 
    1          
-   2          //      本程序是STC系列的内置EEPROM读写程序。
+   2          //  本程序是STC系列的内置EEPROM读写程序。
    3          
    4          
    5          #include "eeprom.h"
    6          
    7          
    8          //========================================================================
-   9          // 函数: void   ISP_Disable(void)
+   9          // 函数: void ISP_Disable(void)
   10          // 描述: 禁止访问ISP/IAP.
   11          // 参数: non.
   12          // 返回: non.
   13          // 版本: V1.0, 2012-10-22
   14          //========================================================================
-  15          void    DisableEEPROM(void)
+  15          void  DisableEEPROM(void)
   16          {
-  17   1              IAP_CONTR = 0;                  //禁止ISP/IAP操作
-  18   1              IAP_CMD   = 0;                  //去除ISP/IAP命令
-  19   1              IAP_TRIG  = 0;                  //防止ISP/IAP命令误触发
-  20   1              IAP_ADDRH = 0x80;               //清0地址高字节
-  21   1              IAP_ADDRL = 0;                  //清0地址低字节，指向非EEPROM区，防止误操作
+  17   1        IAP_CONTR = 0;      //禁止ISP/IAP操作
+  18   1        IAP_CMD   = 0;      //去除ISP/IAP命令
+  19   1        IAP_TRIG  = 0;      //防止ISP/IAP命令误触发
+  20   1        IAP_ADDRH = 0x80;   //清0地址高字节
+  21   1        IAP_ADDRL = 0;      //清0地址低字节，指向非EEPROM区，防止误操作
   22   1      }
   23          
   24          //========================================================================
@@ -43,28 +43,28 @@ line level    source
   33          
   34          void EEPROM_read_n(u16 EE_address,u8 *DataAddress,u16 number)
   35          {
-  36   1      //      EA = 0;         //禁止中断
+  36   1      //  EA = 0;   //禁止中断
   37   1      
-  38   1              do
-  39   1              {
-  40   2                      IAP_CONTR = ENABLE_IAP;                                         //设置等待时间，允许ISP/IAP操作，送一次就够
-  41   2                      IAP_CMD = CMD_READ;
-  42   2                      IAP_ADDRH = EE_address / 256;           //送地址高字节（地址需要改变时才需重新送地址）
-  43   2                      IAP_ADDRL = EE_address % 256;           //送地址低字节
-  44   2                      IAP_TRIG=0X46;
-  45   2                      IAP_TRIG=0XB9;
-  46   2                      _nop_();
-  47   2                      
-  48   2                      *DataAddress = IAP_DATA;                        //读出的数据送往
-  49   2                      EE_address++;
-  50   2                      DataAddress++;
-  51   2                      DisableEEPROM();
-  52   2              }while(--number);
+  38   1        do
+  39   1        {
+  40   2          IAP_CONTR = ENABLE_IAP;           //设置等待时间，允许ISP/IAP操作，送一次就够
+  41   2          IAP_CMD = CMD_READ;
+  42   2          IAP_ADDRH = EE_address / 256;   //送地址高字节（地址需要改变时才需重新送地址）
+  43   2          IAP_ADDRL = EE_address % 256;   //送地址低字节
+  44   2          IAP_TRIG=0X46;
+  45   2          IAP_TRIG=0XB9;
+  46   2          _nop_();
+  47   2          
+  48   2          *DataAddress = IAP_DATA;      //读出的数据送往
+  49   2          EE_address++;
+  50   2          DataAddress++;
+  51   2          DisableEEPROM();
+  52   2        }while(--number);
   53   1      
-  54   1              
-C51 COMPILER V9.01   EEPROM                                                                03/01/2019 15:37:17 PAGE 2   
+  54   1        
+C51 COMPILER V9.00   EEPROM                                                                03/11/2019 18:42:03 PAGE 2   
 
-  55   1      //      EA = 1;         //重新允许中断
+  55   1      //  EA = 1;   //重新允许中断
   56   1      }
   57          
   58          
@@ -78,16 +78,16 @@ line level    source
   66          //========================================================================
   67          void EEPROM_SectorErase(u16 EE_address)
   68          {
-  69   1      //      EA = 0;         //禁止中断
-  70   1              IAP_CONTR = ENABLE_IAP;
-  71   1              IAP_CMD = CMD_ERASE;
-  72   1              IAP_ADDRH = EE_address / 256;                   //送扇区地址高字节（地址需要改变时才需重新送地址）
-  73   1              IAP_ADDRL = EE_address % 256;                   //送扇区地址低字节
-  74   1              IAP_TRIG=0X46;
-  75   1              IAP_TRIG=0XB9;
-  76   1              _nop_();
-  77   1              DisableEEPROM();
-  78   1      //      EA = 1;         //重新允许中断
+  69   1      //  EA = 0;   //禁止中断
+  70   1        IAP_CONTR = ENABLE_IAP;
+  71   1        IAP_CMD = CMD_ERASE;
+  72   1        IAP_ADDRH = EE_address / 256;     //送扇区地址高字节（地址需要改变时才需重新送地址）
+  73   1        IAP_ADDRL = EE_address % 256;     //送扇区地址低字节
+  74   1        IAP_TRIG=0X46;
+  75   1        IAP_TRIG=0XB9;
+  76   1        _nop_();
+  77   1        DisableEEPROM();
+  78   1      //  EA = 1;   //重新允许中断
   79   1      }
   80          
   81          //========================================================================
@@ -101,32 +101,32 @@ line level    source
   89          //========================================================================
   90          void EEPROM_write_n(u16 EE_address,u8 *DataAddress,u16 number)
   91          {
-  92   1      //      EA = 0;         //禁止中断
+  92   1      //  EA = 0;   //禁止中断
   93   1      
-  94   1              
+  94   1        
   95   1      
-  96   1              do
-  97   1              {
-  98   2                      IAP_CONTR = ENABLE_IAP;
-  99   2                      IAP_CMD = CMD_PROGRAM;
- 100   2                      IAP_ADDRH = EE_address / 256;           //送地址高字节（地址需要改变时才需重新送地址）
- 101   2                      IAP_ADDRL = EE_address % 256;           //送地址低字节
- 102   2                      IAP_DATA  = *DataAddress;                       //送数据到ISP_DATA，只有数据改变时才需重新送
- 103   2                      
- 104   2                      IAP_TRIG=0X46;
- 105   2                      IAP_TRIG=0XB9;
- 106   2                      _nop_();
- 107   2                      EE_address++;
- 108   2                      DataAddress++;
- 109   2                      DisableEEPROM();
- 110   2              }while(--number);
+  96   1        do
+  97   1        {
+  98   2          IAP_CONTR = ENABLE_IAP;
+  99   2          IAP_CMD = CMD_PROGRAM;
+ 100   2          IAP_ADDRH = EE_address / 256;   //送地址高字节（地址需要改变时才需重新送地址）
+ 101   2          IAP_ADDRL = EE_address % 256;   //送地址低字节
+ 102   2          IAP_DATA  = *DataAddress;     //送数据到ISP_DATA，只有数据改变时才需重新送
+ 103   2          
+ 104   2          IAP_TRIG=0X46;
+ 105   2          IAP_TRIG=0XB9;
+ 106   2          _nop_();
+ 107   2          EE_address++;
+ 108   2          DataAddress++;
+ 109   2          DisableEEPROM();
+ 110   2        }while(--number);
  111   1      
- 112   1              
- 113   1      //      EA = 1;         //重新允许中断
+ 112   1        
+ 113   1      //  EA = 1;   //重新允许中断
  114   1      }
  115          
 
-C51 COMPILER V9.01   EEPROM                                                                03/01/2019 15:37:17 PAGE 3   
+C51 COMPILER V9.00   EEPROM                                                                03/11/2019 18:42:03 PAGE 3   
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

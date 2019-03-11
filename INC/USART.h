@@ -100,10 +100,7 @@ void intUsart();
 void uart_aly(); 
 void speak(u8 speakTask,u8 num);
 
-
-
-
-
+void Uart_Print(u8 speakTask,u8 num);
 
 #endif
 

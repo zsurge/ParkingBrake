@@ -61,7 +61,16 @@ void TX1_writebuff(u8 dat)	//Ð´Èë·¢ËÍ»º³å£¬Ö¸Õë+1
 
 void PrintString(u8 *puts)
 {
-    for (; *puts != 0;	puts++)  TX1_writebuff(*puts); 	//Óöµ½Í£Ö¹·û0½áÊø
+	#if ISDEBUG
+
+	while (*puts != '\0') 
+	{
+		TX1_writebuff(*puts++);
+  	}
+
+	//TX1_writebuff(0x0d);
+    
+  #endif
 }
 
 
@@ -71,6 +80,65 @@ void intUsart()
 	memset(&TX1_Buffer, 0, sizeof(TX1_Buffer));
 	memset(&RX1_Buffer, 0, sizeof(RX1_Buffer));
 	DE= COM_RECE;
+}
+
+
+void Uart_Print(u8 speakTask,u8 num)
+{
+#if ISDEBUG
+	u8 xdata sen_buff[COM_TX1_Lenth];
+	u8 i = 0;
+	memset(sen_buff,0,sizeof(sen_buff));
+	
+	switch(speakTask)
+	{
+		case 1:
+			break;
+		case 3:
+			sen_buff[0]=num + 63;
+			sen_buff[1]=0x30+SpeRinN/100%10;
+			sen_buff[2]=0x30+SpeRinN/10%10;
+			sen_buff[3]=0x30+SpeRinN%10;
+			sen_buff[4]=0x2c;
+		
+			sen_buff[5]=0x30+gRepairMotor.CurrentCounts/10000%10;
+			sen_buff[6]=0x30+gRepairMotor.CurrentCounts/1000%10;
+			sen_buff[7]=0x30+gRepairMotor.CurrentCounts/100%10;
+			sen_buff[8]=0x30+gRepairMotor.CurrentCounts/10%10;
+			sen_buff[9]=0x30+gRepairMotor.CurrentCounts%10;
+			sen_buff[10]=0x2c;
+            
+            sen_buff[11]=0x30+gCurrentSpringNum%10;
+			sen_buff[12]=0x2c;
+			break;
+		
+//			sen_buff[5]=0x30+gRepairMotor.LastSpeRin/100%10;
+//			sen_buff[6]=0x30+gRepairMotor.LastSpeRin/10%10;
+//			sen_buff[7]=0x30+gRepairMotor.LastSpeRin%10;
+//			sen_buff[8]=0x2c;
+//		
+//			sen_buff[9]=0x30+gRepairMotor.FlagValue/100%10;
+//			sen_buff[10]=0x30+gRepairMotor.FlagValue/10%10;
+//			sen_buff[11]=0x30+gRepairMotor.FlagValue%10;
+//			sen_buff[12]=0x2c;
+//		
+//			sen_buff[13]=0x30+gRepairMotor.CurrentCounts/100%10;
+//			sen_buff[14]=0x30+gRepairMotor.CurrentCounts/10%10;
+//			sen_buff[15]=0x30+gRepairMotor.CurrentCounts%10;
+//			sen_buff[16]=0x2c;		
+//			break;
+		default:
+			break;
+	}	
+
+
+	for(i=0;i<15;i++)
+	{
+		TX1_writebuff(sen_buff[i]);
+	}
+	
+  #endif
+
 }
 
 //speakTask:²Ù×÷ÃüÁî
@@ -91,15 +159,38 @@ void speak(u8 speakTask,u8 num)
 				sen_buff[2]=num;
 				break;
 
-			case 3:
-				sen_buff[0]=0x30+StmNum2/100%10;
-				sen_buff[1]=0x30+StmNum2/10%10;
-				sen_buff[2]=0x30+StmNum2%10;
-				sen_buff[3]=0x3b;
-				sen_buff[4]=0x0a;
-				break;
+//			case 3:
+//				sen_buff[0]=num + 63;
+//				sen_buff[1]=0x30+SpeRinN/100%10;
+//				sen_buff[2]=0x30+SpeRinN/10%10;
+//				sen_buff[3]=0x30+SpeRinN%10;
+//				sen_buff[4]=0x2c;
+
+//				sen_buff[5]=0x30+gRepairMotor.LastSpeRin/100%10;
+//				sen_buff[6]=0x30+gRepairMotor.LastSpeRin/10%10;
+//				sen_buff[7]=0x30+gRepairMotor.LastSpeRin%10;
+//				sen_buff[8]=0x2c;
+
+//				sen_buff[9]=0x30+gRepairMotor.FlagValue/100%10;
+//				sen_buff[10]=0x30+gRepairMotor.FlagValue/10%10;
+//				sen_buff[11]=0x30+gRepairMotor.FlagValue%10;
+//				sen_buff[12]=0x2c;
+
+//				sen_buff[13]=0x30+gRepairMotor.CurrentCounts/100%10;
+//				sen_buff[14]=0x30+gRepairMotor.CurrentCounts/10%10;
+//				sen_buff[15]=0x30+gRepairMotor.CurrentCounts%10;
+//				sen_buff[16]=0x2c;
+
+//				break;
+//				
+//			case 2:
+//				sen_buff[0]=num + 39;
+//				sen_buff[1]=0x30+gRepairMotor.CurrentCounts/100%10;
+//				sen_buff[2]=0x30+gRepairMotor.CurrentCounts/10%10;
+//				sen_buff[3]=0x30+gRepairMotor.CurrentCounts%10;
+//				sen_buff[4]=0x3b;
+//				sen_buff[5]=0x0a;
 				
-			case 2:
 //				sen_buff[0]=0x30+test_dly/10000%10;
 //				sen_buff[1]=0x30+test_dly/1000%10;
 //				sen_buff[2]=0x30+test_dly/100%10;
@@ -240,20 +331,20 @@ void speak(u8 speakTask,u8 num)
 //				sen_buff[3]=0x0a;
 
 
-				sen_buff[0]=0x30+StmSp/100%10;
-				sen_buff[1]=0x30+StmSp/10%10;
-				sen_buff[2]=0x30+StmSp%10;
-				sen_buff[3]=0x30+StmSp2/100%10;
-				sen_buff[4]=0x30+StmSp2/10%10;
-				sen_buff[5]=0x30+StmSp2%10;
-				sen_buff[6]=0x30+StmSlow/100%10;
-				sen_buff[7]=0x30+StmSlow/10%10;
-				sen_buff[8]=0x30+StmSlow%10;
-				sen_buff[9]=0x30+StmSlow2/100%10;
-				sen_buff[10]=0x30+StmSlow2/10%10;
-				sen_buff[11]=0x30+StmSlow2%10;
-				sen_buff[12]=0x3b;
-				sen_buff[13]=0x0a;
+//				sen_buff[0]=0x30+StmSp/100%10;
+//				sen_buff[1]=0x30+StmSp/10%10;
+//				sen_buff[2]=0x30+StmSp%10;
+//				sen_buff[3]=0x30+StmSp2/100%10;
+//				sen_buff[4]=0x30+StmSp2/10%10;
+//				sen_buff[5]=0x30+StmSp2%10;
+//				sen_buff[6]=0x30+StmSlow/100%10;
+//				sen_buff[7]=0x30+StmSlow/10%10;
+//				sen_buff[8]=0x30+StmSlow%10;
+//				sen_buff[9]=0x30+StmSlow2/100%10;
+//				sen_buff[10]=0x30+StmSlow2/10%10;
+//				sen_buff[11]=0x30+StmSlow2%10;
+//				sen_buff[12]=0x3b;
+//				sen_buff[13]=0x0a;
 
 //				sen_buff[0]=0x30+StmSp/1000%10;
 //				sen_buff[1]=0x30+StmSp/100%10;
@@ -384,7 +475,6 @@ void uart_aly()
 			COM1.B_RX_OK= 0;
 		}
 }
-
 
 
 

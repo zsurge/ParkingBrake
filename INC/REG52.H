@@ -102,6 +102,8 @@ sfr RCAP2L = 0xCA;
 sfr RCAP2H = 0xCB;
 sfr TL2    = 0xCC;
 sfr TH2    = 0xCD;
+sfr T2MOD  = 0xC9; //surge add
+
 
 
 /*  BIT Registers  */

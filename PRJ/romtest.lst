@@ -1,19 +1,19 @@
-C51 COMPILER V9.01   ROMTEST                                                               03/01/2019 15:37:17 PAGE 1   
+C51 COMPILER V9.00   ROMTEST                                                               03/11/2019 18:42:03 PAGE 1   
 
 
-C51 COMPILER V9.01, COMPILATION OF MODULE ROMTEST
+C51 COMPILER V9.00, COMPILATION OF MODULE ROMTEST
 OBJECT MODULE PLACED IN ..\HEX\romtest.obj
-COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\SCR\romtest.c BROWSE INCDIR(..\INC) DEBUG OBJECTEXTEND PRINT(.\romtest.l
-                    -st) OBJECT(..\HEX\romtest.obj)
+COMPILER INVOKED BY: c:\Keil\C51\BIN\C51.EXE ..\SCR\romtest.c BROWSE INCDIR(..\INC) DEBUG OBJECTEXTEND PRINT(.\romtest.l
+                    -st) TABS(2) OBJECT(..\HEX\romtest.obj)
 
 line level    source
 
    1          /****************************************************************************
-   2          * File:                 romtest.c                                                                                                       *
-   3          * Created:              2015-02-13                                                                                                      *
-   4          * Last Change:                                                                                                                          *
-   5          * Author:               chen zhi peng                                                                                           *
-   6          * Description:                                                                                                                          *
+   2          * File:     romtest.c                         *
+   3          * Created:    2015-02-13                          *
+   4          * Last Change:                                *
+   5          * Author:   chen zhi peng                         *
+   6          * Description:                                *
    7          ****************************************************************************/
    8          #include "ROMTEST.h"
    9          
@@ -27,45 +27,45 @@ line level    source
              -****//
   16          void RomTest()
   17          {
-  18   1              u8 t=0,i=0; u8 xdata buff[8];
-  19   1              WDT_CONTR=DISABLE;              //内部看门狗关闭
-  20   1              err=ERR_EEPROM_WRITE;
-  21   1              EEPROM_read_n(FIRST_SECTOR,&buff,8);
-  22   1              for(t=0;t<8;t++) {if(buff[t]==eight) i++;}      //存储器识别码
-  23   1              if(i==8)err=ERR_INT;            
-  24   1              if(err==ERR_EEPROM_WRITE)//系统初始化
-  25   1                      {
-  26   2              //********擦&写&读3次测试X个扇区**********//
-  27   2                              for(t=0;t<1;t++)
-  28   2                                      {       
-  29   3                                              SectotE(FIRST_SECTOR,0x200,2);//删除x扇区
-  30   3                                              delay(10);
-  31   3                                              SectotWT(FIRST_SECTOR,0xaa,2);  //x个扇区里全写满数据0xAA=10101010
-  32   3                                              delay(10);
-  33   3                                              if(SectotRT(FIRST_SECTOR,0xaa,2)) { BUZZ=BUZZ_EN;  } //读x个扇区并判断数据是否错误
-  34   3                                              delay(10);
-  35   3                                              SectotE(FIRST_SECTOR,0x200,2);//删除x扇区
-  36   3                                              delay(10);
-  37   3                                              SectotWT(FIRST_SECTOR,0x55,2);//x个扇区里全写满数据0x55=01010101
-  38   3                                              delay(10);
-  39   3                                              if(SectotRT(FIRST_SECTOR,0x55,2)) { BUZZ=BUZZ_EN;  } //读x个扇区并判断数据是否错误
-  40   3                                              delay(10);
-  41   3                                      }
-  42   2              //********测试完成，1扇区写入初始化识别数-8个识别码,用作识别是否已经初始化配置**********//
-  43   2                              if(BUZZ)
-  44   2                                      {
-  45   3                                              EEPROM_SectorErase(FIRST_SECTOR);
-  46   3                                              for(t=0;t<8;t++) buff[t]=eight;
-  47   3                                              EEPROM_write_n(FIRST_SECTOR,&buff,8);
-  48   3                                      }
-  49   2                              else 
-  50   2                                      {
-  51   3                                              BUZZ=BUZZ_CL;
-  52   3                                              err=ERR_EEPROM_WRITE1;
-C51 COMPILER V9.01   ROMTEST                                                               03/01/2019 15:37:17 PAGE 2   
+  18   1        u8 t=0,i=0; u8 xdata buff[8];
+  19   1        WDT_CONTR=DISABLE;    //内部看门狗关闭
+  20   1        err=ERR_EEPROM_WRITE;
+  21   1        EEPROM_read_n(FIRST_SECTOR,&buff,8);
+  22   1        for(t=0;t<8;t++) {if(buff[t]==eight) i++;}  //存储器识别码
+  23   1        if(i==8)err=ERR_INT;    
+  24   1        if(err==ERR_EEPROM_WRITE)//系统初始化
+  25   1          {
+  26   2        //********擦&写&读3次测试X个扇区**********//
+  27   2            for(t=0;t<1;t++)
+  28   2              { 
+  29   3                SectotE(FIRST_SECTOR,0x200,2);//删除x扇区
+  30   3                delay(10);
+  31   3                SectotWT(FIRST_SECTOR,0xaa,2);  //x个扇区里全写满数据0xAA=10101010
+  32   3                delay(10);
+  33   3                if(SectotRT(FIRST_SECTOR,0xaa,2)) { BUZZ=BUZZ_EN;  } //读x个扇区并判断数据是否错误
+  34   3                delay(10);
+  35   3                SectotE(FIRST_SECTOR,0x200,2);//删除x扇区
+  36   3                delay(10);
+  37   3                SectotWT(FIRST_SECTOR,0x55,2);//x个扇区里全写满数据0x55=01010101
+  38   3                delay(10);
+  39   3                if(SectotRT(FIRST_SECTOR,0x55,2)) { BUZZ=BUZZ_EN;  } //读x个扇区并判断数据是否错误
+  40   3                delay(10);
+  41   3              }
+  42   2        //********测试完成，1扇区写入初始化识别数-8个识别码,用作识别是否已经初始化配置**********//
+  43   2            if(BUZZ)
+  44   2              {
+  45   3                EEPROM_SectorErase(FIRST_SECTOR);
+  46   3                for(t=0;t<8;t++) buff[t]=eight;
+  47   3                EEPROM_write_n(FIRST_SECTOR,&buff,8);
+  48   3              }
+  49   2            else 
+  50   2              {
+  51   3                BUZZ=BUZZ_CL;
+  52   3                err=ERR_EEPROM_WRITE1;
+C51 COMPILER V9.00   ROMTEST                                                               03/11/2019 18:42:03 PAGE 2   
 
-  53   3                                      }
-  54   2                      }
+  53   3              }
+  54   2          }
   55   1      }
   56          
   57          
@@ -76,89 +76,90 @@ line level    source
              -****
   62          ////SectotE扇区删除
   63          //入口变量 dx:扇区起始地址
-  64          //                 hf:扇区首地址间隔
-  65          //                 tt:删除扇区数量
+  64          //       hf:扇区首地址间隔
+  65          //       tt:删除扇区数量
   66          //         
   67          //********************************************************************************************************
              -****
   68          void SectotE(u16 dx, u16 hf, u8 tt)
   69          {
-  70   1              u8 k;
-  71   1              for(k=0;k<tt;k++)
-  72   1                      {       
-  73   2                              LED=1;
-  74   2                              EEPROM_SectorErase(dx);
-  75   2                              delay(10);
-  76   2                              dx+=hf;
-  77   2                      }
+  70   1        u8 k;
+  71   1        for(k=0;k<tt;k++)
+  72   1          { 
+  73   2            LED=1;
+  74   2            EEPROM_SectorErase(dx);
+  75   2            delay(10);
+  76   2            dx+=hf;
+  77   2          }
   78   1      }
   79          
   80          //********************************************************************************************************
              -****
   81          ////SectotWT扇区写入测试
   82          //入口变量  dx:扇区起始地址
-  83          //                      nu:要写的数据
-  84          //                  tt:写操作扇区数量
+  83          //      nu:要写的数据
+  84          //        tt:写操作扇区数量
   85          //********************************************************************************************************
              -****
   86          void SectotWT(u16 dx, u8 nu, u8 tt)
   87          {
-  88   1              u8 k,i; u8 xdata buff[8];
-  89   1              for(k=0;k<8;k++) buff[k]=nu;
-  90   1              for(k=0;k<tt;k++)
-  91   1                      {
-  92   2                              for(i=0;i<64;i++)//一个扇区分64次写入，一次写8个字节
-  93   2                                      {
-  94   3                                              EEPROM_write_n(dx,&buff,8);
-  95   3                                              dx+=8;
-  96   3                                              delay(10);
-  97   3                                      }
-  98   2                              LED=!LED;
-  99   2                              
- 100   2                              delay(30);
- 101   2                      }
+  88   1        u8 k,i; u8 xdata buff[8];
+  89   1        for(k=0;k<8;k++) buff[k]=nu;
+  90   1        for(k=0;k<tt;k++)
+  91   1          {
+  92   2            for(i=0;i<64;i++)//一个扇区分64次写入，一次写8个字节
+  93   2              {
+  94   3                EEPROM_write_n(dx,&buff,8);
+  95   3                dx+=8;
+  96   3                delay(10);
+  97   3              }
+  98   2            LED=!LED;
+  99   2            
+ 100   2            delay(30);
+ 101   2          }
  102   1      }
- 103                                                  
+ 103                    
  104          
  105          //********************************************************************************************************
              -****
  106          ////SectotRT扇区读出测试
  107          //入口变量  dx:扇区起始地址
- 108          //                      nu:要比较的数据
- 109          //                  tt:读操作扇区数量
-C51 COMPILER V9.01   ROMTEST                                                               03/01/2019 15:37:17 PAGE 3   
+ 108          //      nu:要比较的数据
+ 109          //        tt:读操作扇区数量
+C51 COMPILER V9.00   ROMTEST                                                               03/11/2019 18:42:03 PAGE 3   
 
  110          //********************************************************************************************************
              -****
  111          bit SectotRT(u16 dx, u8 nu, u8 tt)
  112          {
- 113   1              u8 k,u,i;               u8 xdata buff[8];                u16 cnum=0;
+ 113   1        u8 k,u,i;   u8 xdata buff[8];    u16 cnum=0;
  114   1      
- 115   1              for(k=0;k<tt;k++)
- 116   1                      {
- 117   2                              for(i=0;i<64;i++) 
- 118   2                                      {
- 119   3                                              EEPROM_read_n(dx,&buff,8);
- 120   3                                              dx+=8;
- 121   3                                              for(u=0;u<8;u++)
- 122   3                                                      {
- 123   4                                                              if(buff[u]==nu)
- 124   4                                                              cnum++;
- 125   4                                                      }
- 126   3                                              LED=!LED;
- 127   3                                              delay(10);
- 128   3                                      }
- 129   2                              delay(30);
- 130   2                      }
- 131   1              if(cnum<(512*tt-1)) return 1;
- 132   1              else return 0;
- 133   1      }
- 134          
+ 115   1        for(k=0;k<tt;k++)
+ 116   1          {
+ 117   2            for(i=0;i<64;i++) 
+ 118   2              {
+ 119   3                EEPROM_read_n(dx,&buff,8);
+ 120   3                dx+=8;
+ 121   3                for(u=0;u<8;u++)
+ 122   3                  {
+ 123   4                    if(buff[u]==nu)
+ 124   4                    cnum++;
+ 125   4                  }
+ 126   3                LED=!LED;
+ 127   3                delay(10);
+ 128   3              }
+ 129   2            delay(30);
+ 130   2          }
+ 131   1        if(cnum<(512*tt-1)) return 1;
+ 132   1        else return 0;
+ 133   1        return 0;
+ 134   1      }
  135          
  136          
  137          
  138          
  139          
+ 140          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

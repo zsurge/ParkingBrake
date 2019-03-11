@@ -1,19 +1,19 @@
-C51 COMPILER V9.01   BUZZ                                                                  03/01/2019 15:37:16 PAGE 1   
+C51 COMPILER V9.00   BUZZ                                                                  03/11/2019 18:42:02 PAGE 1   
 
 
-C51 COMPILER V9.01, COMPILATION OF MODULE BUZZ
+C51 COMPILER V9.00, COMPILATION OF MODULE BUZZ
 OBJECT MODULE PLACED IN ..\HEX\buzz.obj
-COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\SCR\buzz.c BROWSE INCDIR(..\INC) DEBUG OBJECTEXTEND PRINT(.\buzz.lst) OB
-                    -JECT(..\HEX\buzz.obj)
+COMPILER INVOKED BY: c:\Keil\C51\BIN\C51.EXE ..\SCR\buzz.c BROWSE INCDIR(..\INC) DEBUG OBJECTEXTEND PRINT(.\buzz.lst) TA
+                    -BS(2) OBJECT(..\HEX\buzz.obj)
 
 line level    source
 
    1          /****************************************************************************
-   2          * File:                 buzz.c                                                                                                          *
-   3          * Created:              2015-02-13                                                                                                      *
-   4          * Last Change:                                                                                                                          *
-   5          * Author:               chen zhi peng                                                                                           *
-   6          * Description:                                                                                                                          *
+   2          * File:     buzz.c                            *
+   3          * Created:    2015-02-13                          *
+   4          * Last Change:                                *
+   5          * Author:   chen zhi peng                         *
+   6          * Description:                                *
    7          ****************************************************************************/
    8           #include "buzz.h"
    9          
@@ -24,7 +24,7 @@ line level    source
   14          
   15          void Buzz_clk()
   16          {
-  17   1              if(BuzzNum>10)BuzzNum--;
+  17   1        if(BuzzNum>10)BuzzNum--;
   18   1      }
   19          
   20          
@@ -37,198 +37,198 @@ line level    source
              -****//
   26          void Buzz_task(u8 mode)
   27          {
-  28   1              if(BuzzMode!=mode) {BuzzMode=mode; BuzzNum=0;}
-  29   1              switch(BuzzMode)
-  30   1                      {
-  31   2                              case BUZZ_NA: BuzzNum=0; BUZZ=BUZZ_CL;  break;
-  32   2                              
-  33   2                              case BUZZ_B:                    //ßÙ(Ö»ÏìÒ»Éù£¬ÓÃÓÚ°´¼ü²Ù×÷)    
-  34   2                                      switch(BuzzNum)
-  35   2                                              {
-  36   3                                                      case 10:                        BuzzNum=0;      BuzzMode=BUZZ_NA;       BUZZ=BUZZ_CL;   break;
-  37   3                                                      case 0:                         BuzzNum=16;             BUZZ=BUZZ_EN; break;
-  38   3                                                      default: break;
-  39   3                                              }
-  40   2                                      break;
-  41   2                                      
-  42   2                              case BUZZ_BB:                   //ßÙßÙ(Ö»ÏìÁ½Éù£¬ÓÃÓÚ°´¼ü²Ù×÷)
-  43   2                                      switch(BuzzNum)
-  44   2                                              {
-  45   3                                                      case 22:                        BUZZ=BUZZ_CL;   break;                                  
-  46   3                                                      case 16:                        BUZZ=BUZZ_EN;   break;
-  47   3                                                      case 10:                        BuzzNum=0;      BuzzMode=BUZZ_NA;       BUZZ=BUZZ_CL;   break;
-  48   3                                                      case 0:                         BuzzNum=28;             BUZZ=BUZZ_EN; break;
-  49   3                                                      default: break;
-  50   3                                              }
-  51   2                                      break;
+  28   1        if(BuzzMode!=mode) {BuzzMode=mode; BuzzNum=0;}
+  29   1        switch(BuzzMode)
+  30   1          {
+  31   2            case BUZZ_NA: BuzzNum=0; BUZZ=BUZZ_CL;  break;
+  32   2            
+  33   2            case BUZZ_B:      //ßÙ(Ö»ÏìÒ»Éù£¬ÓÃÓÚ°´¼ü²Ù×÷)  
+  34   2              switch(BuzzNum)
+  35   2                {
+  36   3                  case 10:      BuzzNum=0;  BuzzMode=BUZZ_NA; BUZZ=BUZZ_CL; break;
+  37   3                  case 0:       BuzzNum=16;     BUZZ=BUZZ_EN; break;
+  38   3                  default: break;
+  39   3                }
+  40   2              break;
+  41   2              
+  42   2            case BUZZ_BB:     //ßÙßÙ(Ö»ÏìÁ½Éù£¬ÓÃÓÚ°´¼ü²Ù×÷)
+  43   2              switch(BuzzNum)
+  44   2                {
+  45   3                  case 22:      BUZZ=BUZZ_CL; break;          
+  46   3                  case 16:      BUZZ=BUZZ_EN; break;
+  47   3                  case 10:      BuzzNum=0;  BuzzMode=BUZZ_NA; BUZZ=BUZZ_CL; break;
+  48   3                  case 0:       BuzzNum=28;     BUZZ=BUZZ_EN; break;
+  49   3                  default: break;
+  50   3                }
+  51   2              break;
   52   2      
-C51 COMPILER V9.01   BUZZ                                                                  03/01/2019 15:37:16 PAGE 2   
+C51 COMPILER V9.00   BUZZ                                                                  03/11/2019 18:42:02 PAGE 2   
 
-  53   2                              case BUZZ_BB_B:                 
-  54   2                                      switch(BuzzNum)
-  55   2                                              {
-  56   3                                                      case 30:                        BUZZ=BUZZ_CL;   break;                                  
-  57   3                                                      case 20:                        BUZZ=BUZZ_EN;   break;
-  58   3                                                      case 10:                        BuzzNum=0;      BuzzMode=BUZZ_NA;       BUZZ=BUZZ_CL;   break;
-  59   3                                                      case 0:                         BuzzNum=130;            BUZZ=BUZZ_EN; break;
-  60   3                                                      default: break;
-  61   3                                              }
-  62   2                                      break;
+  53   2            case BUZZ_BB_B:     
+  54   2              switch(BuzzNum)
+  55   2                {
+  56   3                  case 30:      BUZZ=BUZZ_CL; break;          
+  57   3                  case 20:      BUZZ=BUZZ_EN; break;
+  58   3                  case 10:      BuzzNum=0;  BuzzMode=BUZZ_NA; BUZZ=BUZZ_CL; break;
+  59   3                  case 0:       BuzzNum=130;    BUZZ=BUZZ_EN; break;
+  60   3                  default: break;
+  61   3                }
+  62   2              break;
   63   2      
-  64   2                              case BUZZ_BB_B_B:                       
-  65   2                                      switch(BuzzNum)
-  66   2                                              {
-  67   3                                                      case 50:                        BUZZ=BUZZ_CL;   break;  
-  68   3                                                      case 40:                        BUZZ=BUZZ_EN;   break;
-  69   3                                                      case 30:                        BUZZ=BUZZ_CL;   break;                                  
-  70   3                                                      case 20:                        BUZZ=BUZZ_EN;   break;
-  71   3                                                      case 10:                        BuzzNum=0;      BuzzMode=BUZZ_NA;       BUZZ=BUZZ_CL;   break;
-  72   3                                                      case 0:                         BuzzNum=150;            BUZZ=BUZZ_EN; break;
-  73   3                                                      default: break;
-  74   3                                              }
-  75   2                                      break;
-  76   2                              
-  77   2                              case BUZZ_BB_B_B_B:                     
-  78   2                                      switch(BuzzNum)
-  79   2                                              {
-  80   3                                                      case 70:                        BUZZ=BUZZ_CL;   break;  
-  81   3                                                      case 60:                        BUZZ=BUZZ_EN;   break;
-  82   3                                                      case 50:                        BUZZ=BUZZ_CL;   break;  
-  83   3                                                      case 40:                        BUZZ=BUZZ_EN;   break;
-  84   3                                                      case 30:                        BUZZ=BUZZ_CL;   break;                                  
-  85   3                                                      case 20:                        BUZZ=BUZZ_EN;   break;
-  86   3                                                      case 10:                        BuzzNum=0;      BuzzMode=BUZZ_NA;       BUZZ=BUZZ_CL;   break;
-  87   3                                                      case 0:                         BuzzNum=170;            BUZZ=BUZZ_EN; break;
-  88   3                                                      default: break;
-  89   3                                              }
-  90   2                                      break;
+  64   2            case BUZZ_BB_B_B:     
+  65   2              switch(BuzzNum)
+  66   2                {
+  67   3                  case 50:      BUZZ=BUZZ_CL; break;  
+  68   3                  case 40:      BUZZ=BUZZ_EN; break;
+  69   3                  case 30:      BUZZ=BUZZ_CL; break;          
+  70   3                  case 20:      BUZZ=BUZZ_EN; break;
+  71   3                  case 10:      BuzzNum=0;  BuzzMode=BUZZ_NA; BUZZ=BUZZ_CL; break;
+  72   3                  case 0:       BuzzNum=150;    BUZZ=BUZZ_EN; break;
+  73   3                  default: break;
+  74   3                }
+  75   2              break;
+  76   2            
+  77   2            case BUZZ_BB_B_B_B:     
+  78   2              switch(BuzzNum)
+  79   2                {
+  80   3                  case 70:      BUZZ=BUZZ_CL; break;  
+  81   3                  case 60:      BUZZ=BUZZ_EN; break;
+  82   3                  case 50:      BUZZ=BUZZ_CL; break;  
+  83   3                  case 40:      BUZZ=BUZZ_EN; break;
+  84   3                  case 30:      BUZZ=BUZZ_CL; break;          
+  85   3                  case 20:      BUZZ=BUZZ_EN; break;
+  86   3                  case 10:      BuzzNum=0;  BuzzMode=BUZZ_NA; BUZZ=BUZZ_CL; break;
+  87   3                  case 0:       BuzzNum=170;    BUZZ=BUZZ_EN; break;
+  88   3                  default: break;
+  89   3                }
+  90   2              break;
   91   2      
-  92   2                              case BUZZ_BB_BB:                        
-  93   2                                      switch(BuzzNum)
-  94   2                                              {
-  95   3                                                      case 122:                       BUZZ=BUZZ_CL;   break;                                  
-  96   3                                                      case 110:                       BUZZ=BUZZ_EN;   break;
-  97   3                                                      case 10:                        BuzzNum=0;      BuzzMode=BUZZ_NA;       BUZZ=BUZZ_CL;   break;
-  98   3                                                      case 0:                         BuzzNum=222;            BUZZ=BUZZ_EN; break;
-  99   3                                                      default: break;
- 100   3                                              }
- 101   2                                      break;
+  92   2            case BUZZ_BB_BB:      
+  93   2              switch(BuzzNum)
+  94   2                {
+  95   3                  case 122:     BUZZ=BUZZ_CL; break;          
+  96   3                  case 110:     BUZZ=BUZZ_EN; break;
+  97   3                  case 10:      BuzzNum=0;  BuzzMode=BUZZ_NA; BUZZ=BUZZ_CL; break;
+  98   3                  case 0:       BuzzNum=222;    BUZZ=BUZZ_EN; break;
+  99   3                  default: break;
+ 100   3                }
+ 101   2              break;
  102   2      
- 103   2                              case BUZZ_BBB:                  //ßÙßÙ(Ö»ÏìÈýÉù£¬ÓÃÓÚ°´¼ü²Ù×÷)
- 104   2                                      switch(BuzzNum)
- 105   2                                              {
- 106   3                                                      case 34:                        BUZZ=BUZZ_CL;   break;
- 107   3                                                      case 28:                        BUZZ=BUZZ_EN;   break;
- 108   3                                                      case 22:                        BUZZ=BUZZ_CL;   break;                                  
- 109   3                                                      case 16:                        BUZZ=BUZZ_EN;   break;
- 110   3                                                      case 10:                        BuzzNum=0;      BuzzMode=BUZZ_NA;       BUZZ=BUZZ_CL;   break;
- 111   3                                                      case 0:                         BuzzNum=40;             BUZZ=BUZZ_EN; break;
- 112   3                                                      default: break;
- 113   3                                              }
- 114   2                                      break;
-C51 COMPILER V9.01   BUZZ                                                                  03/01/2019 15:37:16 PAGE 3   
+ 103   2            case BUZZ_BBB:      //ßÙßÙ(Ö»ÏìÈýÉù£¬ÓÃÓÚ°´¼ü²Ù×÷)
+ 104   2              switch(BuzzNum)
+ 105   2                {
+ 106   3                  case 34:      BUZZ=BUZZ_CL; break;
+ 107   3                  case 28:      BUZZ=BUZZ_EN; break;
+ 108   3                  case 22:      BUZZ=BUZZ_CL; break;          
+ 109   3                  case 16:      BUZZ=BUZZ_EN; break;
+ 110   3                  case 10:      BuzzNum=0;  BuzzMode=BUZZ_NA; BUZZ=BUZZ_CL; break;
+ 111   3                  case 0:       BuzzNum=40;     BUZZ=BUZZ_EN; break;
+ 112   3                  default: break;
+ 113   3                }
+ 114   2              break;
+C51 COMPILER V9.00   BUZZ                                                                  03/11/2019 18:42:02 PAGE 3   
 
- 115   2                                      
- 116   2                              case BUZZ_B02:                  //ßÙ~~~200ºÁÃë  
- 117   2                                      switch(BuzzNum)
- 118   2                                              {
- 119   3                                                      case 16:                        BUZZ=BUZZ_CL;                                           break;
- 120   3                                                      case 10:
- 121   3                                                      case 1:
- 122   3                                                      case 0:                         BuzzNum=22;             BUZZ=BUZZ_EN; break;
- 123   3                                                      default: break;
- 124   3                                              }
- 125   2                                      break;
- 126   2                                      
- 127   2                              case BUZZ_B2:                   //ßÙ~~~~2ÃëÆµÂÊ
- 128   2                                      switch(BuzzNum)
- 129   2                                              {
- 130   3                                                      case 195:                       BUZZ=BUZZ_CL;                                           break;
- 131   3                                                      case 10:
- 132   3                                                      case 1:
- 133   3                                                      case 0:                         BuzzNum=200;            BUZZ=BUZZ_EN; break;
- 134   3                                                      default: break;
- 135   3                                              }
- 136   2                                      break;
- 137   2                                      
- 138   2                              case BUZZ_BB2:                  //ßÙßÙ~~~2ÃëÆµÂÊ
- 139   2                                      switch(BuzzNum)
- 140   2                                              {
- 141   3                                                      case 196:                       BUZZ=BUZZ_CL;                                           break;
- 142   3                                                      case 192:                       BUZZ=BUZZ_EN;                                           break;
- 143   3                                                      case 188:                       BUZZ=BUZZ_CL;                                           break;
- 144   3                                                      case 10:
- 145   3                                                      case 1:
- 146   3                                                      case 0:                         BuzzNum=200;            BUZZ=BUZZ_EN; break;
- 147   3                                                      default: break;
- 148   3                                              }
- 149   2                                      break;
+ 115   2              
+ 116   2            case BUZZ_B02:      //ßÙ~~~200ºÁÃë  
+ 117   2              switch(BuzzNum)
+ 118   2                {
+ 119   3                  case 16:      BUZZ=BUZZ_CL;           break;
+ 120   3                  case 10:
+ 121   3                  case 1:
+ 122   3                  case 0:       BuzzNum=22;     BUZZ=BUZZ_EN; break;
+ 123   3                  default: break;
+ 124   3                }
+ 125   2              break;
+ 126   2              
+ 127   2            case BUZZ_B2:     //ßÙ~~~~2ÃëÆµÂÊ
+ 128   2              switch(BuzzNum)
+ 129   2                {
+ 130   3                  case 195:     BUZZ=BUZZ_CL;           break;
+ 131   3                  case 10:
+ 132   3                  case 1:
+ 133   3                  case 0:       BuzzNum=200;    BUZZ=BUZZ_EN; break;
+ 134   3                  default: break;
+ 135   3                }
+ 136   2              break;
+ 137   2              
+ 138   2            case BUZZ_BB2:      //ßÙßÙ~~~2ÃëÆµÂÊ
+ 139   2              switch(BuzzNum)
+ 140   2                {
+ 141   3                  case 196:     BUZZ=BUZZ_CL;           break;
+ 142   3                  case 192:     BUZZ=BUZZ_EN;           break;
+ 143   3                  case 188:     BUZZ=BUZZ_CL;           break;
+ 144   3                  case 10:
+ 145   3                  case 1:
+ 146   3                  case 0:       BuzzNum=200;    BUZZ=BUZZ_EN; break;
+ 147   3                  default: break;
+ 148   3                }
+ 149   2              break;
  150   2      
- 151   2                              case BUZZ_BBB2:                 //ßÙßÙßÙ~~~~2ÃëÆµÂÊ
- 152   2                                      switch(BuzzNum)
- 153   2                                              {
- 154   3                                                      case 196:                       BUZZ=BUZZ_CL;                                           break;
- 155   3                                                      case 192:                       BUZZ=BUZZ_EN;                                           break;
- 156   3                                                      case 188:                       BUZZ=BUZZ_CL;                                           break;
- 157   3                                                      case 184:                       BUZZ=BUZZ_EN;                                           break;
- 158   3                                                      case 180:                       BUZZ=BUZZ_CL;                                           break;
- 159   3                                                      case 10:
- 160   3                                                      case 1:
- 161   3                                                      case 0:                         BuzzNum=200;            BUZZ=BUZZ_EN; break;
- 162   3                                                      default: break;
- 163   3                                              }
- 164   2                                      break;
+ 151   2            case BUZZ_BBB2:     //ßÙßÙßÙ~~~~2ÃëÆµÂÊ
+ 152   2              switch(BuzzNum)
+ 153   2                {
+ 154   3                  case 196:     BUZZ=BUZZ_CL;           break;
+ 155   3                  case 192:     BUZZ=BUZZ_EN;           break;
+ 156   3                  case 188:     BUZZ=BUZZ_CL;           break;
+ 157   3                  case 184:     BUZZ=BUZZ_EN;           break;
+ 158   3                  case 180:     BUZZ=BUZZ_CL;           break;
+ 159   3                  case 10:
+ 160   3                  case 1:
+ 161   3                  case 0:       BuzzNum=200;    BUZZ=BUZZ_EN; break;
+ 162   3                  default: break;
+ 163   3                }
+ 164   2              break;
  165   2      
- 166   2                              case BUZZ_B_B:                  //ßÙ(³¤Ãù1Ãë)~~~~ßÙ
- 167   2                                      switch(BuzzNum)
- 168   2                                              {
- 169   3                                                      case 180:                       BUZZ=BUZZ_CL;                                           break;
- 170   3                                                      case 160:                       BUZZ=BUZZ_EN;                                           break;
- 171   3                                                      case 155:                       BUZZ=BUZZ_CL;                                           break;
- 172   3                                                      case 10:
- 173   3                                                      case 1:
- 174   3                                                      case 0:                         BuzzNum=250;            BUZZ=BUZZ_EN; break;
- 175   3                                                      default: break;
- 176   3                                              }
-C51 COMPILER V9.01   BUZZ                                                                  03/01/2019 15:37:16 PAGE 4   
+ 166   2            case BUZZ_B_B:      //ßÙ(³¤Ãù1Ãë)~~~~ßÙ
+ 167   2              switch(BuzzNum)
+ 168   2                {
+ 169   3                  case 180:     BUZZ=BUZZ_CL;           break;
+ 170   3                  case 160:     BUZZ=BUZZ_EN;           break;
+ 171   3                  case 155:     BUZZ=BUZZ_CL;           break;
+ 172   3                  case 10:
+ 173   3                  case 1:
+ 174   3                  case 0:       BuzzNum=250;    BUZZ=BUZZ_EN; break;
+ 175   3                  default: break;
+ 176   3                }
+C51 COMPILER V9.00   BUZZ                                                                  03/11/2019 18:42:02 PAGE 4   
 
- 177   2                                      break;
+ 177   2              break;
  178   2      
- 179   2                              case BUZZ_B_BB:                 //ßÙ(³¤Ãù1Ãë)~~~~ßÙßÙ
- 180   2                                      switch(BuzzNum)
- 181   2                                              {
- 182   3                                                      case 180:                       BUZZ=BUZZ_CL;                                           break;
- 183   3                                                      case 160:                       BUZZ=BUZZ_EN;                                           break;
- 184   3                                                      case 155:                       BUZZ=BUZZ_CL;                                           break;
- 185   3                                                      case 150:                       BUZZ=BUZZ_EN;                                           break;
- 186   3                                                      case 145:                       BUZZ=BUZZ_CL;                                           break;
- 187   3                                                      case 10:        
- 188   3                                                      case 1:
- 189   3                                                      case 0:                         BuzzNum=250;            BUZZ=BUZZ_EN; break;
- 190   3                                                      default: break;
- 191   3                                              }
- 192   2                                      break;
+ 179   2            case BUZZ_B_BB:     //ßÙ(³¤Ãù1Ãë)~~~~ßÙßÙ
+ 180   2              switch(BuzzNum)
+ 181   2                {
+ 182   3                  case 180:     BUZZ=BUZZ_CL;           break;
+ 183   3                  case 160:     BUZZ=BUZZ_EN;           break;
+ 184   3                  case 155:     BUZZ=BUZZ_CL;           break;
+ 185   3                  case 150:     BUZZ=BUZZ_EN;           break;
+ 186   3                  case 145:     BUZZ=BUZZ_CL;           break;
+ 187   3                  case 10:  
+ 188   3                  case 1:
+ 189   3                  case 0:       BuzzNum=250;    BUZZ=BUZZ_EN; break;
+ 190   3                  default: break;
+ 191   3                }
+ 192   2              break;
  193   2      
- 194   2                              case BUZZ_B_BBB:                //ßÙ(³¤Ãù1Ãë)~~~~ßÙßÙßÙ
- 195   2                                      switch(BuzzNum)
- 196   2                                              {
- 197   3                                                      case 180:                       BUZZ=BUZZ_CL;                                           break;
- 198   3                                                      case 160:                       BUZZ=BUZZ_EN;                                           break;
- 199   3                                                      case 155:                       BUZZ=BUZZ_CL;                                           break;
- 200   3                                                      case 150:                       BUZZ=BUZZ_EN;                                           break;
- 201   3                                                      case 145:                       BUZZ=BUZZ_CL;                                           break;
- 202   3                                                      case 140:                       BUZZ=BUZZ_EN;                                           break;
- 203   3                                                      case 135:                       BUZZ=BUZZ_CL;                                           break;
- 204   3                                                      case 10:
- 205   3                                                      case 1:
- 206   3                                                      case 0:                         BuzzNum=250;            BUZZ=BUZZ_EN; break;
- 207   3                                                      default: break;
- 208   3                                              }
- 209   2                                      break;
- 210   2                                      
- 211   2                              default:  BuzzMode=BUZZ_NA; BuzzNum=0; break;   //·äÃùÆ÷Ïà¹Ø±äÁ¿³õÊ¼»¯
- 212   2                                      
- 213   2                      }
+ 194   2            case BUZZ_B_BBB:    //ßÙ(³¤Ãù1Ãë)~~~~ßÙßÙßÙ
+ 195   2              switch(BuzzNum)
+ 196   2                {
+ 197   3                  case 180:     BUZZ=BUZZ_CL;           break;
+ 198   3                  case 160:     BUZZ=BUZZ_EN;           break;
+ 199   3                  case 155:     BUZZ=BUZZ_CL;           break;
+ 200   3                  case 150:     BUZZ=BUZZ_EN;           break;
+ 201   3                  case 145:     BUZZ=BUZZ_CL;           break;
+ 202   3                  case 140:     BUZZ=BUZZ_EN;           break;
+ 203   3                  case 135:     BUZZ=BUZZ_CL;           break;
+ 204   3                  case 10:
+ 205   3                  case 1:
+ 206   3                  case 0:       BuzzNum=250;    BUZZ=BUZZ_EN; break;
+ 207   3                  default: break;
+ 208   3                }
+ 209   2              break;
+ 210   2              
+ 211   2            default:  BuzzMode=BUZZ_NA; BuzzNum=0; break; //·äÃùÆ÷Ïà¹Ø±äÁ¿³õÊ¼»¯
+ 212   2              
+ 213   2          }
  214   1      }
 
 

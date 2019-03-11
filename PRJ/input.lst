@@ -1,41 +1,41 @@
-C51 COMPILER V9.01   INPUT                                                                 03/01/2019 15:37:17 PAGE 1   
+C51 COMPILER V9.00   INPUT                                                                 03/11/2019 18:42:03 PAGE 1   
 
 
-C51 COMPILER V9.01, COMPILATION OF MODULE INPUT
+C51 COMPILER V9.00, COMPILATION OF MODULE INPUT
 OBJECT MODULE PLACED IN ..\HEX\input.obj
-COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\SCR\input.c BROWSE INCDIR(..\INC) DEBUG OBJECTEXTEND PRINT(.\input.lst) 
-                    -OBJECT(..\HEX\input.obj)
+COMPILER INVOKED BY: c:\Keil\C51\BIN\C51.EXE ..\SCR\input.c BROWSE INCDIR(..\INC) DEBUG OBJECTEXTEND PRINT(.\input.lst) 
+                    -TABS(2) OBJECT(..\HEX\input.obj)
 
 line level    source
 
    1          /****************************************************************************
-   2          * File:                 INPUT.c                                                                                                         *
-   3          * Created:              2015-02-13                                                                                                      *
-   4          * Last Change:                                                                                                                          *
-   5          * Author:               chen zhi peng                                                                                           *
-   6          * Description:                                                                                                                          *
+   2          * File:     INPUT.c                           *
+   3          * Created:    2015-02-13                          *
+   4          * Last Change:                                *
+   5          * Author:   chen zhi peng                         *
+   6          * Description:                                *
    7          ****************************************************************************/
    8          #include "INPUT.H"
    9          
-  10          u8  data HupNum;                        //
-  11          u8  data VupNum;                        //
-  12          u8  data HDwNum;                        //
-  13          u8  data DgNum;                         //DG端无信号防抖计时
-  14          u8  data DgNum1;                        //DG端有信号防抖计时
-  15          u8  data FzNum;                         //FZ端防抖计时
-  16          u8  data PosNum;                        //位置检测计时
+  10          u8  data HupNum;      //
+  11          u8  data VupNum;      //
+  12          u8  data HDwNum;      //
+  13          u8  data DgNum;       //DG端无信号防抖计时
+  14          u8  data DgNum1;      //DG端有信号防抖计时
+  15          u8  data FzNum;       //FZ端防抖计时
+  16          u8  data PosNum;      //位置检测计时
   17          
-  18          u8 xdata HupSta;                        //
-  19          u8 xdata VupSta;                        //
-  20          u8 xdata HDwSta;                        //
-  21          u8 xdata DgSta;                         //地感输入状态
-  22          u8 xdata FzSta;                         //外部防砸输入状态
+  18          u8 xdata HupSta;      //
+  19          u8 xdata VupSta;      //
+  20          u8 xdata HDwSta;      //
+  21          u8 xdata DgSta;       //地感输入状态
+  22          u8 xdata FzSta;       //外部防砸输入状态
   23          
-  24          u8 xdata PosLin;                        //位置检测顺序
-  25          u8 xdata Even;                          //事件
-  26          u8 xdata EveNu;                         //事件个数
+  24          u8 xdata PosLin;      //位置检测顺序
+  25          u8 xdata Even;        //事件
+  26          u8 xdata EveNu;       //事件个数
   27          
-  28          u8 xdata McuId;                         //设备号
+  28          u8 xdata McuId;       //设备号
   29          
   30          
   31          
@@ -62,331 +62,331 @@ line level    source
   52          
   53          
   54          
-C51 COMPILER V9.01   INPUT                                                                 03/01/2019 15:37:17 PAGE 2   
+C51 COMPILER V9.00   INPUT                                                                 03/11/2019 18:42:03 PAGE 2   
 
   55          
   56          
-  57          void Dg_clk()   { if(DgNum)             DgNum--; if(DgNum1) DgNum1--; }
-  58          void Fz_clk()   { if(FzNum)             FzNum--;}
-  59          void Pos_clk()  { if(PosNum)    PosNum--;}
-  60          void Hup_clk()  { if(HupNum)    HupNum--;}
-  61          void Hdw_clk()  { if(HDwNum)    HDwNum--;}
-  62          void Vup_clk()  { if(VupNum)    VupNum--;}
+  57          void Dg_clk() { if(DgNum)   DgNum--; if(DgNum1) DgNum1--; }
+  58          void Fz_clk() { if(FzNum)   FzNum--;}
+  59          void Pos_clk()  { if(PosNum)  PosNum--;}
+  60          void Hup_clk()  { if(HupNum)  HupNum--;}
+  61          void Hdw_clk()  { if(HDwNum)  HDwNum--;}
+  62          void Vup_clk()  { if(VupNum)  VupNum--;}
   63          
   64          
-  65          void BmRed()            //拨码参数读取
+  65          void BmRed()    //拨码参数读取
   66          {
-  67   1              if(!BM4) McuId= MACHI_MASTER;  else McuId= MACHI_VICE;
+  67   1        if(!BM4) McuId= MACHI_MASTER;  else McuId= MACHI_VICE;
   68   1      
-  69   1              if(!BM1)                DwSloBri|=1;
-  70   1              if(!BM2)                DwSloBri|=2;
+  69   1        if(!BM1)    DwSloBri|=1;
+  70   1        if(!BM2)    DwSloBri|=2;
   71   1      
   72   1      }
   73          
   74          
   75          void Event(u8 evn)
-  76          {       
-  77   1              if(Even <= evn) { Even= evn; EveNu++; }
+  76          { 
+  77   1        if(Even <= evn) { Even= evn; EveNu++; }
   78   1      }
   79          
   80          
-  81          u8 posing()             //限位开关防抖--变0和1都防抖
+  81          u8 posing()   //限位开关防抖--变0和1都防抖
   82          {
-  83   1              switch(PosLin)
-  84   1                      {
-  85   2                              case 0:
-  86   2                                      if(!VER && !HOR) PosLin= 4;
-  87   2                                      else if(!VER || !HOR) { PosLin=1; PosNum= POS_ON_TIME; }
-  88   2                                      else  PosRal= POS_INT;
-  89   2                                      break;
+  83   1        switch(PosLin)
+  84   1          {
+  85   2            case 0:
+  86   2              if(!VER && !HOR) PosLin= 4;  //说明在抬杆或者落标缓冲区间 surge
+  87   2              else if(!VER || !HOR) { PosLin=1; PosNum= POS_ON_TIME; }
+  88   2              else  PosRal= POS_INT;
+  89   2              break;
   90   2      
-  91   2                              case 1: if(!VER || !HOR){ if(!PosNum) PosLin= 2; }  else { PosNum= 0; PosLin= 0;} break;
+  91   2            case 1: if(!VER || !HOR){ if(!PosNum) PosLin= 2; }  else { PosNum= 0; PosLin= 0;} break;
   92   2      
-  93   2                              case 2: 
-  94   2                                      if(!VER && !HOR)        { PosLin= 4; break; }
-  95   2                                      else if(!VER)           { PosRal= POS_VER; break; }
-  96   2                                      else if(!HOR)           { PosRal= POS_HOR; break; }
-  97   2                                      else { PosNum= POS_OF_TIME; PosLin= 3; }
-  98   2                                      break;
-  99   2                                      
- 100   2                              case 3:
- 101   2                                      if(VER && HOR){ if(!PosNum) PosLin= 0; } else PosLin= 2;
- 102   2                                      break;
+  93   2            case 2: 
+  94   2              if(!VER && !HOR)  { PosLin= 4; break; }
+  95   2              else if(!VER)     { PosRal= POS_VER; break; }
+  96   2              else if(!HOR)     { PosRal= POS_HOR; break; }
+  97   2              else { PosNum= POS_OF_TIME; PosLin= 3; }
+  98   2              break;
+  99   2              
+ 100   2            case 3:
+ 101   2              if(VER && HOR){ if(!PosNum) PosLin= 0; } else PosLin= 2;
+ 102   2              break;
  103   2      
- 104   2                              case 4:
- 105   2                                      if(VER || HOR) PosLin= 0;
- 106   2                                      else PosRal= POS_ERR;
- 107   2                                      break;
- 108   2                                      
- 109   2                              default: PosLin=0; PosRal=0; break;
- 110   2                      }
- 111   1              if(PosRal== POS_ERR) return ERR_POS_FAIL;
- 112   1              return 0;
+ 104   2            case 4:
+ 105   2              if(VER || HOR) PosLin= 0;
+ 106   2              else PosRal= POS_ERR;
+ 107   2              break;
+ 108   2              
+ 109   2            default: PosLin=0; PosRal=0; break;
+ 110   2          }
+ 111   1        if(PosRal== POS_ERR) return ERR_POS_FAIL;
+ 112   1        return 0;
  113   1      }
  114          
  115          
- 116          void FZing()    //防砸信号防抖--变1防抖
-C51 COMPILER V9.01   INPUT                                                                 03/01/2019 15:37:17 PAGE 3   
+ 116          void FZing()  //防砸信号防抖--变1防抖
+C51 COMPILER V9.00   INPUT                                                                 03/11/2019 18:42:03 PAGE 3   
 
  117          {
- 118   1              switch(FzSta)
- 119   1                      {
- 120   2                              case STA_NA:
- 121   2                                      if(!FZ) { FzSta=STA_ON; FzNum=FZ_OFF_TIME; }
- 122   2                                      break;
- 123   2                              case STA_ON:
- 124   2                                      if(FZ){ if(!FzNum) FzSta=STA_NA; }
- 125   2                                      else DgNum=FZ_OFF_TIME;
- 126   2                                      break;
- 127   2                              default: 
- 128   2                                      if(!FZ) { FzSta=STA_ON; break; }
- 129   2                                      else    { FzSta=STA_NA; DgNum=FZ_OFF_TIME; }
- 130   2                                      break;
- 131   2                      }
+ 118   1        switch(FzSta)
+ 119   1          {
+ 120   2            case STA_NA:
+ 121   2              if(!FZ) { FzSta=STA_ON; FzNum=FZ_OFF_TIME; }
+ 122   2              break;
+ 123   2            case STA_ON:
+ 124   2              if(FZ){ if(!FzNum) FzSta=STA_NA; }
+ 125   2              else DgNum=FZ_OFF_TIME;
+ 126   2              break;
+ 127   2            default: 
+ 128   2              if(!FZ) { FzSta=STA_ON; break; }
+ 129   2              else    { FzSta=STA_NA; DgNum=FZ_OFF_TIME; }
+ 130   2              break;
+ 131   2          }
  132   1      }
  133          
  134          void DgStaClr()
  135          {
- 136   1              if(DgSta== STA_KEEP) DgSta= STA_NA; 
+ 136   1        if(DgSta== STA_KEEP) DgSta= STA_NA; 
  137   1      }
  138          
  139          
- 140          void DGing()            //地感信号防抖--变1防抖
+ 140          void DGing()    //地感信号防抖--变1防抖
  141          {
  142   1      /*
- 143   1              switch(DgSta)
- 144   1                      {
- 145   1                              case STA_NA:
- 146   1                              case STA_KEEP:
- 147   1                                      if(!DG) { DgSta= STA_ON; DgNum= DG_OFF_TIME; }
- 148   1                                      else if(UpCt) { if(!UpDcNum) { UpCt=0; DgStaClr(); } }
- 149   1                                      break;
- 150   1                                      
- 151   1                              case STA_ON:
- 152   1                                      if(DG)  { if(!DgNum) DgSta= STA_KEEP1; }
- 153   1                                      else DgNum= DG_OFF_TIME;
- 154   1                                      if(ViceSta==VICE_STA_EN || ViceSta==VICE_STA_DGOF) ViceSta=VICE_STA_DGON;
- 155   1                                      UpDcNum=UPDCTIME;
- 156   1                                      break;
- 157   1                                      
- 158   1                              case STA_KEEP1:
- 159   1                                      if(UpCt)        UpCt--;
- 160   1                                      DgSta= STA_KEEP;
- 161   1                                      if(ViceSta==VICE_STA_DGON) ViceSta=VICE_STA_DGOF;
- 162   1                                      break;
- 163   1                                      
- 164   1                              default: 
- 165   1                                      if(!DG) { DgSta=STA_ON; break; }
- 166   1                                      else    { DgSta=STA_NA; DgNum=DG_OFF_TIME; }
- 167   1                                      break;
- 168   1                      }
+ 143   1        switch(DgSta)
+ 144   1          {
+ 145   1            case STA_NA:
+ 146   1            case STA_KEEP:
+ 147   1              if(!DG) { DgSta= STA_ON; DgNum= DG_OFF_TIME; }
+ 148   1              else if(UpCt) { if(!UpDcNum) { UpCt=0; DgStaClr(); } }
+ 149   1              break;
+ 150   1              
+ 151   1            case STA_ON:
+ 152   1              if(DG)  { if(!DgNum) DgSta= STA_KEEP1; }
+ 153   1              else DgNum= DG_OFF_TIME;
+ 154   1              if(ViceSta==VICE_STA_EN || ViceSta==VICE_STA_DGOF) ViceSta=VICE_STA_DGON;
+ 155   1              UpDcNum=UPDCTIME;
+ 156   1              break;
+ 157   1              
+ 158   1            case STA_KEEP1:
+ 159   1              if(UpCt)  UpCt--;
+ 160   1              DgSta= STA_KEEP;
+ 161   1              if(ViceSta==VICE_STA_DGON) ViceSta=VICE_STA_DGOF;
+ 162   1              break;
+ 163   1              
+ 164   1            default: 
+ 165   1              if(!DG) { DgSta=STA_ON; break; }
+ 166   1              else    { DgSta=STA_NA; DgNum=DG_OFF_TIME; }
+ 167   1              break;
+ 168   1          }
  169   1      */
- 170   1              switch(DgSta)
- 171   1                      {
- 172   2                              case STA_NA:
- 173   2                              case STA_KEEP:
- 174   2                                      if(!DG) { DgSta= STA_ON; DgNum= DG_OFF_TIME; DgNum1=DG_ON_TIME;}
- 175   2                                      else if(UpCt) { if(!UpDcNum) { UpCt=0; DgStaClr(); } }
- 176   2                                      break;
- 177   2                                      
- 178   2                              case STA_ON:
-C51 COMPILER V9.01   INPUT                                                                 03/01/2019 15:37:17 PAGE 4   
+ 170   1        switch(DgSta)
+ 171   1          {
+ 172   2            case STA_NA:
+ 173   2            case STA_KEEP:
+ 174   2              if(!DG) { DgSta= STA_ON; DgNum= DG_OFF_TIME; DgNum1=DG_ON_TIME;}
+ 175   2              else if(UpCt) { if(!UpDcNum) { UpCt=0; DgStaClr(); } }
+ 176   2              break;
+ 177   2              
+ 178   2            case STA_ON:
+C51 COMPILER V9.00   INPUT                                                                 03/11/2019 18:42:03 PAGE 4   
 
- 179   2                                      if(DG)  
- 180   2                                              {
- 181   3                                                      if(DgNum1) DgSta=STA_NA;
- 182   3                                                      else if(!DgNum) DgSta= STA_KEEP1; 
- 183   3                                              }
- 184   2                                      else DgNum= DG_OFF_TIME;
- 185   2                                      if(ViceSta==VICE_STA_EN || ViceSta==VICE_STA_DGOF) ViceSta=VICE_STA_DGON;
- 186   2                                      UpDcNum=UPDCTIME;
- 187   2                                      break;
- 188   2                                      
- 189   2                              case STA_KEEP1:
- 190   2                                      if(UpCt)        UpCt--;
- 191   2                                      DgSta= STA_KEEP;
- 192   2                                      if(ViceSta==VICE_STA_DGON) ViceSta=VICE_STA_DGOF;
- 193   2                                      break;
- 194   2                                      
- 195   2                              default: 
- 196   2                                      if(!DG) { DgSta=STA_ON; break; }
- 197   2                                      else    { DgSta=STA_NA; DgNum=DG_OFF_TIME; }
- 198   2                                      break;
- 199   2                      }
+ 179   2              if(DG)  
+ 180   2                {
+ 181   3                  if(DgNum1) DgSta=STA_NA;
+ 182   3                  else if(!DgNum) DgSta= STA_KEEP1; 
+ 183   3                }
+ 184   2              else DgNum= DG_OFF_TIME;
+ 185   2              if(ViceSta==VICE_STA_EN || ViceSta==VICE_STA_DGOF) ViceSta=VICE_STA_DGON;
+ 186   2              UpDcNum=UPDCTIME;
+ 187   2              break;
+ 188   2              
+ 189   2            case STA_KEEP1:
+ 190   2              if(UpCt)  UpCt--;
+ 191   2              DgSta= STA_KEEP;
+ 192   2              if(ViceSta==VICE_STA_DGON) ViceSta=VICE_STA_DGOF;
+ 193   2              break;
+ 194   2              
+ 195   2            default: 
+ 196   2              if(!DG) { DgSta=STA_ON; break; }
+ 197   2              else    { DgSta=STA_NA; DgNum=DG_OFF_TIME; }
+ 198   2              break;
+ 199   2          }
  200   1      }
  201          
- 202          void HanUpEvent()       //手动抬闸事件--变0防抖
+ 202          void HanUpEvent() //手动抬闸事件--变0防抖
  203          {
- 204   1              switch(HupSta)
- 205   1                      {
- 206   2                              case STA_NA:
- 207   2                                      if(!HUP){ if(!HupNum) HupSta= STA_KEEP; }
- 208   2                                      else HupNum=HUP_ON_TIME; 
- 209   2                                      break;
- 210   2                              case STA_ON:
- 211   2                                      if(HUP) 
- 212   2                                              { 
- 213   3                                                      HupSta= STA_NA; 
- 214   3                                                      HupNum= HUP_ON_TIME; 
- 215   3                                              }
- 216   2                                      DgStaClr();
- 217   2                                      Event(ITASK_HAN_UP);
- 218   2                                      break;
- 219   2                              case STA_KEEP:
- 220   2                                      if(!JY) if(!UpCtNum) { UpCt++; UpCtNum= UPCTTIME; }
- 221   2                                      HupSta= STA_ON;
- 222   2                                      UpDcNum=UPDCTIME;
- 223   2                                      break;
- 224   2                              default:
- 225   2                                      HupSta= STA_NA; HupNum=HUP_ON_TIME;
- 226   2                                      break;
- 227   2                      }
+ 204   1        switch(HupSta)
+ 205   1          {
+ 206   2            case STA_NA:
+ 207   2              if(!HUP){ if(!HupNum) HupSta= STA_KEEP; }
+ 208   2              else HupNum=HUP_ON_TIME; 
+ 209   2              break;
+ 210   2            case STA_ON:
+ 211   2              if(HUP) 
+ 212   2                { 
+ 213   3                  HupSta= STA_NA; 
+ 214   3                  HupNum= HUP_ON_TIME; 
+ 215   3                }
+ 216   2              DgStaClr();
+ 217   2              Event(ITASK_HAN_UP);
+ 218   2              break;
+ 219   2            case STA_KEEP:
+ 220   2              if(!JY) if(!UpCtNum) { UpCt++; UpCtNum= UPCTTIME; }
+ 221   2              HupSta= STA_ON;
+ 222   2              UpDcNum=UPDCTIME;
+ 223   2              break;
+ 224   2            default:
+ 225   2              HupSta= STA_NA; HupNum=HUP_ON_TIME;
+ 226   2              break;
+ 227   2          }
  228   1      }
  229          
- 230          void HanDwEvent()                                               //手动落闸事件
+ 230          void HanDwEvent()           //手动落闸事件
  231          {
- 232   1              if(!HUP || !VUP) { HDwSta=STA_NA; return;}
- 233   1              switch(HDwSta)
- 234   1                      {
- 235   2                              case STA_NA:
- 236   2                                      if(!HDW){ if(!HDwNum) HDwSta= STA_KEEP; }
- 237   2                                      else HDwNum= HDW_ON_TIME; 
- 238   2                                      break;
- 239   2                              case STA_ON:
- 240   2                                      if(HDW)
-C51 COMPILER V9.01   INPUT                                                                 03/01/2019 15:37:17 PAGE 5   
+ 232   1        if(!HUP || !VUP) { HDwSta=STA_NA; return;}
+ 233   1        switch(HDwSta)
+ 234   1          {
+ 235   2            case STA_NA:
+ 236   2              if(!HDW){ if(!HDwNum) HDwSta= STA_KEEP; }
+ 237   2              else HDwNum= HDW_ON_TIME; 
+ 238   2              break;
+ 239   2            case STA_ON:
+ 240   2              if(HDW)
+C51 COMPILER V9.00   INPUT                                                                 03/11/2019 18:42:03 PAGE 5   
 
- 241   2                                              {
- 242   3                                                      HDwSta= STA_NA;
- 243   3                                                      HDwNum= HDW_ON_TIME; 
- 244   3                                              }                
- 245   2                                      break;
- 246   2                              case STA_KEEP:
- 247   2                                      if(McuId== MACHI_MASTER)
- 248   2                                                      {
- 249   3                                                              if(ViceRal==POS_VER) Event(ITASK_HAN_DW);               //
- 250   3                                                      }
- 251   2                                              else Event(ITASK_HAN_DW);       
- 252   2                                      HDwSta= STA_ON;
- 253   2                                      UpCt=0;
- 254   2                                      UpCtNum=0;
- 255   2                                      UpDcNum=0;
- 256   2                                      if(McuId==MACHI_MASTER)if(ViceRal!=POS_VER){ HDwSta=STA_NA; break; }
- 257   2                                      if(ViceSta==VICE_STA_EN) ViceSta=VICE_STA_DW;
- 258   2                                      break;
- 259   2                              default:
- 260   2                                      HDwSta= STA_NA; HDwNum= HDW_ON_TIME;
- 261   2                                      break;
- 262   2                      }
+ 241   2                {
+ 242   3                  HDwSta= STA_NA;
+ 243   3                  HDwNum= HDW_ON_TIME; 
+ 244   3                }    
+ 245   2              break;
+ 246   2            case STA_KEEP:
+ 247   2              if(McuId== MACHI_MASTER)
+ 248   2                  {
+ 249   3                    if(ViceRal==POS_VER) Event(ITASK_HAN_DW);   //
+ 250   3                  }
+ 251   2                else Event(ITASK_HAN_DW); 
+ 252   2              HDwSta= STA_ON;
+ 253   2              UpCt=0;
+ 254   2              UpCtNum=0;
+ 255   2              UpDcNum=0;
+ 256   2              if(McuId==MACHI_MASTER)if(ViceRal!=POS_VER){ HDwSta=STA_NA; break; }
+ 257   2              if(ViceSta==VICE_STA_EN) ViceSta=VICE_STA_DW;
+ 258   2              break;
+ 259   2            default:
+ 260   2              HDwSta= STA_NA; HDwNum= HDW_ON_TIME;
+ 261   2              break;
+ 262   2          }
  263   1      }
  264          
  265          
  266          
- 267          void VdoUpEvent()       //视频抬闸事件--变0防抖
+ 267          void VdoUpEvent() //视频抬闸事件--变0防抖
  268          {
- 269   1              switch(VupSta)
- 270   1                      {
- 271   2                              case STA_NA:
- 272   2                                      if(!VUP){ if(!VupNum) VupSta= STA_KEEP; }
- 273   2                                      else VupNum=VUP_ON_TIME; 
- 274   2                                      break;
- 275   2                              case STA_KEEP:
- 276   2                                      if(!JY) if(!UpCtNum) { UpCt++; UpCtNum= UPCTTIME; }
- 277   2                                      VupSta= STA_ON;
- 278   2                                      UpDcNum=UPDCTIME;
- 279   2                                      break;
- 280   2                              case STA_ON:
- 281   2                                      if(VUP) 
- 282   2                                              { 
- 283   3                                                      VupSta= STA_NA; 
- 284   3                                                      VupNum=VUP_ON_TIME; 
- 285   3                                              }
- 286   2                                      DgStaClr();
- 287   2                                      Event(ITASK_VDO_UP); 
- 288   2                                      break;
- 289   2                              default:
- 290   2                                      VupSta= STA_NA; VupNum=VUP_ON_TIME;
- 291   2                                      break;
- 292   2                      }
+ 269   1        switch(VupSta)
+ 270   1          {
+ 271   2            case STA_NA:
+ 272   2              if(!VUP){ if(!VupNum) VupSta= STA_KEEP; }
+ 273   2              else VupNum=VUP_ON_TIME; 
+ 274   2              break;
+ 275   2            case STA_KEEP:
+ 276   2              if(!JY) if(!UpCtNum) { UpCt++; UpCtNum= UPCTTIME; }
+ 277   2              VupSta= STA_ON;
+ 278   2              UpDcNum=UPDCTIME;
+ 279   2              break;
+ 280   2            case STA_ON:
+ 281   2              if(VUP) 
+ 282   2                { 
+ 283   3                  VupSta= STA_NA; 
+ 284   3                  VupNum=VUP_ON_TIME; 
+ 285   3                }
+ 286   2              DgStaClr();
+ 287   2              Event(ITASK_VDO_UP); 
+ 288   2              break;
+ 289   2            default:
+ 290   2              VupSta= STA_NA; VupNum=VUP_ON_TIME;
+ 291   2              break;
+ 292   2          }
  293   1      }
  294          
- 295          void AtUpEvent()                                                //自动抬闸事件
+ 295          void AtUpEvent()            //自动抬闸事件
  296          {
- 297   1              if(Atctr== STA_ON) 
- 298   1                      {
- 299   2                              DgStaClr();
- 300   2                              Event(ITASK_AUTO_UP);
- 301   2                      }
+ 297   1        if(Atctr== STA_ON) 
+ 298   1          {
+ 299   2            DgStaClr();
+ 300   2            Event(ITASK_AUTO_UP);
+ 301   2          }
  302   1      }
-C51 COMPILER V9.01   INPUT                                                                 03/01/2019 15:37:17 PAGE 6   
+C51 COMPILER V9.00   INPUT                                                                 03/11/2019 18:42:03 PAGE 6   
 
  303          
- 304          void AtDwEvent()                                                //自动落闸事件
+ 304          void AtDwEvent()            //自动落闸事件
  305          {
- 306   1              if(Atctr== STA_KEEP)                            //
- 307   1                      Event(ITASK_AUTO_DW);                   //
+ 306   1        if(Atctr== STA_KEEP)        //
+ 307   1          Event(ITASK_AUTO_DW);     //
  308   1      }
  309          
- 310          void VerEvenr()                                                 //垂直到位事件
+ 310          void VerEvenr()             //垂直到位事件
  311          {
- 312   1              if(PosRal==POS_VER) 
- 313   1                      if(iTask >= ITASK_DG_UP && iTask <= ITASK_HAN_UP)
- 314   1                              Event(ITASK_REACH_V);           //输出事件
+ 312   1        if(PosRal==POS_VER) 
+ 313   1          if(iTask >= ITASK_DG_UP && iTask <= ITASK_HAN_UP)
+ 314   1            Event(ITASK_REACH_V);   //输出事件
  315   1      }
  316          
- 317          void HorEvent()                                                 //水平到位事件
+ 317          void HorEvent()             //水平到位事件
  318          {
- 319   1              if(PosRal== POS_HOR)                    //实际位置----在水平位
- 320   1                      if(iTask==ITASK_DG_DW || iTask==ITASK_COM_DW || iTask==ITASK_AUTO_DW || iTask==ITASK_HAN_DW)
- 321   1                              Event(ITASK_REACH_H);           //输出事件优先级
+ 319   1        if(PosRal== POS_HOR)      //实际位置----在水平位
+ 320   1          if(iTask==ITASK_DG_DW || iTask==ITASK_COM_DW || iTask==ITASK_AUTO_DW || iTask==ITASK_HAN_DW)
+ 321   1            Event(ITASK_REACH_H);   //输出事件优先级
  322   1      }
  323          
- 324          void DgUpEvent()                                                //地感抬闸事件
+ 324          void DgUpEvent()            //地感抬闸事件
  325          {
- 326   1              if(DgSta== STA_ON)                                      //地感信号----有效
- 327   1                      if(PosRal!= POS_HOR)                    //实际位置----不在水平位
- 328   1                              if(mPosD== POS_DW                       //执行位置状态----在落闸中
- 329   1                                      || mPosD== POS_VER)     //或者执行位置状态----在垂直位
- 330   1                                      Event(ITASK_DG_UP);     //地感信号有效或保持中--输出地感抬闸事件
+ 326   1        if(DgSta== STA_ON)          //地感信号----有效
+ 327   1          if(PosRal!= POS_HOR)      //实际位置----不在水平位
+ 328   1            if(mPosD== POS_DW       //执行位置状态----在落闸中
+ 329   1              || mPosD== POS_VER)   //或者执行位置状态----在垂直位
+ 330   1              Event(ITASK_DG_UP);   //地感信号有效或保持中--输出地感抬闸事件
  331   1      }
  332          
- 333          void DgDwEvent()                                                //地感落闸事件
+ 333          void DgDwEvent()            //地感落闸事件
  334          {
- 335   1              if(PosRal== POS_VER)                            //位置状态在----垂直位
- 336   1                      if(DgSta== STA_KEEP)                    //地感落闸记忆----有效
- 337   1                              if(!UpCt)
- 338   1                                      {
- 339   2                                              if(McuId== MACHI_MASTER)
- 340   2                                                      {
- 341   3                                                              if(ViceRal==POS_VER) Event(ITASK_DG_DW);                //地感记忆落闸有效--输出地感落闸事件
- 342   3                                                      }
- 343   2                                              else Event(ITASK_DG_DW);        
- 344   2                                      }
+ 335   1        if(PosRal== POS_VER)        //位置状态在----垂直位
+ 336   1          if(DgSta== STA_KEEP)      //地感落闸记忆----有效
+ 337   1            if(!UpCt)
+ 338   1              {
+ 339   2                if(McuId== MACHI_MASTER)
+ 340   2                  {
+ 341   3                    if(ViceRal==POS_VER) Event(ITASK_DG_DW);    //地感记忆落闸有效--输出地感落闸事件
+ 342   3                  }
+ 343   2                else Event(ITASK_DG_DW);  
+ 344   2              }
  345   1      }
  346          
- 347          void FzUpEvent()                                                //防砸抬闸事件
+ 347          void FzUpEvent()            //防砸抬闸事件
  348          {
- 349   1              if(FzSta== STA_ON)                                      //防砸信号----有效
- 350   1                      if(PosRal!= POS_HOR)                    //实际位置----不在水平位
- 351   1                              if(mPosD== POS_DW                       //执行位置状态----落闸中
- 352   1                                      || mPosD== POS_VER)     //或者执行位置状态----在垂直位
- 353   1                                      Event(ITASK_FZ_UP);             //地感信号有效或保持中--输出地感抬闸事件        
+ 349   1        if(FzSta== STA_ON)          //防砸信号----有效
+ 350   1          if(PosRal!= POS_HOR)      //实际位置----不在水平位
+ 351   1            if(mPosD== POS_DW     //执行位置状态----落闸中
+ 352   1              || mPosD== POS_VER)   //或者执行位置状态----在垂直位
+ 353   1              Event(ITASK_FZ_UP);   //地感信号有效或保持中--输出地感抬闸事件  
  354   1      }
  355          
  356          void InerOkEvt()
  357          {
- 358   1              if(iTask== ITASK_INER_DW)
- 359   1                      if(PosRal== POS_VER)
- 360   1                              Event(ITASK_INER_OK);   
+ 358   1        if(iTask== ITASK_INER_DW)
+ 359   1          if(PosRal== POS_VER)
+ 360   1            Event(ITASK_INER_OK); 
  361   1      }
  362          
  363          void CoerOkEvt()
  364          {
-C51 COMPILER V9.01   INPUT                                                                 03/01/2019 15:37:17 PAGE 7   
+C51 COMPILER V9.00   INPUT                                                                 03/11/2019 18:42:03 PAGE 7   
 
- 365   1              if(iTask== ITASK_COER_UP)
- 366   1                      if(PosRal== POS_HOR)
- 367   1                              Event(ITASK_COER_OK);
+ 365   1        if(iTask== ITASK_COER_UP)
+ 366   1          if(PosRal== POS_HOR)
+ 367   1            Event(ITASK_COER_OK);
  368   1      }
  369          
  370          
@@ -394,32 +394,32 @@ line level    source
  372          
  373          void InputTask()
  374          {
- 375   1              if(iTask== ITASK_INT|| iTask== ITASK_STR) return;       //外部任务未初始化完成
- 376   1              if(posing())    //限位开关防抖
- 377   1                      err_volu(ERR_POS_FAIL);         
- 378   1              if(UpCt) { if(JY) { UpCt= 0; DgStaClr(); } }
- 379   1              FZing();                //防砸信号防抖
- 380   1              DGing();                //地感信号防抖
- 381   1              
- 382   1              HanUpEvent();   //手动抬闸事件
- 383   1              VdoUpEvent();   //视频抬闸事件
- 384   1              AtUpEvent();    //自动抬闸事件
- 385   1              DgUpEvent();    //地感抬闸事件
- 386   1              FzUpEvent();    //防砸抬闸事件
- 387   1              
- 388   1              AtDwEvent();    //自动落闸事件
- 389   1              HanDwEvent();   //手动落闸事件
- 390   1              DgDwEvent();    //地感落闸事件  
+ 375   1        if(iTask== ITASK_INT|| iTask== ITASK_STR) return; //外部任务未初始化完成
+ 376   1        if(posing())  //限位开关防抖
+ 377   1          err_volu(ERR_POS_FAIL);   
+ 378   1        if(UpCt) { if(JY) { UpCt= 0; DgStaClr(); } }
+ 379   1        FZing();    //防砸信号防抖
+ 380   1        DGing();    //地感信号防抖
+ 381   1        
+ 382   1        HanUpEvent(); //手动抬闸事件
+ 383   1        VdoUpEvent(); //视频抬闸事件
+ 384   1        AtUpEvent();  //自动抬闸事件
+ 385   1        DgUpEvent();  //地感抬闸事件
+ 386   1        FzUpEvent();  //防砸抬闸事件
+ 387   1        
+ 388   1        AtDwEvent();  //自动落闸事件
+ 389   1        HanDwEvent(); //手动落闸事件
+ 390   1        DgDwEvent();  //地感落闸事件  
  391   1      
- 392   1              VerEvenr();             //垂直到位事件          
- 393   1              HorEvent();             //水平到位事件          
+ 392   1        VerEvenr();   //垂直到位事件    
+ 393   1        HorEvent();   //水平到位事件    
  394   1      
- 395   1              InerOkEvt();    //掉杆复位事件
- 396   1              CoerOkEvt();    //强抬复位事件
+ 395   1        InerOkEvt();  //掉杆复位事件
+ 396   1        CoerOkEvt();  //强抬复位事件
  397   1      
  398   1      
- 399   1              if(!EveNu) Even= 0;     //无事件触发，事件清零
- 400   1              else EveNu= 0;  
+ 399   1        if(!EveNu) Even= 0; //无事件触发，事件清零
+ 400   1        else EveNu= 0;  
  401   1      }
  402          
  403          

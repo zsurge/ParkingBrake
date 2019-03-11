@@ -1,0 +1,1 @@
+"..\SCR\run.c" BROWSE INCDIR(..\INC) DEBUG OBJECTEXTEND PRINT(.\run.lst) TABS (2) OBJECT(..\HEX\run.obj)

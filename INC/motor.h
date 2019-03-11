@@ -9,7 +9,7 @@
 #define	__MOTOR_H
 
 
-#include "RUN.H"
+#include "run.H"
 #include "INPUT.H"
 #include "ERR.h"
 #include "reg52.h"
@@ -167,17 +167,25 @@
 #define M_SLOW	 	{ BigM5u= M_NA; BigM3u= M_EN; LitM= M_EN; }			//
 
 
+typedef struct TRepairMotor
+{
+	u8 LastSpeRin;      //上一个测速环的值
+	u8 CurrentSpeRin;  //当前测速环转动圈数
+	u16 CurrentCounts;  //统计次数
+	u8 CurrentMotorType;//当前电机类型
+	u8 CurrentSprintType;//当前弹簧类型
+	u8 CurrentMotorPosition;//当前电机位置
+	u8 Direction; //电机转动方向
+	u8 Time;		//所用时间
+	u8 FlagValue;   //统计超限次数
+}RepairMotor_t;
 
-
-
-
-
-
-
-
-
-
-
+typedef struct TLimitValue
+{
+	u8 InitSpeRin;
+	u8 SafetyLimit;
+	u8 TimeMinValue;
+}LimitValue_t;
 
 
 
@@ -249,6 +257,11 @@ extern volatile u8 xdata DwSloBri;	//开始减速圈数计算(即开始设置BigM5u=M_NA )
 
 extern volatile bit SpeSta;			//测速缓存比较标志
 
+extern volatile RepairMotor_t gRepairMotor;  //判定当前是否需要抬闸
+//extern volatile LimitValue_t gLimitValue;//设置判定条件
+extern volatile u8 xdata gCurrentSpringNum;//设置弹簧条数，默认为3
+
+
 
 
 
@@ -260,15 +273,8 @@ void intMotor();
 void mRunClk();
 void mCtrClk();
 void mTaskControl();	
-
-
-
-
-
-
-
-
-
-
+void InitRepairMotor(void);
+//void InitLimitValue(void);
+//void GetLimitValue(void);
 #endif
 

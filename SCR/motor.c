@@ -37,6 +37,8 @@ u8 xdata DwSloBri;	//开始减速圈数计算(即开始设置BigM5u=M_NA )
 bit SpeSta;			//测速缓存比较标志
 
 
+volatile RepairMotor_t gRepairMotor;  //判定当前是否需要抬闸
+volatile u8 xdata gCurrentSpringNum = 3;//设置弹簧条数，默认为3
 
 
 
@@ -48,7 +50,17 @@ void intMotor()
 	StmNum= 0; StmNum2= 0; StmNum3= 0; mCorNum= 0; mRunNum= 0; SpeRinN= 0; 
 	memset(StmNumBuf,0,sizeof(StmNumBuf));  memset(StmNumBuf2,0,sizeof(StmNumBuf2));  memset(&SpriBuf,0,sizeof(SpriBuf));
 	StmSp= 0; StmSp2= 0; mRunTe= 0; DwSlo= 0; Stm= 0; StmSlow= 0; StmSlow2= 0; SpeSta= 0;
+	InitRepairMotor();
+    gCurrentSpringNum = 3;
+//	InitLimitValue();
 }
+
+void InitRepairMotor(void)
+{
+	memset(&gRepairMotor,0x00,sizeof(gRepairMotor));    
+}
+
+
 
 void mRunClk()	{ if(mRunNum) mRunNum--; }					//电机运行时间时钟
 void mCtrClk()	{ if(mCorNum) mCorNum--;  else StmNum++; }	//电机正反转切换时钟   //遇阻时钟	
@@ -240,6 +252,7 @@ void KnowMtyp(u8 sta,u8 Prg,u8 pos)	//机芯类型识别及参数赋值
 					StmSp=STMMAXTIME;		//机芯类型未知时，获取默认灵敏度
 				}
 		}
+	
 }
 
 //**********************************************//
@@ -366,8 +379,11 @@ void mTaskControl()			//电机任务控制
 //					抬闸		
 /***********************************************************************************************/
 			case MTASK_UP:
+				InitRepairMotor();
+				gRepairMotor.Direction = POS_UP;				
 				BrakeClr();
 				KnowMtyp(MLN_UP,MTPYREAD,POS_HOR);
+				//GetLimitValue(mType);//获取边界值
 				SpringTest(SPRI_CLR_PARA);
 				SpeRinN= 0;
 				mCorNum= M_OF_TIME;
@@ -440,12 +456,15 @@ void mTaskControl()			//电机任务控制
 			case MTASK_US5:
 				 if(PosRal!= POS_VER) { mPosD=POS_INT; Event(ITASK_INER_DW); BrakeClr(); break; }
 				 if(mPosD== POS_INT) mPosD= POS_VER;
+//				 Timer2_Zero();
 				break;
 				
 /***********************************************************************************************/
 //					      落闸		
 /***********************************************************************************************/				
 			case MTASK_DW:
+				InitRepairMotor();
+				gRepairMotor.Direction = POS_DW;
 				BrakeClr();
 				KnowMtyp(MLN_DW,MTPYREAD,POS_VER);
 				CalcuStm(STMBUF_CLR1);
@@ -472,7 +491,7 @@ void mTaskControl()			//电机任务控制
 			case MTASK_DW3:
 				if(mType > MTPYREAD) 				 //已识别机芯类型时，操作如下
 					{
-						if(SpeRinN < 26) 			 //起步时，前26圈的遇阻灵明度 = 默认灵敏度 + 工作灵敏度 
+						if(SpeRinN < 26) 			 //起步时，前26圈的遇阻灵敏度 = 默认灵敏度 + 工作灵敏度 
 							StmSlow= STMMAXTIME;
 						else if(SpeRinN > DwSlo)	 //开始缓冲阶段
 							{
@@ -562,10 +581,37 @@ void mTaskControl()			//电机任务控制
 			case MTASK_DS5:
 				if(mPosD== POS_INT) mPosD= POS_HOR;
 				if(PosRal!= POS_HOR) { mPosD= POS_INT; Event(ITASK_COER_UP); BrakeClr(); }
+//				Timer2_Zero();
 				break;
 				
 			default:  break;
 		}
 }
 
+//void InitLimitValue(void)
+//{
+//	memset(&gLimitValue, 0xFF,sizeof(gLimitValue) );
+//}
+
+
+//void GetLimitValue(void)
+//{
+//	#if type == M1S
+//		gLimitValue.InitSpeRin = 30;
+//		gLimitValue.SafetyLimit = 4;
+//		gLimitValue.TimeMinValue = 4;
+//	#elif type == M18S
+//		gLimitValue.InitSpeRin = 30;
+//		gLimitValue.SafetyLimit = 4;
+//		gLimitValue.TimeMinValue = 4;	
+//	#elif type == M38S
+//		gLimitValue.InitSpeRin = 30;
+//		gLimitValue.SafetyLimit = 4;
+//		gLimitValue.TimeMinValue = 4;	
+//	#else
+//		gLimitValue.InitSpeRin = 30;
+//		gLimitValue.SafetyLimit = 4;
+//		gLimitValue.TimeMinValue = 4;	
+//	#endif
+//}
 

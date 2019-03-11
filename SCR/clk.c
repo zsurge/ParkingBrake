@@ -45,7 +45,7 @@ void clk()							//设备运行时钟
 			T100MS=T100MS_TIME;
 			if(T1000MS)T1000MS--;
 			
-			LED=!LED;
+//			LED=!LED;
 			AtRun_clk();
 			err_clk();
 			DZP_clk();

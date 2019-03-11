@@ -130,6 +130,7 @@ bit SectotRT(u16 dx, u8 nu, u8 tt)
 		}
 	if(cnum<(512*tt-1)) return 1;
 	else return 0;
+	return 0;
 }
 
 

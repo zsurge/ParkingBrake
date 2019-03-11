@@ -66,6 +66,29 @@ void intMcu()
 	EA=1;
 }
 
+
+//定时器2初始化
+#if TIMER2
+void Timer2_Init(void)
+{
+	T2MOD = 0;		//初始化模式寄存器
+	T2CON = 0;		//初始化控制寄存器
+	TL2 = (65536 - 50000) / 256;		//设置定时初值 50000--50ms 9216---10ms
+	TH2 = (65536 - 50000) % 256;		//设置定时初值
+	TR2 = 1;		//定时器2开始计时
+
+
+	//  TH2 = (65536-9216)/256;
+	//  TL2 = (65536-9216)%256;
+	EA=1;                      //打开总中断
+	ET2=1;                     //打开定时器中断  
+	TR2=1;                     //打开定时器开关
+}
+#endif
+
+
+
+
 void intRun() { iTask= ITASK_INT; iTask2= ITASK_NA; ViceDo= 0; ViceRal= 0; ViceRal2= 0; ViceSta= 0; UpCt=0; UpCtNum=0; }
 
 void delay(u8 cnt)  //   延时单位:
@@ -87,15 +110,18 @@ void UpDcClk() { if(UpDcNum) UpDcNum--; }
 
 void sysint()
 {
-	intMcu();
+	intMcu();	
 	intUsart();
+	#if TIMER2
+	Timer2_Init();
+	#endif
 	intRun();
 	intBuzz();
 	intErr();
 	intInput();
 	intclk();
 	intMotor();
-	intOut();
+	intOut();	
 	intAtRun();
 	RomTest();
 }
@@ -267,5 +293,181 @@ void t0_interrupt(void)  interrupt 1 //using 1
 }
 
 
+
+
+//	落闸时分为5个阶段，分别是
+//	1.起步阶段，垂直位到起步位
+//	2.运行阶段，起步位到中段
+//	3.减速阶段，中段到缓冲位
+//	4.缓冲阶段，缓冲到平稳位
+//	5.稳定阶段，平稳位到水平位
+//	大概思路是，根据测试的数据，得出起步阶段和运行阶段的所需要的转数区间
+//	然后从这个区间开始判定，根据进入定时器的次数，得到新的转数，以及总的时间
+//	这个时间再根据经验值，判定是不是超出我们预期的转数区间，若是，则抬闸
+
+//预期的落闸时间为5秒，快于5秒，认为就有风险
+
+#if 0 
+void testTimer2(void)
+{	
+	//首先判断是否到了减速阶段
+	//30是假设到减速阶段测速环的转数，实际需要去手动的计量
+	if(SpeRinN >= 30) //已到减速阶段，之后要根据测速环的圈数和时间判定是否失速
+	{
+		if(gRepairMotor.CurrentCounts == 0)
+		{
+			gRepairMotor.InitSpeRin = SpeRinN;//记录开始计算前测速环的圈数
+		}
+		
+		gRepairMotor.CurrentCounts++;//进入中断的次数，根据中断的次数判定所用的时间
+		
+		//因为是10ms的定时器，3.8的电机每个周期是22.5ms，所有进行判定每50ms有两次
+		//这里测试使用，先固定3.8电机，release时会使用宏定义，定义不同的计算方式和判定条件
+		if((gRepairMotor.CurrentCounts != 0) && (gRepairMotor.CurrentCounts % 5 == 0))
+		{
+			if (gRepairMotor.FlagValue >= 4)
+			{
+				Event(ITASK_DG_UP);//危险，抬杆
+			}
+			
+			if(gRepairMotor.LastSpeRin !=0)
+			{
+				//这里根据是开5U电机和3U电机判定，空载最快8圈，所以取6圈做为判定条件
+				if((SpeRinN - gRepairMotor.LastSpeRin) >= 4  /*&&这里应该根据电压*/)
+				{
+					//这个时候就比较危险了
+					gRepairMotor.FlagValue++;
+				}
+			}
+
+			gRepairMotor.LastSpeRin = SpeRinN;
+			
+			//打印当前测速环值
+			Uart_Print(3,gRepairMotor.Direction);			
+
+		}
+	}
+	
+}
+
+//定时器中断2
+void Timer2_ISR(void) interrupt 5 //定时器2中断
+{
+	TF2=0;
+	EXF2 = 0;
+	TL2 = (65536 - 9216) / 256;		//设置定时初值
+	TH2 = (65536 - 9216) % 256;		//设置定时初值
+
+	testTimer2();  
+}
+#endif 
+
+#if 1 
+#define TIMER_FRE  90 
+#define BASIC_SPEED_100MS 8 //每100ms测速环转到的圈数
+#define SPRING_PARAM_OFFSET 2//弹簧参数
+#define STANDARD_VALUE 72//弹簧标准值
+
+
+void motorTimer2(void)
+{	
+# if 1
+    //每隔100毫秒进来判定一次
+	if(SpeRinN >= 1) //测速环转动才开始进来
+	{		
+	    //从第900毫秒的时候进来，然后每100毫秒判定一次
+    	if(gRepairMotor.CurrentCounts++ >= TIMER_FRE);//进入中断的次数，根据中断的次数判定所用的时间
+        {      
+    		//这里测试使用，先固定3.8电机，release时会使用宏定义，定义不同的计算方式和判定条件
+    		
+    		if(gRepairMotor.CurrentCounts % TIMER_FRE == 0)
+    		{
+                //先判定抬闸
+                if(gRepairMotor.Direction == POS_UP)
+                {
+                    if(gRepairMotor.CurrentCounts == TIMER_FRE)
+                    {
+                        if (SpeRinN > STANDARD_VALUE + SPRING_PARAM_OFFSET)
+                        {
+                            //三根弹簧
+                            gCurrentSpringNum = 3;
+                        }
+                        else if(SpeRinN < STANDARD_VALUE + SPRING_PARAM_OFFSET && SpeRinN >= STANDARD_VALUE -SPRING_PARAM_OFFSET)
+                        {
+                            //两根弹簧，需要报警
+                            gCurrentSpringNum = 2;
+                        }
+                        else
+                        {
+                            //只有一根弹簧
+                            gCurrentSpringNum = 1;
+                        }
+                    }
+                }
+                else //落闸
+                {
+                    if(gCurrentSpringNum == 1 || SpeRinN >= STANDARD_VALUE + SPRING_PARAM_OFFSET*2-1)
+                    {
+                        //执行抬闸
+                        Event(ITASK_DG_UP);
+                    }
+                
+                }
+                
+    			//打印当前测速环值
+    			Uart_Print(3,gRepairMotor.Direction);		
+              }
+
+		}
+	}
+#else 
+	g_timer_run_counter++;
+	if(g_timer_run_counter % TIMER_FRE == 0)
+	{
+		if(SpeRinN > FISTER_SPRING_BREAK && SpeRinN <= SECOND_SPRING_BREAK && g_timer_run_counter == 1)
+		{
+			g_timer_run_counter = 0;
+			Event(ITASK_DG_UP);//危险，抬杆
+		}
+		else if(SpeRinN > SECOND_SPRING_BREAK && SpeRinN <= THIRD_SPRING_BREAK && g_timer_run_counter == 2)
+		{
+			g_timer_run_counter = 0;
+			Event(ITASK_DG_UP);//危险，抬杆
+		}
+		else if(SpeRinN > THIRD_SPRING_BREAK && SpeRinN <= FORTH_SPRING_BREAK  && g_timer_run_counter == 3)
+		{
+			g_timer_run_counter = 0;
+			Event(ITASK_DG_UP);//危险，抬杆
+		}
+		else
+		{
+			g_timer_run_counter = 0;
+		}
+
+		//打印当前测速环值
+		Uart_Print(3,gRepairMotor.Direction);
+	}
+
+	#endif
+}
+
+//定时器中断2
+void Timer2_ISR(void) interrupt 5 //定时器2中断
+{
+	TF2=0;
+	EXF2 = 0;
+	TL2 = (65536 - 9216) / 256;		//设置定时初值
+	TH2 = (65536 - 9216) % 256;		//设置定时初值
+
+	motorTimer2();  
+}
+
+//void Timer2_Zero(void)
+//{	
+//	TF2=0;
+//	EXF2 = 0;	
+//}
+
+#endif
 
 

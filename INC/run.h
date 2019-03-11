@@ -25,6 +25,9 @@
 #define		ENABLE		1
 #define		DISABLE		0
 
+#define 	ISDEBUG 	1
+#define 	TIMER2      1
+
 
 //主副机通信周期
 #define COM_TIME		20		
@@ -127,6 +130,9 @@ void ComClk();
 void UpCtClk();
 void UpDcClk();
 void delay(u8 cnt);
+
+void Timer2_Init(void);
+//void Timer2_Zero(void);
 
 
 

@@ -1,25 +1,25 @@
-C51 COMPILER V9.01   ERR                                                                   03/01/2019 15:37:16 PAGE 1   
+C51 COMPILER V9.00   ERR                                                                   03/11/2019 18:42:02 PAGE 1   
 
 
-C51 COMPILER V9.01, COMPILATION OF MODULE ERR
+C51 COMPILER V9.00, COMPILATION OF MODULE ERR
 OBJECT MODULE PLACED IN ..\HEX\err.obj
-COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\SCR\err.c BROWSE INCDIR(..\INC) DEBUG OBJECTEXTEND PRINT(.\err.lst) OBJE
-                    -CT(..\HEX\err.obj)
+COMPILER INVOKED BY: c:\Keil\C51\BIN\C51.EXE ..\SCR\err.c BROWSE INCDIR(..\INC) DEBUG OBJECTEXTEND PRINT(.\err.lst) TABS
+                    -(2) OBJECT(..\HEX\err.obj)
 
 line level    source
 
    1          /****************************************************************************
-   2          * File:                 ERR.c                                                                                                           *
-   3          * Created:              2015-02-13                                                                                                      *
-   4          * Last Change:                                                                                                                          *
-   5          * Author:               chen zhi peng                                                                                           *
-   6          * Description:                                                                                                                          *
+   2          * File:     ERR.c                           *
+   3          * Created:    2015-02-13                          *
+   4          * Last Change:                                *
+   5          * Author:   chen zhi peng                         *
+   6          * Description:                                *
    7          ****************************************************************************/
    8          #include "ERR.h"
    9          
-  10          u8 xdata err;           //错误代码
-  11          u8 xdata errnum;        //时钟
-  12          u8 xdata errctr;        //错误计数
+  10          u8 xdata err;   //错误代码
+  11          u8 xdata errnum;  //时钟
+  12          u8 xdata errctr;  //错误计数
   13          
   14          
   15          void intErr() { err=ERR_INT; errnum=0; errctr=0; }
@@ -27,7 +27,7 @@ line level    source
   17          
   18          void err_volu(u8 dat)
   19          {
-  20   1              if(dat>=err) { err = dat; errctr++; errnum= ERRTIME; }
+  20   1        if(dat>=err) { err = dat; errctr++; errnum= ERRTIME; }
   21   1      }
   22          
   23          //********************************************************************************************************
@@ -37,96 +37,96 @@ line level    source
              -****/
   26          void err_task()
   27          {
-  28   1              switch(err)
-  29   1                      {
-  30   2                              case ERR_NONE:
-  31   2                                      break;
-  32   2                              case ERR_CLR:
-  33   2                                      Buzz_task(BUZZ_NA);
-  34   2                                      err=ERR_NONE;
-  35   2                                      break;
+  28   1        switch(err)
+  29   1          {
+  30   2            case ERR_NONE:
+  31   2              break;
+  32   2            case ERR_CLR:
+  33   2              Buzz_task(BUZZ_NA);
+  34   2              err=ERR_NONE;
+  35   2              break;
   36   2      //************************************************************************//
   37   2      
   38   2      //************************************************单次提示鸣响******************//
-  39   2                              case ERR_INT:
-  40   2                                      Buzz_task(BUZZ_B);
-  41   2                                      err=ERR_NONE;
-  42   2                                      break;
-  43   2                              case ERR_M1S:
-  44   2                                      Buzz_task(BUZZ_B);
-  45   2                                      err=ERR_NONE;
-  46   2                                      break;
-  47   2                              case ERR_M18S:
-  48   2                              case ERR_EEPROM_WRITE:
-  49   2                                      Buzz_task(BUZZ_BB);
-  50   2                                      err=ERR_NONE;
-  51   2                                      break;
-  52   2                              case ERR_M38S:
-C51 COMPILER V9.01   ERR                                                                   03/01/2019 15:37:16 PAGE 2   
+  39   2            case ERR_INT:
+  40   2              Buzz_task(BUZZ_B);
+  41   2              err=ERR_NONE;
+  42   2              break;
+  43   2            case ERR_M1S:
+  44   2              Buzz_task(BUZZ_B);
+  45   2              err=ERR_NONE;
+  46   2              break;
+  47   2            case ERR_M18S:
+  48   2            case ERR_EEPROM_WRITE:
+  49   2              Buzz_task(BUZZ_BB);
+  50   2              err=ERR_NONE;
+  51   2              break;
+  52   2            case ERR_M38S:
+C51 COMPILER V9.00   ERR                                                                   03/11/2019 18:42:02 PAGE 2   
 
-  53   2                              case ERR_EEPROM_WRITE1:
-  54   2                                      Buzz_task(BUZZ_BBB);
-  55   2                                      err=ERR_NONE;
-  56   2                                      break;
-  57   2                              case ERR_SPRI_BIG:
-  58   2                                      Buzz_task(BUZZ_BB_B_B_B);
-  59   2                                      err=ERR_NONE;
-  60   2                                      break;
-  61   2                              case ERR_SPRI_ERR:
-  62   2                                      Buzz_task(BUZZ_BB_BB);
-  63   2                                      err=ERR_NONE;
-  64   2                                      break;
-  65   2                              case ERR_SPRI_LIT:
-  66   2                                      Buzz_task(BUZZ_BB_B);
-  67   2                                      err=ERR_NONE;
-  68   2                                      break;
-  69   2                              case ERR_SPRI_MID:
-  70   2                                      Buzz_task(BUZZ_BB_B_B);
-  71   2                                      err=ERR_NONE;
-  72   2                                      break;
+  53   2            case ERR_EEPROM_WRITE1:
+  54   2              Buzz_task(BUZZ_BBB);
+  55   2              err=ERR_NONE;
+  56   2              break;
+  57   2            case ERR_SPRI_BIG:
+  58   2              Buzz_task(BUZZ_BB_B_B_B);
+  59   2              err=ERR_NONE;
+  60   2              break;
+  61   2            case ERR_SPRI_ERR:
+  62   2              Buzz_task(BUZZ_BB_BB);
+  63   2              err=ERR_NONE;
+  64   2              break;
+  65   2            case ERR_SPRI_LIT:
+  66   2              Buzz_task(BUZZ_BB_B);
+  67   2              err=ERR_NONE;
+  68   2              break;
+  69   2            case ERR_SPRI_MID:
+  70   2              Buzz_task(BUZZ_BB_B_B);
+  71   2              err=ERR_NONE;
+  72   2              break;
   73   2      //************************************************************************//
   74   2      
-  75   2      //*************************************************5秒内提示鸣响******************//                    
-  76   2                              case ERR_UP_DRAG:                               //抬闸遇阻
-  77   2                                      Buzz_task(BUZZ_B2);
-  78   2                                      if(!errnum) err= ERR_CLR;       //定时清除报警
-  79   2                                      break;
-  80   2                              case ERR_DW_DRAG:                               //落闸遇阻
-  81   2                                      Buzz_task(BUZZ_B02);
-  82   2                                      if(!errnum) err= ERR_CLR;
-  83   2                                      break;
+  75   2      //*************************************************5秒内提示鸣响******************//      
+  76   2            case ERR_UP_DRAG:       //抬闸遇阻
+  77   2              Buzz_task(BUZZ_B2);
+  78   2              if(!errnum) err= ERR_CLR;   //定时清除报警
+  79   2              break;
+  80   2            case ERR_DW_DRAG:       //落闸遇阻
+  81   2              Buzz_task(BUZZ_B02);
+  82   2              if(!errnum) err= ERR_CLR;
+  83   2              break;
   84   2      //************************************************************************//
   85   2      
-  86   2      //*************************************************故障持续提示鸣响*******//    
-  87   2                              case ERR_ID_CONFLICT:
-  88   2                                      Buzz_task(BUZZ_B2);
-  89   2                                      break;
-  90   2                              case ERR_UP_FAIL:               //抬闸失败
-  91   2                                      Buzz_task(BUZZ_B_BB);
-  92   2                                      break;
-  93   2                              case ERR_DW_FAIL:
-  94   2                                      Buzz_task(BUZZ_B_BBB);
-  95   2                                      break;
-  96   2                              case ERR_US_FAIL:
-  97   2                                      Buzz_task(BUZZ_BB2);
-  98   2                                      break;
-  99   2                              case ERR_DS_FAIL:
- 100   2                                      Buzz_task(BUZZ_BBB2);
- 101   2                                      break;
- 102   2                              case ERR_POS_FAIL:
- 103   2                                      Buzz_task(BUZZ_B_B);
- 104   2                                      break;
- 105   2                              default:
- 106   2                                      err=ERR_CLR;
- 107   2                                      break;
- 108   2                      }
- 109   1              if(err> ERR_LEV2)
- 110   1                      {
- 111   2                              if(!errctr) err= ERR_CLR;       //无错误累加时，自动清除错误
- 112   2                              else errctr=0;                  
- 113   2                      }
- 114   1              
-C51 COMPILER V9.01   ERR                                                                   03/01/2019 15:37:16 PAGE 3   
+  86   2      //*************************************************故障持续提示鸣响*******//  
+  87   2            case ERR_ID_CONFLICT:
+  88   2              Buzz_task(BUZZ_B2);
+  89   2              break;
+  90   2            case ERR_UP_FAIL:   //抬闸失败
+  91   2              Buzz_task(BUZZ_B_BB);
+  92   2              break;
+  93   2            case ERR_DW_FAIL:
+  94   2              Buzz_task(BUZZ_B_BBB);
+  95   2              break;
+  96   2            case ERR_US_FAIL:
+  97   2              Buzz_task(BUZZ_BB2);
+  98   2              break;
+  99   2            case ERR_DS_FAIL:
+ 100   2              Buzz_task(BUZZ_BBB2);
+ 101   2              break;
+ 102   2            case ERR_POS_FAIL:
+ 103   2              Buzz_task(BUZZ_B_B);
+ 104   2              break;
+ 105   2            default:
+ 106   2              err=ERR_CLR;
+ 107   2              break;
+ 108   2          }
+ 109   1        if(err> ERR_LEV2)
+ 110   1          {
+ 111   2            if(!errctr) err= ERR_CLR;   //无错误累加时，自动清除错误
+ 112   2            else errctr=0;      
+ 113   2          }
+ 114   1        
+C51 COMPILER V9.00   ERR                                                                   03/11/2019 18:42:02 PAGE 3   
 
  115   1      }
  116          

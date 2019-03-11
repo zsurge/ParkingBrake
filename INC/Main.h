@@ -19,12 +19,7 @@
 #include "Output.h"
 #include "ERR.h"
 #include "USART.h"
-
-
-
-
-
-
+#include <stdio.h>
 
 
 /**************************************************************************** 
