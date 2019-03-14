@@ -43,9 +43,8 @@ void clk()							//设备运行时钟
 	if(!T100MS)						//计时100MS
 		{
 			T100MS=T100MS_TIME;
-			if(T1000MS)T1000MS--;
-			
-//			LED=!LED;
+			if(T1000MS)T1000MS--;		
+
 			AtRun_clk();
 			err_clk();
 			DZP_clk();
@@ -60,6 +59,7 @@ void clk()							//设备运行时钟
 	if(!T1000MS)					//计时1000MS
 		{
 			T1000MS=T1000MS_TIME;
+//            LED=!LED;
 			
 		}
 	test++;							//主程序在100MS内循环跑N次，此参数可观察单片机运行效率

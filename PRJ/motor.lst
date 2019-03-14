@@ -1,4 +1,4 @@
-C51 COMPILER V9.00   MOTOR                                                                 03/11/2019 18:42:03 PAGE 1   
+C51 COMPILER V9.00   MOTOR                                                                 03/14/2019 19:14:17 PAGE 1   
 
 
 C51 COMPILER V9.00, COMPILATION OF MODULE MOTOR
@@ -62,7 +62,7 @@ line level    source
              -f(SpriBuf));
   52   1        StmSp= 0; StmSp2= 0; mRunTe= 0; DwSlo= 0; Stm= 0; StmSlow= 0; StmSlow2= 0; SpeSta= 0;
   53   1        InitRepairMotor();
-C51 COMPILER V9.00   MOTOR                                                                 03/11/2019 18:42:03 PAGE 2   
+C51 COMPILER V9.00   MOTOR                                                                 03/14/2019 19:14:17 PAGE 2   
 
   54   1          gCurrentSpringNum = 3;
   55   1      //  InitLimitValue();
@@ -126,7 +126,7 @@ line level    source
  112          
  113          
  114          //**********************************************//
-C51 COMPILER V9.00   MOTOR                                                                 03/11/2019 18:42:03 PAGE 3   
+C51 COMPILER V9.00   MOTOR                                                                 03/14/2019 19:14:17 PAGE 3   
 
  115          //函数名:  SpringTest(u8 cmd)
  116          //作用:弹簧拉力检测
@@ -190,7 +190,7 @@ line level    source
  171   3                  else SpriBuf[SPRIBUF_STA]= SPRIFRCSTA_ERR;
  172   3                }
  173   2              else SpriBuf[SPRIBUF_STA]= SPRIFRCSTA_ERR;
-C51 COMPILER V9.00   MOTOR                                                                 03/11/2019 18:42:03 PAGE 4   
+C51 COMPILER V9.00   MOTOR                                                                 03/14/2019 19:14:17 PAGE 4   
 
  174   2              break;
  175   2      
@@ -254,7 +254,7 @@ line level    source
  232   3                  else                    //识别异常时
  233   3                    {
  234   4                      mType= M18S;          //识别机芯类型-赋值
-C51 COMPILER V9.00   MOTOR                                                                 03/11/2019 18:42:03 PAGE 5   
+C51 COMPILER V9.00   MOTOR                                                                 03/14/2019 19:14:17 PAGE 5   
 
  235   4                      mRunTe=M18SRUNTIME;       //赋值电机运行超时时间
  236   4                      if(!StmSp2) StmSp2=50;      //第一次落闸遇阻时间未识别时，强行赋值
@@ -318,7 +318,7 @@ line level    source
  294   2                {
  295   3                  StmNum3=0;
  296   3                  for(i=0; i < (STMBUF_POST-1); i++)
-C51 COMPILER V9.00   MOTOR                                                                 03/11/2019 18:42:03 PAGE 6   
+C51 COMPILER V9.00   MOTOR                                                                 03/14/2019 19:14:17 PAGE 6   
 
  297   3                    {
  298   4                      if(StmNumBuf[i] > StmNum3) StmNum3= StmNumBuf[i];
@@ -382,7 +382,7 @@ line level    source
  355   2            default: break;
  356   2          }
  357   1        return 0;
-C51 COMPILER V9.00   MOTOR                                                                 03/11/2019 18:42:03 PAGE 7   
+C51 COMPILER V9.00   MOTOR                                                                 03/14/2019 19:14:17 PAGE 7   
 
  358   1      }
  359          
@@ -446,7 +446,7 @@ line level    source
  417   3                }
  418   2              else;
  419   2              break;  
-C51 COMPILER V9.00   MOTOR                                                                 03/11/2019 18:42:03 PAGE 8   
+C51 COMPILER V9.00   MOTOR                                                                 03/14/2019 19:14:17 PAGE 8   
 
  420   2      /***********************************************************************************************/
  421   2      //          抬闸缓冲    
@@ -510,7 +510,7 @@ line level    source
  479   2            case MTASK_DW1:
  480   2              if(!mCorNum) { MCR_DW; mCorNum= M_ON_TIME; mTask= MTASK_DW2; }
  481   2              break;
-C51 COMPILER V9.00   MOTOR                                                                 03/11/2019 18:42:03 PAGE 9   
+C51 COMPILER V9.00   MOTOR                                                                 03/14/2019 19:14:17 PAGE 9   
 
  482   2            case MTASK_DW2:
  483   2              if(!mCorNum)
@@ -574,7 +574,7 @@ line level    source
  541   2              break;
  542   2              
  543   2      /***********************************************************************************************/
-C51 COMPILER V9.00   MOTOR                                                                 03/11/2019 18:42:03 PAGE 10  
+C51 COMPILER V9.00   MOTOR                                                                 03/14/2019 19:14:17 PAGE 10  
 
  544   2      //              落闸缓冲
  545   2      /***********************************************************************************************/ 
@@ -638,7 +638,7 @@ line level    source
  603          //  #elif type == M18S
  604          //    gLimitValue.InitSpeRin = 30;
  605          //    gLimitValue.SafetyLimit = 4;
-C51 COMPILER V9.00   MOTOR                                                                 03/11/2019 18:42:03 PAGE 11  
+C51 COMPILER V9.00   MOTOR                                                                 03/14/2019 19:14:17 PAGE 11  
 
  606          //    gLimitValue.TimeMinValue = 4; 
  607          //  #elif type == M38S
@@ -659,7 +659,7 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =     34    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =     42       3
+   DATA SIZE        =     40       3
    IDATA SIZE       =   ----    ----
    BIT SIZE         =      1    ----
 END OF MODULE INFORMATION.

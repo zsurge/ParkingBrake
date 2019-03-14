@@ -27,6 +27,7 @@
 
 #define 	ISDEBUG 	1
 #define 	TIMER2      1
+#define     CALCFUN     0
 
 
 //主副机通信周期

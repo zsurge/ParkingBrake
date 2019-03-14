@@ -93,6 +93,13 @@ void Uart_Print(u8 speakTask,u8 num)
 	switch(speakTask)
 	{
 		case 1:
+            sen_buff[0]=num;
+            sen_buff[1]=0x30+gRepairMotor.CurrentCounts/10000%10;
+			sen_buff[2]=0x30+gRepairMotor.CurrentCounts/1000%10;
+			sen_buff[3]=0x30+gRepairMotor.CurrentCounts/100%10;
+			sen_buff[4]=0x30+gRepairMotor.CurrentCounts/10%10;
+			sen_buff[5]=0x30+gRepairMotor.CurrentCounts%10;
+			sen_buff[6]=num+2;
 			break;
 		case 3:
 			sen_buff[0]=num + 63;
@@ -109,7 +116,7 @@ void Uart_Print(u8 speakTask,u8 num)
 			sen_buff[10]=0x2c;
             
             sen_buff[11]=0x30+gCurrentSpringNum%10;
-			sen_buff[12]=0x2c;
+			sen_buff[12]=0x3B;
 			break;
 		
 //			sen_buff[5]=0x30+gRepairMotor.LastSpeRin/100%10;
@@ -132,7 +139,7 @@ void Uart_Print(u8 speakTask,u8 num)
 	}	
 
 
-	for(i=0;i<15;i++)
+	for(i=0;i<13;i++)
 	{
 		TX1_writebuff(sen_buff[i]);
 	}

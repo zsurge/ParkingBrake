@@ -21,6 +21,7 @@ u8  data UpDcNum;  		//抬闸计数超时减数
 
 
 
+
 u8 code iTask_buf[7][18]= 	//任务表
 {/*  无事件  手动落闸 内部落闸 通信落闸 地感落闸 到水平位 强制抬杆 强抬复位 地感抬闸 防砸抬闸 遇阻抬闸 内部抬闸 通信抬闸 视频抬闸 手动抬闸 到垂直位 惯性掉杆 掉杆复位        事件	*///
 	TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA,	/* 状态未初始化 */
@@ -73,8 +74,8 @@ void Timer2_Init(void)
 {
 	T2MOD = 0;		//初始化模式寄存器
 	T2CON = 0;		//初始化控制寄存器
-	TL2 = (65536 - 50000) / 256;		//设置定时初值 50000--50ms 9216---10ms
-	TH2 = (65536 - 50000) % 256;		//设置定时初值
+    TH2 = (65536 - 9216*5) / 256;		//设置定时初值
+	TL2 = (65536 - 9216*5) % 256;		//设置定时初值 46080--50ms 9216---10ms
 	TR2 = 1;		//定时器2开始计时
 
 
@@ -362,93 +363,181 @@ void Timer2_ISR(void) interrupt 5 //定时器2中断
 }
 #endif 
 
-#if 1 
-#define TIMER_FRE  90 
-#define BASIC_SPEED_100MS 8 //每100ms测速环转到的圈数
-#define SPRING_PARAM_OFFSET 2//弹簧参数
-#define STANDARD_VALUE 72//弹簧标准值
+#if CALCFUN
+#define TIMER_FRE  5         //计算周期
+#define BASIC_OFFSET_250MS 4 //每250ms测速环转到的圈数
+#define SPRING_PARAM_OFFSET1 2//弹簧参数
+#define SPRING_PARAM_OFFSET2 3//弹簧参数
+#define SPRING_PARAM_OFFSET3 4//弹簧参数
+#define BASIC_SPRING_NUM 46//弹簧标准值
+#else
+#define START_POSITION 50   //从第50次进入中断开始计算
+#define END_POSITION (START_POSITION+TIMER_FRE*SPRING_CHECK_NUM)  //从第50次进入中断开始计算
+#define TIMER_FRE  5        //计算周期
+#define THREE_SPRING_LOWER_LIMIT 16 //如果统计总的圈数差大于这个值，说明已经不是三根弹簧了
+#define TWO_SPRINT_LOWER_LIMIT 26 //如果统计总的圈数差大于这个值，说明已经不是两根弹簧了
+#define BASIC_SPRING_NUM 38//弹簧标准值
+#define BASIC_OFFSET_250MS 4 //每250ms测速环转到的圈数
+#define SPRING_CHECK_NUM 6//取样次数
+#endif
+
+
+
+
 
 
 void motorTimer2(void)
-{	
-# if 1
+{
+//    gRepairMotor.CurrentCounts++ ;
+//    //打印当前测速环值
+//    Uart_Print(3,gRepairMotor.Direction);   
+
+#if CALCFUN
     //每隔100毫秒进来判定一次
 	if(SpeRinN >= 1) //测速环转动才开始进来
-	{		
-	    //从第900毫秒的时候进来，然后每100毫秒判定一次
-    	if(gRepairMotor.CurrentCounts++ >= TIMER_FRE);//进入中断的次数，根据中断的次数判定所用的时间
-        {      
-    		//这里测试使用，先固定3.8电机，release时会使用宏定义，定义不同的计算方式和判定条件
-    		
-    		if(gRepairMotor.CurrentCounts % TIMER_FRE == 0)
-    		{
-                //先判定抬闸
-                if(gRepairMotor.Direction == POS_UP)
-                {
-                    if(gRepairMotor.CurrentCounts == TIMER_FRE)
-                    {
-                        if (SpeRinN > STANDARD_VALUE + SPRING_PARAM_OFFSET)
-                        {
-                            //三根弹簧
-                            gCurrentSpringNum = 3;
-                        }
-                        else if(SpeRinN < STANDARD_VALUE + SPRING_PARAM_OFFSET && SpeRinN >= STANDARD_VALUE -SPRING_PARAM_OFFSET)
-                        {
-                            //两根弹簧，需要报警
-                            gCurrentSpringNum = 2;
-                        }
-                        else
-                        {
-                            //只有一根弹簧
-                            gCurrentSpringNum = 1;
-                        }
-                    }
-                }
-                else //落闸
-                {
-                    if(gCurrentSpringNum == 1 || SpeRinN >= STANDARD_VALUE + SPRING_PARAM_OFFSET*2-1)
-                    {
-                        //执行抬闸
-                        Event(ITASK_DG_UP);
-                    }
-                
-                }
-                
-    			//打印当前测速环值
-    			Uart_Print(3,gRepairMotor.Direction);		
-              }
+	{  
+	    gRepairMotor.CurrentCounts++ ;  
+        
+        
+		//这里测试使用，先固定4.8电机，release时会使用宏定义，定义不同的计算方式和判定条件
+		if(gRepairMotor.CurrentCounts  == TIMER_FRE*12)//46
+		{ 	
+    		gRepairMotor.FlagValue = 0;
+            gRepairMotor.AverageValue = 0;
+		    gRepairMotor.LastSpeRin = SpeRinN;
+            if(SpeRinN >= BASIC_SPRING_NUM+BASIC_OFFSET_250MS)
+            {
+                gRepairMotor.FlagValue += 2;//很严重，疑似断了两根弹簧
+            }
+            else if(SpeRinN >= BASIC_SPRING_NUM+SPRING_PARAM_OFFSET2)
+            {
+                gRepairMotor.FlagValue += 1;//有可能断了一根弹簧
+            }
+            else
+            {
+                ;//认为还在可控区间
+            }  
+        }
+        else if(gRepairMotor.CurrentCounts  == TIMER_FRE*13)//50
+        {
+            gRepairMotor.AverageValue = SpeRinN-gRepairMotor.LastSpeRin; //获取每次的差值
 
-		}
+            if(SpeRinN >= BASIC_SPRING_NUM + BASIC_OFFSET_250MS*2)
+            {
+                gRepairMotor.FlagValue += 2;//很严重，疑似断了两根弹簧
+            }
+            else if(SpeRinN >= BASIC_SPRING_NUM+BASIC_OFFSET_250MS+SPRING_PARAM_OFFSET2)
+            {
+                gRepairMotor.FlagValue += 1;//有可能断了一根弹簧
+            }
+            else
+            {
+                ;//认为还在可控区间
+            }
+            gRepairMotor.LastSpeRin = SpeRinN;  
+            
+        }
+        else if(gRepairMotor.CurrentCounts  == TIMER_FRE*14)//54
+        {
+            gRepairMotor.AverageValue += SpeRinN-gRepairMotor.LastSpeRin; //获取每次的差值和求平均数
+
+            if(SpeRinN >= BASIC_SPRING_NUM + BASIC_OFFSET_250MS*3)
+            {
+                gRepairMotor.FlagValue += 2;//很严重，疑似断了两根弹簧
+            }
+            else if(SpeRinN >= BASIC_SPRING_NUM+BASIC_OFFSET_250MS*2+SPRING_PARAM_OFFSET2)
+            {
+                gRepairMotor.FlagValue += 1;//有可能断了一根弹簧
+            }
+            else
+            {
+                ;//认为还在可控区间
+            }
+            gRepairMotor.LastSpeRin = SpeRinN; 
+
+               
+        }
+        else if(gRepairMotor.CurrentCounts  == TIMER_FRE*15)//58
+        {
+            gRepairMotor.AverageValue += SpeRinN-gRepairMotor.LastSpeRin; //获取每次的差值和求平均数
+            if(SpeRinN >= BASIC_SPRING_NUM + BASIC_OFFSET_250MS*4)
+            {
+                gRepairMotor.FlagValue += 2;//很严重，疑似断了两根弹簧
+            }
+            else if(SpeRinN >= BASIC_SPRING_NUM+BASIC_OFFSET_250MS*3+SPRING_PARAM_OFFSET2)
+            {
+                gRepairMotor.FlagValue += 1;//有可能断了一根弹簧
+            }
+            else
+            {
+
+            
+            }     
+        }
+        else
+        {
+            ;
+        }
+
+    	//打印当前测速环值
+		Uart_Print(3,gRepairMotor.Direction);	      
+
+        
+
 	}
-#else 
-	g_timer_run_counter++;
-	if(g_timer_run_counter % TIMER_FRE == 0)
-	{
-		if(SpeRinN > FISTER_SPRING_BREAK && SpeRinN <= SECOND_SPRING_BREAK && g_timer_run_counter == 1)
-		{
-			g_timer_run_counter = 0;
-			Event(ITASK_DG_UP);//危险，抬杆
-		}
-		else if(SpeRinN > SECOND_SPRING_BREAK && SpeRinN <= THIRD_SPRING_BREAK && g_timer_run_counter == 2)
-		{
-			g_timer_run_counter = 0;
-			Event(ITASK_DG_UP);//危险，抬杆
-		}
-		else if(SpeRinN > THIRD_SPRING_BREAK && SpeRinN <= FORTH_SPRING_BREAK  && g_timer_run_counter == 3)
-		{
-			g_timer_run_counter = 0;
-			Event(ITASK_DG_UP);//危险，抬杆
-		}
-		else
-		{
-			g_timer_run_counter = 0;
-		}
+#else
+    if(SpeRinN >= 1) //测速环转动才开始进来
+    { 
+        gRepairMotor.CurrentCounts++ ; 
 
-		//打印当前测速环值
-		Uart_Print(3,gRepairMotor.Direction);
-	}
+        if((gRepairMotor.CurrentCounts >= START_POSITION) && (gRepairMotor.CurrentCounts % TIMER_FRE == 0) && gRepairMotor.CurrentCounts <= END_POSITION)//38
+        {
+            gRepairMotor.Times++;
+            if(SpeRinN >= BASIC_SPRING_NUM + BASIC_OFFSET_250MS*gRepairMotor.Times)
+            {
+                gRepairMotor.FlagValue ++;//这里应该不会出现，如果出现就是大问题
+            }
+            
 
-	#endif
+            if(gRepairMotor.Times > 1) //从第2次开始，要计算每次的差
+            {
+                gRepairMotor.AverageValue += SpeRinN - gRepairMotor.LastSpeRin;
+            }
+
+            gRepairMotor.LastSpeRin = SpeRinN;
+            
+            if (gRepairMotor.FlagValue >= 4) //不需完全走完判定，可以直接认为是有问题的 
+            {            
+                Event(ITASK_DG_UP);
+            }
+
+            if(gRepairMotor.Times == SPRING_CHECK_NUM) //一共进来判定6次
+            {
+                if (gRepairMotor.AverageValue >= TWO_SPRINT_LOWER_LIMIT)//只有一根弹簧了
+                {
+                    Event(ITASK_DG_UP);
+                }
+                else if(gRepairMotor.AverageValue >= THREE_SPRING_LOWER_LIMIT)
+                {
+                    //报警，只有两根弹簧
+                    LED=!LED;
+                }
+                else
+                {
+                    //正常
+                }
+                   
+            }
+
+            //打印当前测速环值
+		    Uart_Print(3,gRepairMotor.Direction);
+            
+        }  
+    }
+
+#endif    
+
+
 }
 
 //定时器中断2
@@ -456,10 +545,7 @@ void Timer2_ISR(void) interrupt 5 //定时器2中断
 {
 	TF2=0;
 	EXF2 = 0;
-	TL2 = (65536 - 9216) / 256;		//设置定时初值
-	TH2 = (65536 - 9216) % 256;		//设置定时初值
-
-	motorTimer2();  
+	motorTimer2(); 
 }
 
 //void Timer2_Zero(void)
@@ -468,6 +554,6 @@ void Timer2_ISR(void) interrupt 5 //定时器2中断
 //	EXF2 = 0;	
 //}
 
-#endif
+
 
 

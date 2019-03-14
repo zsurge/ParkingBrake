@@ -1,0 +1,1 @@
+"..\SCR\input.c" BROWSE INCDIR(..\INC) DEBUG OBJECTEXTEND PRINT(.\input.lst) TABS (2) OBJECT(..\HEX\input.obj)

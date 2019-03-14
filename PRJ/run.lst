@@ -1,4 +1,4 @@
-C51 COMPILER V9.00   RUN                                                                   03/11/2019 18:50:53 PAGE 1   
+C51 COMPILER V9.00   RUN                                                                   03/14/2019 19:18:22 PAGE 1   
 
 
 C51 COMPILER V9.00, COMPILATION OF MODULE RUN
@@ -31,312 +31,313 @@ line level    source
   21          
   22          
   23          
-  24          u8 code iTask_buf[7][18]=   //ÈÎÎñ±í
-  25          {/*  ÎÞÊÂ¼þ  ÊÖ¶¯ÂäÕ¢ ÄÚ²¿ÂäÕ¢ Í¨ÐÅÂäÕ¢ µØ¸ÐÂäÕ¢ µ½Ë®Æ½Î» Ç¿ÖÆÌ§¸Ë Ç¿Ì§¸´Î» µØ¸ÐÌ§Õ¢ ·ÀÔÒÌ§Õ¢ Óö×èÌ§Õ¢ ÄÚ²
+  24          
+  25          u8 code iTask_buf[7][18]=   //ÈÎÎñ±í
+  26          {/*  ÎÞÊÂ¼þ  ÊÖ¶¯ÂäÕ¢ ÄÚ²¿ÂäÕ¢ Í¨ÐÅÂäÕ¢ µØ¸ÐÂäÕ¢ µ½Ë®Æ½Î» Ç¿ÖÆÌ§¸Ë Ç¿Ì§¸´Î» µØ¸ÐÌ§Õ¢ ·ÀÔÒÌ§Õ¢ Óö×èÌ§Õ¢ ÄÚ²
              -¿Ì§Õ¢ Í¨ÐÅÌ§Õ¢ ÊÓÆµÌ§Õ¢ ÊÖ¶¯Ì§Õ¢ µ½´¹Ö±Î» ¹ßÐÔµô¸Ë µô¸Ë¸´Î»        ÊÂ¼þ *///
-  26            TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_N
+  27            TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_N
              -A, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA,  /* ×´Ì¬Î´³õÊ¼»¯ */
-  27            TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_DS, TASK_DW, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_N
+  28            TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_DS, TASK_DW, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_N
              -A, TASK_UP, TASK_NA, TASK_UP, TASK_US, TASK_UP, TASK_NA,  /* ³õÊ¼Î´Öª×´Ì¬ */
-  28            TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_N
+  29            TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_N
              -A, TASK_NA, TASK_NA, TASK_NA, TASK_US, TASK_NA, TASK_US,  /* ÕýÔÚÌ§Õ¢×´Ì¬ */
-  29            TASK_NA, TASK_DW, TASK_DW, TASK_DW, TASK_DW, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_N
+  30            TASK_NA, TASK_DW, TASK_DW, TASK_DW, TASK_DW, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_N
              -A, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA,  /* ´¹Ö±×´Ì¬ */
-  30            TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_DS, TASK_NA, TASK_DS, TASK_UP, TASK_UP, TASK_UP, TASK_U
+  31            TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_DS, TASK_NA, TASK_DS, TASK_UP, TASK_UP, TASK_UP, TASK_U
              -P, TASK_UP, TASK_UP, TASK_UP, TASK_NA, TASK_NA, TASK_NA,  /* ÕýÔÚÂäÕ¢×´Ì¬ */
-  31            TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_DS, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_U
+  32            TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_DS, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_U
              -P, TASK_UP, TASK_UP, TASK_UP, TASK_NA, TASK_NA, TASK_NA,  /* Ë®Æ½×´Ì¬ */
-  32            TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_DS, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_N
+  33            TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_DS, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_N
              -A, TASK_NA, TASK_NA, TASK_NA, TASK_US, TASK_NA, TASK_NA,  /* ´íÎó×´Ì¬ */
-  33          };
-  34          
+  34          };
   35          
   36          
-  37          void intMcu() 
-  38          {  
-  39   1        EA=0;     //½ûÖ¹È«¾ÖÖÐ¶Ï
-  40   1        
-  41   1        SCON=0x50;  //´®ÐÐ½Ó¿Ú¹¤×÷ÓÚÄ£Ê½1£¬ÔÊÐí½ÓÊÕÊý¾ÝSM0 SM1 SM2 REN TB8 RB8 TI RI
-  42   1        TMOD=0x21;  //¼ÆÊ±Æ÷1¹¤×÷ÓÚÄ£Ê½2 | GATE C/T M1 M0 | GATE C/T M1 M0 |
-  43   1                 //¼ÆÊ±Æ÷0¹¤×÷ÓÚÄ£Ê½1 | Timer1    |    Timer0    |a
-  44   1      //´®¿Ú²ÎÊýÅäÖÃ
-  45   1      //  TH1=0xF4;   /*Éè¶¨²¨ÌØÂÊÎª2400, ¾§Õñ11.0592MHz*/
-  46   1      //  TH1=0xE8;   /*Éè¶¨²¨ÌØÂÊÎª2400, ¾§Õñ22.1184MHz*/
-C51 COMPILER V9.00   RUN                                                                   03/11/2019 18:50:53 PAGE 2   
+  37          
+  38          void intMcu() 
+  39          {  
+  40   1        EA=0;     //½ûÖ¹È«¾ÖÖÐ¶Ï
+  41   1        
+  42   1        SCON=0x50;  //´®ÐÐ½Ó¿Ú¹¤×÷ÓÚÄ£Ê½1£¬ÔÊÐí½ÓÊÕÊý¾ÝSM0 SM1 SM2 REN TB8 RB8 TI RI
+  43   1        TMOD=0x21;  //¼ÆÊ±Æ÷1¹¤×÷ÓÚÄ£Ê½2 | GATE C/T M1 M0 | GATE C/T M1 M0 |
+  44   1                 //¼ÆÊ±Æ÷0¹¤×÷ÓÚÄ£Ê½1 | Timer1    |    Timer0    |a
+  45   1      //´®¿Ú²ÎÊýÅäÖÃ
+  46   1      //  TH1=0xF4;   /*Éè¶¨²¨ÌØÂÊÎª2400, ¾§Õñ11.0592MHz*/
+C51 COMPILER V9.00   RUN                                                                   03/14/2019 19:18:22 PAGE 2   
 
-  47   1      //  TH1=0xFD;   /*Éè¶¨²¨ÌØÂÊÎª9600£¬¾§Õñ11.0592MHz*/
-  48   1      //  TH1=0xFA;   /*Éè¶¨²¨ÌØÂÊÎª9600£¬¾§Õñ22.1184MHz*/
-  49   1        TH1=0xFD;   /*Éè¶¨²¨ÌØÂÊÎª19200£¬¾§Õñ22.1184MHz*/
-  50   1        TR1=1;    //Æô¶¯¼ÆÊ±Æ÷1¿ªÊ¼¼ÆÊý 
-  51   1        ES=1;     //ÔÊÐí´®¿ÚÖÐ¶Ï
-  52   1      //¶¨Ê±Æ÷0ÅäÖÃ
-  53   1        TL0 = 0xCD;   //ÉèÖÃ¶¨Ê±³õÖµ
-  54   1        TH0 = 0xF8;   //ÉèÖÃ¶¨Ê±³õÖµ
-  55   1        TR0=1;    //Æô¶¯¶¨Ê±Æ÷0
-  56   1        ET0=1;      //ÔÊÐíT0ÖÐ¶Ï
-  57   1      //ÖÐ¶Ï0ÅäÖÃ 
-  58   1      //  IT0=1;    //Íâ²¿ÖÐ¶Ï0µçÆ½Ìø±ä²úÉúÖÐ¶Ï
-  59   1        EX0=0;      //½ûÖ¹Íâ²¿ÖÐ¶Ï0
-  60   1      //ÖÐ¶Ï1ÅäÖÃ 
-  61   1      //  IT1=1;      //Íâ²¿ÖÐ¶Ï1µçÆ½Ìø±ä²úÉúÖÐ¶Ï
-  62   1        EX1=0;    //½ûÖ¹Íâ²¿ÖÐ¶Ï1
-  63   1      //ÓÅÏÈ¼¶ÅäÖÃ
-  64   1        PS=1;     //Éè¶¨´®¿ÚÖÐ¶ÏÓÅÏÈ
-  65   1      //ÖÐ¶Ï×Ü¿ª¹ØÅäÖÃ
-  66   1        EA=1;
-  67   1      }
-  68          
+  47   1      //  TH1=0xE8;   /*Éè¶¨²¨ÌØÂÊÎª2400, ¾§Õñ22.1184MHz*/
+  48   1      //  TH1=0xFD;   /*Éè¶¨²¨ÌØÂÊÎª9600£¬¾§Õñ11.0592MHz*/
+  49   1      //  TH1=0xFA;   /*Éè¶¨²¨ÌØÂÊÎª9600£¬¾§Õñ22.1184MHz*/
+  50   1        TH1=0xFD;   /*Éè¶¨²¨ÌØÂÊÎª19200£¬¾§Õñ22.1184MHz*/
+  51   1        TR1=1;    //Æô¶¯¼ÆÊ±Æ÷1¿ªÊ¼¼ÆÊý 
+  52   1        ES=1;     //ÔÊÐí´®¿ÚÖÐ¶Ï
+  53   1      //¶¨Ê±Æ÷0ÅäÖÃ
+  54   1        TL0 = 0xCD;   //ÉèÖÃ¶¨Ê±³õÖµ
+  55   1        TH0 = 0xF8;   //ÉèÖÃ¶¨Ê±³õÖµ
+  56   1        TR0=1;    //Æô¶¯¶¨Ê±Æ÷0
+  57   1        ET0=1;      //ÔÊÐíT0ÖÐ¶Ï
+  58   1      //ÖÐ¶Ï0ÅäÖÃ 
+  59   1      //  IT0=1;    //Íâ²¿ÖÐ¶Ï0µçÆ½Ìø±ä²úÉúÖÐ¶Ï
+  60   1        EX0=0;      //½ûÖ¹Íâ²¿ÖÐ¶Ï0
+  61   1      //ÖÐ¶Ï1ÅäÖÃ 
+  62   1      //  IT1=1;      //Íâ²¿ÖÐ¶Ï1µçÆ½Ìø±ä²úÉúÖÐ¶Ï
+  63   1        EX1=0;    //½ûÖ¹Íâ²¿ÖÐ¶Ï1
+  64   1      //ÓÅÏÈ¼¶ÅäÖÃ
+  65   1        PS=1;     //Éè¶¨´®¿ÚÖÐ¶ÏÓÅÏÈ
+  66   1      //ÖÐ¶Ï×Ü¿ª¹ØÅäÖÃ
+  67   1        EA=1;
+  68   1      }
   69          
-  70          //¶¨Ê±Æ÷2³õÊ¼»¯
-  71          #if TIMER2
-  72          void Timer2_Init(void)
-  73          {
-  74   1        T2MOD = 0;    //³õÊ¼»¯Ä£Ê½¼Ä´æÆ÷
-  75   1        T2CON = 0;    //³õÊ¼»¯¿ØÖÆ¼Ä´æÆ÷
-  76   1        TL2 = (65536 - 50000) / 256;    //ÉèÖÃ¶¨Ê±³õÖµ 50000--50ms 9216---10ms
-  77   1        TH2 = (65536 - 50000) % 256;    //ÉèÖÃ¶¨Ê±³õÖµ
-  78   1        TR2 = 1;    //¶¨Ê±Æ÷2¿ªÊ¼¼ÆÊ±
-  79   1      
+  70          
+  71          //¶¨Ê±Æ÷2³õÊ¼»¯
+  72          #if TIMER2
+  73          void Timer2_Init(void)
+  74          {
+  75   1        T2MOD = 0;    //³õÊ¼»¯Ä£Ê½¼Ä´æÆ÷
+  76   1        T2CON = 0;    //³õÊ¼»¯¿ØÖÆ¼Ä´æÆ÷
+  77   1          TH2 = (65536 - 9216*5) / 256;   //ÉèÖÃ¶¨Ê±³õÖµ
+  78   1        TL2 = (65536 - 9216*5) % 256;   //ÉèÖÃ¶¨Ê±³õÖµ 46080--50ms 9216---10ms
+  79   1        TR2 = 1;    //¶¨Ê±Æ÷2¿ªÊ¼¼ÆÊ±
   80   1      
-  81   1        //  TH2 = (65536-9216)/256;
-  82   1        //  TL2 = (65536-9216)%256;
-  83   1        EA=1;                      //´ò¿ª×ÜÖÐ¶Ï
-  84   1        ET2=1;                     //´ò¿ª¶¨Ê±Æ÷ÖÐ¶Ï  
-  85   1        TR2=1;                     //´ò¿ª¶¨Ê±Æ÷¿ª¹Ø
-  86   1      }
-  87          #endif
-  88          
+  81   1      
+  82   1        //  TH2 = (65536-9216)/256;
+  83   1        //  TL2 = (65536-9216)%256;
+  84   1        EA=1;                      //´ò¿ª×ÜÖÐ¶Ï
+  85   1        ET2=1;                     //´ò¿ª¶¨Ê±Æ÷ÖÐ¶Ï  
+  86   1        TR2=1;                     //´ò¿ª¶¨Ê±Æ÷¿ª¹Ø
+  87   1      }
+  88          #endif
   89          
   90          
   91          
-  92          void intRun() { iTask= ITASK_INT; iTask2= ITASK_NA; ViceDo= 0; ViceRal= 0; ViceRal2= 0; ViceSta= 0; UpCt=0
+  92          
+  93          void intRun() { iTask= ITASK_INT; iTask2= ITASK_NA; ViceDo= 0; ViceRal= 0; ViceRal2= 0; ViceSta= 0; UpCt=0
              -; UpCtNum=0; }
-  93          
-  94          void delay(u8 cnt)  //   ÑÓÊ±µ¥Î»:
-  95          {
-  96   1       u16 i;
-  97   1       i=cnt*200; 
-  98   1       while (--i);
-  99   1      }
- 100          
+  94          
+  95          void delay(u8 cnt)  //   ÑÓÊ±µ¥Î»:
+  96          {
+  97   1       u16 i;
+  98   1       i=cnt*200; 
+  99   1       while (--i);
+ 100   1      }
  101          
- 102          void ComClk() 
- 103            { 
- 104   1          if(ComNum) ComNum--;
- 105   1          if(COM1.RX_TimeOut) COM1.RX_TimeOut--;
- 106   1        }
- 107          
-C51 COMPILER V9.00   RUN                                                                   03/11/2019 18:50:53 PAGE 3   
+ 102          
+ 103          void ComClk() 
+ 104            { 
+ 105   1          if(ComNum) ComNum--;
+ 106   1          if(COM1.RX_TimeOut) COM1.RX_TimeOut--;
+ 107   1        }
+C51 COMPILER V9.00   RUN                                                                   03/14/2019 19:18:22 PAGE 3   
 
- 108          void UpCtClk() { if(UpCtNum) UpCtNum--; }
- 109          void UpDcClk() { if(UpDcNum) UpDcNum--; }
- 110          
- 111          void sysint()
- 112          {
- 113   1        intMcu(); 
- 114   1        intUsart();
- 115   1        #if TIMER2
- 116   1        Timer2_Init();
- 117   1        #endif
- 118   1        intRun();
- 119   1        intBuzz();
- 120   1        intErr();
- 121   1        intInput();
- 122   1        intclk();
- 123   1        intMotor();
- 124   1        intOut(); 
- 125   1        intAtRun();
- 126   1        RomTest();
- 127   1      }
- 128          
+ 108          
+ 109          void UpCtClk() { if(UpCtNum) UpCtNum--; }
+ 110          void UpDcClk() { if(UpDcNum) UpDcNum--; }
+ 111          
+ 112          void sysint()
+ 113          {
+ 114   1        intMcu(); 
+ 115   1        intUsart();
+ 116   1        #if TIMER2
+ 117   1        Timer2_Init();
+ 118   1        #endif
+ 119   1        intRun();
+ 120   1        intBuzz();
+ 121   1        intErr();
+ 122   1        intInput();
+ 123   1        intclk();
+ 124   1        intMotor();
+ 125   1        intOut(); 
+ 126   1        intAtRun();
+ 127   1        RomTest();
+ 128   1      }
  129          
  130          
- 131          void iTaskCtr()
- 132          {
- 133   1      
- 134   1        if(iTask < Even)
- 135   1          {
- 136   2            iTask2= iTask_buf[mPosD][Even];   //¸ù¾ÝÊÂ¼þºÍ×´Ì¬²é±í£¬»ñÈ¡ÈÎÎñ
- 137   2            
- 138   2            if(iTask2!= MTASK_NA) 
- 139   2              {
- 140   3                mTask= iTask2;
- 141   3                iTask= Even;
- 142   3                if(!JY) if(iTask== ITASK_DG_UP || iTask== ITASK_DRAG_UP)  UpCt++;
- 143   3              }
- 144   2          }
- 145   1      }
- 146          
+ 131          
+ 132          void iTaskCtr()
+ 133          {
+ 134   1      
+ 135   1        if(iTask < Even)
+ 136   1          {
+ 137   2            iTask2= iTask_buf[mPosD][Even];   //¸ù¾ÝÊÂ¼þºÍ×´Ì¬²é±í£¬»ñÈ¡ÈÎÎñ
+ 138   2            
+ 139   2            if(iTask2!= MTASK_NA) 
+ 140   2              {
+ 141   3                mTask= iTask2;
+ 142   3                iTask= Even;
+ 143   3                if(!JY) if(iTask== ITASK_DG_UP || iTask== ITASK_DRAG_UP)  UpCt++;
+ 144   3              }
+ 145   2          }
+ 146   1      }
  147          
- 148          void ViceCtr()
- 149          {
- 150   1        if(McuId== MACHI_VICE)
- 151   1          {
- 152   2            switch(ViceRal)
- 153   2              {
- 154   3                case POS_HOR:
- 155   3                case POS_DW:
- 156   3                  Event(ITASK_COM_DW);
- 157   3                  speak(VICE_STA,mPosD2);
- 158   3                  break;
- 159   3                case POS_UP:
- 160   3                case POS_VER:
- 161   3                  HDwSta=STA_NA; HDwNum=HDW_ON_TIME;
- 162   3                  DgSta=STA_NA; DgNum=DG_OFF_TIME;
- 163   3                  Event(ITASK_COM_UP);
- 164   3                  speak(VICE_STA,mPosD2);
- 165   3                  break;
- 166   3                case POS_INT:
- 167   3                  speak(VICE_STA,mPosD2);
- 168   3                  break;
- 169   3                default: break;
-C51 COMPILER V9.00   RUN                                                                   03/11/2019 18:50:53 PAGE 4   
+ 148          
+ 149          void ViceCtr()
+ 150          {
+ 151   1        if(McuId== MACHI_VICE)
+ 152   1          {
+ 153   2            switch(ViceRal)
+ 154   2              {
+ 155   3                case POS_HOR:
+ 156   3                case POS_DW:
+ 157   3                  Event(ITASK_COM_DW);
+ 158   3                  speak(VICE_STA,mPosD2);
+ 159   3                  break;
+ 160   3                case POS_UP:
+ 161   3                case POS_VER:
+ 162   3                  HDwSta=STA_NA; HDwNum=HDW_ON_TIME;
+ 163   3                  DgSta=STA_NA; DgNum=DG_OFF_TIME;
+ 164   3                  Event(ITASK_COM_UP);
+ 165   3                  speak(VICE_STA,mPosD2);
+ 166   3                  break;
+ 167   3                case POS_INT:
+ 168   3                  speak(VICE_STA,mPosD2);
+ 169   3                  break;
+C51 COMPILER V9.00   RUN                                                                   03/14/2019 19:18:22 PAGE 4   
 
- 170   3              }
- 171   2            ViceRal=0;
- 172   2          }
- 173   1        if(McuId== MACHI_MASTER)
- 174   1          { 
- 175   2            if(iTask== ITASK_INT || iTask== ITASK_STR) return;
- 176   2            if(!ComNum) ComNum= COM_TIME;
- 177   2            else return;
- 178   2            switch(mPosD2)
- 179   2              {
- 180   3                case POS_HOR:
- 181   3                case POS_DW:
- 182   3                  switch(ViceRal)
- 183   3                    {
- 184   4                      case POS_HOR:
- 185   4                        ViceSta=0;
- 186   4                        speak(VICE_STA,POS_INT);
- 187   4                        break;
- 188   4                      case POS_DW:
- 189   4                        if(!ViceSta) ViceSta=VICE_STA_EN;
- 190   4                        if(ViceSta==VICE_STA_DGON)        speak(VICE_STA,POS_UP);
- 191   4                        else                  speak(VICE_STA,POS_INT);
- 192   4                        break;
- 193   4                      case POS_VER:
- 194   4                        if(!ViceSta) ViceSta=VICE_STA_EN; 
- 195   4                        if(mPosD2==POS_DW)            speak(VICE_STA,POS_DW);
- 196   4                        if(ViceSta==VICE_STA_DW)        speak(VICE_STA,POS_DW);
- 197   4                        else if(ViceSta==VICE_STA_DGOF)     { speak(VICE_STA,POS_DW); ViceSta=0; }
- 198   4                        else                  speak(VICE_STA,POS_INT);
- 199   4                        break;
- 200   4                      case POS_UP:
- 201   4                        if(ViceSta!=VICE_STA_DGON)        DgStaClr();
- 202   4                        if(!ViceSta)              ViceSta=VICE_STA_EN;
- 203   4                        if(mPosD2==POS_DW)            Event(ITASK_COM_UP);
- 204   4                        else if(ViceSta==VICE_STA_DGOF)     speak(VICE_STA,POS_DW);
- 205   4                        else                  speak(VICE_STA,POS_INT);
- 206   4                        break;
- 207   4                      default: 
- 208   4                        speak(VICE_STA,POS_INT);
- 209   4                        break;
- 210   4                    }
- 211   3                  ViceRal=0;
- 212   3                  break;
- 213   3                case POS_VER:
- 214   3                case POS_UP:
- 215   3                  speak(VICE_STA,mPosD2);
- 216   3                  break;
- 217   3                default: 
- 218   3                  speak(VICE_STA,mPosD2);
- 219   3                  break;
- 220   3              }
- 221   2          }
- 222   1        
- 223   1      
- 224   1        //***********************·¢ËÍ×´Ì¬´¦Àí***********************//
- 225   1        
- 226   1      }
- 227          
- 228          void iTaskControl()     //Íâ²¿ÈÎÎñ´¦Àí
- 229          {
- 230   1      
- 231   1        ViceCtr();    //¸±»ú¿ØÖÆ
-C51 COMPILER V9.00   RUN                                                                   03/11/2019 18:50:53 PAGE 5   
+ 170   3                default: break;
+ 171   3              }
+ 172   2            ViceRal=0;
+ 173   2          }
+ 174   1        if(McuId== MACHI_MASTER)
+ 175   1          { 
+ 176   2            if(iTask== ITASK_INT || iTask== ITASK_STR) return;
+ 177   2            if(!ComNum) ComNum= COM_TIME;
+ 178   2            else return;
+ 179   2            switch(mPosD2)
+ 180   2              {
+ 181   3                case POS_HOR:
+ 182   3                case POS_DW:
+ 183   3                  switch(ViceRal)
+ 184   3                    {
+ 185   4                      case POS_HOR:
+ 186   4                        ViceSta=0;
+ 187   4                        speak(VICE_STA,POS_INT);
+ 188   4                        break;
+ 189   4                      case POS_DW:
+ 190   4                        if(!ViceSta) ViceSta=VICE_STA_EN;
+ 191   4                        if(ViceSta==VICE_STA_DGON)        speak(VICE_STA,POS_UP);
+ 192   4                        else                  speak(VICE_STA,POS_INT);
+ 193   4                        break;
+ 194   4                      case POS_VER:
+ 195   4                        if(!ViceSta) ViceSta=VICE_STA_EN; 
+ 196   4                        if(mPosD2==POS_DW)            speak(VICE_STA,POS_DW);
+ 197   4                        if(ViceSta==VICE_STA_DW)        speak(VICE_STA,POS_DW);
+ 198   4                        else if(ViceSta==VICE_STA_DGOF)     { speak(VICE_STA,POS_DW); ViceSta=0; }
+ 199   4                        else                  speak(VICE_STA,POS_INT);
+ 200   4                        break;
+ 201   4                      case POS_UP:
+ 202   4                        if(ViceSta!=VICE_STA_DGON)        DgStaClr();
+ 203   4                        if(!ViceSta)              ViceSta=VICE_STA_EN;
+ 204   4                        if(mPosD2==POS_DW)            Event(ITASK_COM_UP);
+ 205   4                        else if(ViceSta==VICE_STA_DGOF)     speak(VICE_STA,POS_DW);
+ 206   4                        else                  speak(VICE_STA,POS_INT);
+ 207   4                        break;
+ 208   4                      default: 
+ 209   4                        speak(VICE_STA,POS_INT);
+ 210   4                        break;
+ 211   4                    }
+ 212   3                  ViceRal=0;
+ 213   3                  break;
+ 214   3                case POS_VER:
+ 215   3                case POS_UP:
+ 216   3                  speak(VICE_STA,mPosD2);
+ 217   3                  break;
+ 218   3                default: 
+ 219   3                  speak(VICE_STA,mPosD2);
+ 220   3                  break;
+ 221   3              }
+ 222   2          }
+ 223   1        
+ 224   1      
+ 225   1        //***********************·¢ËÍ×´Ì¬´¦Àí***********************//
+ 226   1        
+ 227   1      }
+ 228          
+ 229          void iTaskControl()     //Íâ²¿ÈÎÎñ´¦Àí
+ 230          {
+ 231   1      
+C51 COMPILER V9.00   RUN                                                                   03/14/2019 19:18:22 PAGE 5   
 
- 232   1        switch(iTask) //µ±Ç°Ö´ÐÐÈÎÎñ
- 233   1          {
- 234   2            case ITASK_INT:
- 235   2              BmRed();    //²¦Âë²ÎÊý¶ÁÈ¡
- 236   2              if(!HUP && !HDW && !HOR) AtNum= 30;
- 237   2              else AtNum= 6;
- 238   2              iTask=ITASK_STR;
- 239   2              break;
- 240   2      
- 241   2            case ITASK_STR:
- 242   2              if(!HUP && !HDW && !HOR && !AtNum) { aLine= 1;iTask= ITASK_NA; }
- 243   2              else if(!AtNum) { iTask=ITASK_NA; }
- 244   2              break;
- 245   2      
- 246   2            case ITASK_REACH_H:
- 247   2            case ITASK_REACH_V:
- 248   2            case ITASK_INER_OK:
- 249   2            case ITASK_COER_OK:
- 250   2              iTask=ITASK_NA;
- 251   2              break;
- 252   2              
- 253   2      
- 254   2            case ITASK_NA:
- 255   2            case ITASK_COER_UP:
- 256   2            case ITASK_INER_DW:
- 257   2              iTaskCtr();
- 258   2              break;
- 259   2              
- 260   2            case ITASK_DG_UP:
- 261   2            case ITASK_DRAG_UP:
- 262   2            case ITASK_FZ_UP:
- 263   2            case ITASK_AUTO_UP:
- 264   2            case ITASK_COM_UP:
- 265   2            case ITASK_VDO_UP:
- 266   2            case ITASK_HAN_UP:
- 267   2              iTaskCtr();
- 268   2              break;
- 269   2              
- 270   2            case ITASK_HAN_DW:
- 271   2            case ITASK_COM_DW:
- 272   2            case ITASK_AUTO_DW:
- 273   2            case ITASK_DG_DW:
- 274   2              iTaskCtr();
- 275   2              break;
- 276   2      
- 277   2              
- 278   2            default: iTask=ITASK_NA; break;   //µç»úÏà¹Ø±äÁ¿³õÊ¼»¯
- 279   2          }
- 280   1      }
- 281          
- 282          void t0_interrupt(void)  interrupt 1 //using 1
- 283          {
- 284   1        TF0= 0;
- 285   1        TL0 = 0xCD;   //ÉèÖÃ¶¨Ê±³õÖµ
- 286   1        TH0 = 0xF8;   //ÉèÖÃ¶¨Ê±³õÖµ
- 287   1      
+ 232   1        ViceCtr();    //¸±»ú¿ØÖÆ
+ 233   1        switch(iTask) //µ±Ç°Ö´ÐÐÈÎÎñ
+ 234   1          {
+ 235   2            case ITASK_INT:
+ 236   2              BmRed();    //²¦Âë²ÎÊý¶ÁÈ¡
+ 237   2              if(!HUP && !HDW && !HOR) AtNum= 30;
+ 238   2              else AtNum= 6;
+ 239   2              iTask=ITASK_STR;
+ 240   2              break;
+ 241   2      
+ 242   2            case ITASK_STR:
+ 243   2              if(!HUP && !HDW && !HOR && !AtNum) { aLine= 1;iTask= ITASK_NA; }
+ 244   2              else if(!AtNum) { iTask=ITASK_NA; }
+ 245   2              break;
+ 246   2      
+ 247   2            case ITASK_REACH_H:
+ 248   2            case ITASK_REACH_V:
+ 249   2            case ITASK_INER_OK:
+ 250   2            case ITASK_COER_OK:
+ 251   2              iTask=ITASK_NA;
+ 252   2              break;
+ 253   2              
+ 254   2      
+ 255   2            case ITASK_NA:
+ 256   2            case ITASK_COER_UP:
+ 257   2            case ITASK_INER_DW:
+ 258   2              iTaskCtr();
+ 259   2              break;
+ 260   2              
+ 261   2            case ITASK_DG_UP:
+ 262   2            case ITASK_DRAG_UP:
+ 263   2            case ITASK_FZ_UP:
+ 264   2            case ITASK_AUTO_UP:
+ 265   2            case ITASK_COM_UP:
+ 266   2            case ITASK_VDO_UP:
+ 267   2            case ITASK_HAN_UP:
+ 268   2              iTaskCtr();
+ 269   2              break;
+ 270   2              
+ 271   2            case ITASK_HAN_DW:
+ 272   2            case ITASK_COM_DW:
+ 273   2            case ITASK_AUTO_DW:
+ 274   2            case ITASK_DG_DW:
+ 275   2              iTaskCtr();
+ 276   2              break;
+ 277   2      
+ 278   2              
+ 279   2            default: iTask=ITASK_NA; break;   //µç»úÏà¹Ø±äÁ¿³õÊ¼»¯
+ 280   2          }
+ 281   1      }
+ 282          
+ 283          void t0_interrupt(void)  interrupt 1 //using 1
+ 284          {
+ 285   1        TF0= 0;
+ 286   1        TL0 = 0xCD;   //ÉèÖÃ¶¨Ê±³õÖµ
+ 287   1        TH0 = 0xF8;   //ÉèÖÃ¶¨Ê±³õÖµ
  288   1      
- 289   1        T1Ms_clk();
- 290   1        mCtrClk();
- 291   1        ComClk();
- 292   1      //  LED=!LED;
- 293   1      }
-C51 COMPILER V9.00   RUN                                                                   03/11/2019 18:50:53 PAGE 6   
+ 289   1      
+ 290   1        T1Ms_clk();
+ 291   1        mCtrClk();
+ 292   1        ComClk();
+ 293   1      //  LED=!LED;
+C51 COMPILER V9.00   RUN                                                                   03/14/2019 19:18:22 PAGE 6   
 
- 294          
+ 294   1      }
  295          
  296          
  297          
- 298          //  ÂäÕ¢Ê±·ÖÎª5¸ö½×¶Î£¬·Ö±ðÊÇ
- 299          //  1.Æð²½½×¶Î£¬´¹Ö±Î»µ½Æð²½Î»
- 300          //  2.ÔËÐÐ½×¶Î£¬Æð²½Î»µ½ÖÐ¶Î
- 301          //  3.¼õËÙ½×¶Î£¬ÖÐ¶Îµ½»º³åÎ»
- 302          //  4.»º³å½×¶Î£¬»º³åµ½Æ½ÎÈÎ»
- 303          //  5.ÎÈ¶¨½×¶Î£¬Æ½ÎÈÎ»µ½Ë®Æ½Î»
- 304          //  ´ó¸ÅË¼Â·ÊÇ£¬¸ù¾Ý²âÊÔµÄÊý¾Ý£¬µÃ³öÆð²½½×¶ÎºÍÔËÐÐ½×¶ÎµÄËùÐèÒªµÄ×ªÊýÇø¼ä
- 305          //  È»ºó´ÓÕâ¸öÇø¼ä¿ªÊ¼ÅÐ¶¨£¬¸ù¾Ý½øÈë¶¨Ê±Æ÷µÄ´ÎÊý£¬µÃµ½ÐÂµÄ×ªÊý£¬ÒÔ¼°×ÜµÄÊ±¼ä
- 306          //  Õâ¸öÊ±¼äÔÙ¸ù¾Ý¾­ÑéÖµ£¬ÅÐ¶¨ÊÇ²»ÊÇ³¬³öÎÒÃÇÔ¤ÆÚµÄ×ªÊýÇø¼ä£¬ÈôÊÇ£¬ÔòÌ§Õ¢
- 307          
- 308          //Ô¤ÆÚµÄÂäÕ¢Ê±¼äÎª5Ãë£¬¿ìÓÚ5Ãë£¬ÈÏÎª¾ÍÓÐ·çÏÕ
- 309          
- 310          #if 0 
+ 298          
+ 299          //  ÂäÕ¢Ê±·ÖÎª5¸ö½×¶Î£¬·Ö±ðÊÇ
+ 300          //  1.Æð²½½×¶Î£¬´¹Ö±Î»µ½Æð²½Î»
+ 301          //  2.ÔËÐÐ½×¶Î£¬Æð²½Î»µ½ÖÐ¶Î
+ 302          //  3.¼õËÙ½×¶Î£¬ÖÐ¶Îµ½»º³åÎ»
+ 303          //  4.»º³å½×¶Î£¬»º³åµ½Æ½ÎÈÎ»
+ 304          //  5.ÎÈ¶¨½×¶Î£¬Æ½ÎÈÎ»µ½Ë®Æ½Î»
+ 305          //  ´ó¸ÅË¼Â·ÊÇ£¬¸ù¾Ý²âÊÔµÄÊý¾Ý£¬µÃ³öÆð²½½×¶ÎºÍÔËÐÐ½×¶ÎµÄËùÐèÒªµÄ×ªÊýÇø¼ä
+ 306          //  È»ºó´ÓÕâ¸öÇø¼ä¿ªÊ¼ÅÐ¶¨£¬¸ù¾Ý½øÈë¶¨Ê±Æ÷µÄ´ÎÊý£¬µÃµ½ÐÂµÄ×ªÊý£¬ÒÔ¼°×ÜµÄÊ±¼ä
+ 307          //  Õâ¸öÊ±¼äÔÙ¸ù¾Ý¾­ÑéÖµ£¬ÅÐ¶¨ÊÇ²»ÊÇ³¬³öÎÒÃÇÔ¤ÆÚµÄ×ªÊýÇø¼ä£¬ÈôÊÇ£¬ÔòÌ§Õ¢
+ 308          
+ 309          //Ô¤ÆÚµÄÂäÕ¢Ê±¼äÎª5Ãë£¬¿ìÓÚ5Ãë£¬ÈÏÎª¾ÍÓÐ·çÏÕ
+ 310          
+ 311          #if 0 
               void testTimer2(void)
               { 
                 //Ê×ÏÈÅÐ¶ÏÊÇ·ñµ½ÁË¼õËÙ½×¶Î
@@ -381,9 +382,9 @@ line level    source
               
               //¶¨Ê±Æ÷ÖÐ¶Ï2
               void Timer2_ISR(void) interrupt 5 //¶¨Ê±Æ÷2ÖÐ¶Ï
-              {
-C51 COMPILER V9.00   RUN                                                                   03/11/2019 18:50:53 PAGE 7   
+C51 COMPILER V9.00   RUN                                                                   03/14/2019 19:18:22 PAGE 7   
 
+              {
                 TF2=0;
                 EXF2 = 0;
                 TL2 = (65536 - 9216) / 256;   //ÉèÖÃ¶¨Ê±³õÖµ
@@ -392,126 +393,213 @@ line level    source
                 testTimer2();  
               }
               #endif 
- 364          
- 365          #if 1 
- 366          #define TIMER_FRE  90 
- 367          #define BASIC_SPEED_100MS 8 //Ã¿100ms²âËÙ»·×ªµ½µÄÈ¦Êý
- 368          #define SPRING_PARAM_OFFSET 2//µ¯»É²ÎÊý
- 369          #define STANDARD_VALUE 72//µ¯»É±ê×¼Öµ
- 370          
- 371          
- 372          void motorTimer2(void)
- 373          { 
- 374   1      # if 1
- 375   1          //Ã¿¸ô100ºÁÃë½øÀ´ÅÐ¶¨Ò»´Î
- 376   1        if(SpeRinN >= 1) //²âËÙ»·×ª¶¯²Å¿ªÊ¼½øÀ´
- 377   1        {   
- 378   2            //´ÓµÚ900ºÁÃëµÄÊ±ºò½øÀ´£¬È»ºóÃ¿100ºÁÃëÅÐ¶¨Ò»´Î
- 379   2            if(gRepairMotor.CurrentCounts++ >= TIMER_FRE);//½øÈëÖÐ¶ÏµÄ´ÎÊý£¬¸ù¾ÝÖÐ¶ÏµÄ´ÎÊýÅÐ¶¨ËùÓÃµÄÊ±¼ä
- 380   2              {      
- 381   3              //ÕâÀï²âÊÔÊ¹ÓÃ£¬ÏÈ¹Ì¶¨3.8µç»ú£¬releaseÊ±»áÊ¹ÓÃºê¶¨Òå£¬¶¨Òå²»Í¬µÄ¼ÆËã·½Ê½ºÍÅÐ¶¨Ìõ¼þ
- 382   3              
- 383   3              if(gRepairMotor.CurrentCounts % TIMER_FRE == 0)
- 384   3              {
- 385   4                      //ÏÈÅÐ¶¨Ì§Õ¢
- 386   4                      if(gRepairMotor.Direction == POS_UP)
- 387   4                      {
- 388   5                          if(gRepairMotor.CurrentCounts == TIMER_FRE)
- 389   5                          {
- 390   6                              if (SpeRinN > STANDARD_VALUE + SPRING_PARAM_OFFSET)
- 391   6                              {
- 392   7                                  //Èý¸ùµ¯»É
- 393   7                                  gCurrentSpringNum = 3;
- 394   7                              }
- 395   6                              else if(SpeRinN < STANDARD_VALUE + SPRING_PARAM_OFFSET && SpeRinN >= STANDARD_VALU
-             -E -SPRING_PARAM_OFFSET)
- 396   6                              {
- 397   7                                  //Á½¸ùµ¯»É£¬ÐèÒª±¨¾¯
- 398   7                                  gCurrentSpringNum = 2;
- 399   7                              }
- 400   6                              else
- 401   6                              {
- 402   7                                  //Ö»ÓÐÒ»¸ùµ¯»É
- 403   7                                  gCurrentSpringNum = 1;
- 404   7                              }
- 405   6                          }
- 406   5                      }
- 407   4                      else //ÂäÕ¢
- 408   4                      {
- 409   5                          if(gCurrentSpringNum == 1 || SpeRinN >= STANDARD_VALUE + SPRING_PARAM_OFFSET*2-1)
- 410   5                          {
- 411   6                              //Ö´ÐÐÌ§Õ¢
- 412   6                              Event(ITASK_DG_UP);
- 413   6                          }
- 414   5                      
- 415   5                      }
- 416   4                      
-C51 COMPILER V9.00   RUN                                                                   03/11/2019 18:50:53 PAGE 8   
+ 365          
+ 366          #if CALCFUN
+              #define TIMER_FRE  5         //¼ÆËãÖÜÆÚ
+              #define BASIC_OFFSET_250MS 4 //Ã¿250ms²âËÙ»·×ªµ½µÄÈ¦Êý
+              #define SPRING_PARAM_OFFSET1 2//µ¯»É²ÎÊý
+              #define SPRING_PARAM_OFFSET2 3//µ¯»É²ÎÊý
+              #define SPRING_PARAM_OFFSET3 4//µ¯»É²ÎÊý
+              #define BASIC_SPRING_NUM 46//µ¯»É±ê×¼Öµ
+              #else
+ 374          #define START_POSITION 50   //´ÓµÚ50´Î½øÈëÖÐ¶Ï¿ªÊ¼¼ÆËã
+ 375          #define END_POSITION (START_POSITION+TIMER_FRE*SPRING_CHECK_NUM)  //´ÓµÚ50´Î½øÈëÖÐ¶Ï¿ªÊ¼¼ÆËã
+ 376          #define TIMER_FRE  5        //¼ÆËãÖÜÆÚ
+ 377          #define THREE_SPRING_LOWER_LIMIT 16 //Èç¹ûÍ³¼Æ×ÜµÄÈ¦Êý²î´óÓÚÕâ¸öÖµ£¬ËµÃ÷ÒÑ¾­²»ÊÇÈý¸ùµ¯»ÉÁË
+ 378          #define TWO_SPRINT_LOWER_LIMIT 26 //Èç¹ûÍ³¼Æ×ÜµÄÈ¦Êý²î´óÓÚÕâ¸öÖµ£¬ËµÃ÷ÒÑ¾­²»ÊÇÁ½¸ùµ¯»ÉÁË
+ 379          #define BASIC_SPRING_NUM 38//µ¯»É±ê×¼Öµ
+ 380          #define BASIC_OFFSET_250MS 4 //Ã¿250ms²âËÙ»·×ªµ½µÄÈ¦Êý
+ 381          #define SPRING_CHECK_NUM 6//È¡Ñù´ÎÊý
+ 382          #endif
+ 383          
+ 384          
+ 385          
+ 386          
+ 387          
+ 388          
+ 389          void motorTimer2(void)
+ 390          {
+ 391   1      //    gRepairMotor.CurrentCounts++ ;
+ 392   1      //    //´òÓ¡µ±Ç°²âËÙ»·Öµ
+ 393   1      //    Uart_Print(3,gRepairMotor.Direction);   
+ 394   1      
+ 395   1      #if CALCFUN
+                  //Ã¿¸ô100ºÁÃë½øÀ´ÅÐ¶¨Ò»´Î
+                if(SpeRinN >= 1) //²âËÙ»·×ª¶¯²Å¿ªÊ¼½øÀ´
+                {  
+                    gRepairMotor.CurrentCounts++ ;  
+                      
+                      
+                  //ÕâÀï²âÊÔÊ¹ÓÃ£¬ÏÈ¹Ì¶¨4.8µç»ú£¬releaseÊ±»áÊ¹ÓÃºê¶¨Òå£¬¶¨Òå²»Í¬µÄ¼ÆËã·½Ê½ºÍÅÐ¶¨Ìõ¼þ
+                  if(gRepairMotor.CurrentCounts  == TIMER_FRE*12)//46
+                  {   
+                      gRepairMotor.FlagValue = 0;
+                          gRepairMotor.AverageValue = 0;
+                      gRepairMotor.LastSpeRin = SpeRinN;
+                          if(SpeRinN >= BASIC_SPRING_NUM+BASIC_OFFSET_250MS)
+                          {
+                              gRepairMotor.FlagValue += 2;//ºÜÑÏÖØ£¬ÒÉËÆ¶ÏÁËÁ½¸ùµ¯»É
+                          }
+                          else if(SpeRinN >= BASIC_SPRING_NUM+SPRING_PARAM_OFFSET2)
+                          {
+                              gRepairMotor.FlagValue += 1;//ÓÐ¿ÉÄÜ¶ÏÁËÒ»¸ùµ¯»É
+                          }
+                          else
+                          {
+C51 COMPILER V9.00   RUN                                                                   03/14/2019 19:18:22 PAGE 8   
 
- 417   4                //´òÓ¡µ±Ç°²âËÙ»·Öµ
- 418   4                Uart_Print(3,gRepairMotor.Direction);   
- 419   4                    }
- 420   3      
- 421   3          }
- 422   2        }
- 423   1      #else 
-                g_timer_run_counter++;
-                if(g_timer_run_counter % TIMER_FRE == 0)
-                {
-                  if(SpeRinN > FISTER_SPRING_BREAK && SpeRinN <= SECOND_SPRING_BREAK && g_timer_run_counter == 1)
-                  {
-                    g_timer_run_counter = 0;
-                    Event(ITASK_DG_UP);//Î£ÏÕ£¬Ì§¸Ë
-                  }
-                  else if(SpeRinN > SECOND_SPRING_BREAK && SpeRinN <= THIRD_SPRING_BREAK && g_timer_run_counter == 2)
-                  {
-                    g_timer_run_counter = 0;
-                    Event(ITASK_DG_UP);//Î£ÏÕ£¬Ì§¸Ë
-                  }
-                  else if(SpeRinN > THIRD_SPRING_BREAK && SpeRinN <= FORTH_SPRING_BREAK  && g_timer_run_counter == 3)
-                  {
-                    g_timer_run_counter = 0;
-                    Event(ITASK_DG_UP);//Î£ÏÕ£¬Ì§¸Ë
-                  }
-                  else
-                  {
-                    g_timer_run_counter = 0;
-                  }
+                              ;//ÈÏÎª»¹ÔÚ¿É¿ØÇø¼ä
+                          }  
+                      }
+                      else if(gRepairMotor.CurrentCounts  == TIMER_FRE*13)//50
+                      {
+                          gRepairMotor.AverageValue = SpeRinN-gRepairMotor.LastSpeRin; //»ñÈ¡Ã¿´ÎµÄ²îÖµ
               
-                  //´òÓ¡µ±Ç°²âËÙ»·Öµ
-                  Uart_Print(3,gRepairMotor.Direction);
+                          if(SpeRinN >= BASIC_SPRING_NUM + BASIC_OFFSET_250MS*2)
+                          {
+                              gRepairMotor.FlagValue += 2;//ºÜÑÏÖØ£¬ÒÉËÆ¶ÏÁËÁ½¸ùµ¯»É
+                          }
+                          else if(SpeRinN >= BASIC_SPRING_NUM+BASIC_OFFSET_250MS+SPRING_PARAM_OFFSET2)
+                          {
+                              gRepairMotor.FlagValue += 1;//ÓÐ¿ÉÄÜ¶ÏÁËÒ»¸ùµ¯»É
+                          }
+                          else
+                          {
+                              ;//ÈÏÎª»¹ÔÚ¿É¿ØÇø¼ä
+                          }
+                          gRepairMotor.LastSpeRin = SpeRinN;  
+                          
+                      }
+                      else if(gRepairMotor.CurrentCounts  == TIMER_FRE*14)//54
+                      {
+                          gRepairMotor.AverageValue += SpeRinN-gRepairMotor.LastSpeRin; //»ñÈ¡Ã¿´ÎµÄ²îÖµºÍÇóÆ½¾ùÊý
+              
+                          if(SpeRinN >= BASIC_SPRING_NUM + BASIC_OFFSET_250MS*3)
+                          {
+                              gRepairMotor.FlagValue += 2;//ºÜÑÏÖØ£¬ÒÉËÆ¶ÏÁËÁ½¸ùµ¯»É
+                          }
+                          else if(SpeRinN >= BASIC_SPRING_NUM+BASIC_OFFSET_250MS*2+SPRING_PARAM_OFFSET2)
+                          {
+                              gRepairMotor.FlagValue += 1;//ÓÐ¿ÉÄÜ¶ÏÁËÒ»¸ùµ¯»É
+                          }
+                          else
+                          {
+                              ;//ÈÏÎª»¹ÔÚ¿É¿ØÇø¼ä
+                          }
+                          gRepairMotor.LastSpeRin = SpeRinN; 
+              
+                             
+                      }
+                      else if(gRepairMotor.CurrentCounts  == TIMER_FRE*15)//58
+                      {
+                          gRepairMotor.AverageValue += SpeRinN-gRepairMotor.LastSpeRin; //»ñÈ¡Ã¿´ÎµÄ²îÖµºÍÇóÆ½¾ùÊý
+                          if(SpeRinN >= BASIC_SPRING_NUM + BASIC_OFFSET_250MS*4)
+                          {
+                              gRepairMotor.FlagValue += 2;//ºÜÑÏÖØ£¬ÒÉËÆ¶ÏÁËÁ½¸ùµ¯»É
+                          }
+                          else if(SpeRinN >= BASIC_SPRING_NUM+BASIC_OFFSET_250MS*3+SPRING_PARAM_OFFSET2)
+                          {
+                              gRepairMotor.FlagValue += 1;//ÓÐ¿ÉÄÜ¶ÏÁËÒ»¸ùµ¯»É
+                          }
+                          else
+                          {
+              
+                          
+                          }     
+                      }
+                      else
+                      {
+                          ;
+C51 COMPILER V9.00   RUN                                                                   03/14/2019 19:18:22 PAGE 9   
+
+                      }
+              
+                    //´òÓ¡µ±Ç°²âËÙ»·Öµ
+                  Uart_Print(3,gRepairMotor.Direction);       
+              
+                      
+              
                 }
-              
-                #endif
- 452   1      }
- 453          
- 454          //¶¨Ê±Æ÷ÖÐ¶Ï2
- 455          void Timer2_ISR(void) interrupt 5 //¶¨Ê±Æ÷2ÖÐ¶Ï
- 456          {
- 457   1        TF2=0;
- 458   1        EXF2 = 0;
- 459   1        TL2 = (65536 - 9216) / 256;   //ÉèÖÃ¶¨Ê±³õÖµ
- 460   1        TH2 = (65536 - 9216) % 256;   //ÉèÖÃ¶¨Ê±³õÖµ
- 461   1      
- 462   1        motorTimer2();  
- 463   1      }
- 464          
- 465          //void Timer2_Zero(void)
- 466          //{ 
- 467          //  TF2=0;
- 468          //  EXF2 = 0; 
- 469          //}
- 470          
- 471          #endif
- 472          
- 473          
+              #else
+ 489   1          if(SpeRinN >= 1) //²âËÙ»·×ª¶¯²Å¿ªÊ¼½øÀ´
+ 490   1          { 
+ 491   2              gRepairMotor.CurrentCounts++ ; 
+ 492   2      
+ 493   2              if((gRepairMotor.CurrentCounts >= START_POSITION) && (gRepairMotor.CurrentCounts % TIMER_FRE == 0)
+             - && gRepairMotor.CurrentCounts <= END_POSITION)//38
+ 494   2              {
+ 495   3                  gRepairMotor.Times++;
+ 496   3                  if(SpeRinN >= BASIC_SPRING_NUM + BASIC_OFFSET_250MS*gRepairMotor.Times)
+ 497   3                  {
+ 498   4                      gRepairMotor.FlagValue ++;//ÕâÀïÓ¦¸Ã²»»á³öÏÖ£¬Èç¹û³öÏÖ¾ÍÊÇ´óÎÊÌâ
+ 499   4                  }
+ 500   3                  
+ 501   3      
+ 502   3                  if(gRepairMotor.Times > 1) //´ÓµÚ2´Î¿ªÊ¼£¬Òª¼ÆËãÃ¿´ÎµÄ²î
+ 503   3                  {
+ 504   4                      gRepairMotor.AverageValue += SpeRinN - gRepairMotor.LastSpeRin;
+ 505   4                  }
+ 506   3      
+ 507   3                  gRepairMotor.LastSpeRin = SpeRinN;
+ 508   3                  
+ 509   3                  if (gRepairMotor.FlagValue >= 4) //²»ÐèÍêÈ«×ßÍêÅÐ¶¨£¬¿ÉÒÔÖ±½ÓÈÏÎªÊÇÓÐÎÊÌâµÄ 
+ 510   3                  {            
+ 511   4                      Event(ITASK_DG_UP);
+ 512   4                  }
+ 513   3      
+ 514   3                  if(gRepairMotor.Times == SPRING_CHECK_NUM) //Ò»¹²½øÀ´ÅÐ¶¨6´Î
+ 515   3                  {
+ 516   4                      if (gRepairMotor.AverageValue >= TWO_SPRINT_LOWER_LIMIT)//Ö»ÓÐÒ»¸ùµ¯»ÉÁË
+ 517   4                      {
+ 518   5                          Event(ITASK_DG_UP);
+ 519   5                      }
+ 520   4                      else if(gRepairMotor.AverageValue >= THREE_SPRING_LOWER_LIMIT)
+ 521   4                      {
+ 522   5                          //±¨¾¯£¬Ö»ÓÐÁ½¸ùµ¯»É
+ 523   5                          LED=!LED;
+ 524   5                      }
+ 525   4                      else
+ 526   4                      {
+ 527   5                          //Õý³£
+ 528   5                      }
+ 529   4                         
+ 530   4                  }
+ 531   3      
+ 532   3                  //´òÓ¡µ±Ç°²âËÙ»·Öµ
+ 533   3              Uart_Print(3,gRepairMotor.Direction);
+ 534   3                  
+ 535   3              }  
+ 536   2          }
+ 537   1      
+ 538   1      #endif    
+ 539   1      
+ 540   1      
+C51 COMPILER V9.00   RUN                                                                   03/14/2019 19:18:22 PAGE 10  
+
+ 541   1      }
+ 542          
+ 543          //¶¨Ê±Æ÷ÖÐ¶Ï2
+ 544          void Timer2_ISR(void) interrupt 5 //¶¨Ê±Æ÷2ÖÐ¶Ï
+ 545          {
+ 546   1        TF2=0;
+ 547   1        EXF2 = 0;
+ 548   1        motorTimer2(); 
+ 549   1      }
+ 550          
+ 551          //void Timer2_Zero(void)
+ 552          //{ 
+ 553          //  TF2=0;
+ 554          //  EXF2 = 0; 
+ 555          //}
+ 556          
+ 557          
+ 558          
+ 559          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    977    ----
+   CODE SIZE        =   1005    ----
    CONSTANT SIZE    =    126    ----
-C51 COMPILER V9.00   RUN                                                                   03/11/2019 18:50:53 PAGE 9   
-
    XDATA SIZE       =      7    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =      3    ----
