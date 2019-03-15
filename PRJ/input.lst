@@ -1,4 +1,4 @@
-C51 COMPILER V9.00   INPUT                                                                 03/14/2019 19:14:17 PAGE 1   
+C51 COMPILER V9.00   INPUT                                                                 03/15/2019 15:48:39 PAGE 1   
 
 
 C51 COMPILER V9.00, COMPILATION OF MODULE INPUT
@@ -62,7 +62,7 @@ line level    source
   52          
   53          
   54          
-C51 COMPILER V9.00   INPUT                                                                 03/14/2019 19:14:17 PAGE 2   
+C51 COMPILER V9.00   INPUT                                                                 03/15/2019 15:48:39 PAGE 2   
 
   55          
   56          
@@ -126,7 +126,7 @@ line level    source
  114          
  115          
  116          void FZing()  //防砸信号防抖--变1防抖
-C51 COMPILER V9.00   INPUT                                                                 03/14/2019 19:14:17 PAGE 3   
+C51 COMPILER V9.00   INPUT                                                                 03/15/2019 15:48:39 PAGE 3   
 
  117          {
  118   1        switch(FzSta)
@@ -190,7 +190,7 @@ line level    source
  176   2              break;
  177   2              
  178   2            case STA_ON:
-C51 COMPILER V9.00   INPUT                                                                 03/14/2019 19:14:17 PAGE 4   
+C51 COMPILER V9.00   INPUT                                                                 03/15/2019 15:48:39 PAGE 4   
 
  179   2              if(DG)  
  180   2                {
@@ -254,7 +254,7 @@ line level    source
  238   2              break;
  239   2            case STA_ON:
  240   2              if(HDW)
-C51 COMPILER V9.00   INPUT                                                                 03/14/2019 19:14:17 PAGE 5   
+C51 COMPILER V9.00   INPUT                                                                 03/15/2019 15:48:39 PAGE 5   
 
  241   2                {
  242   3                  HDwSta= STA_NA;
@@ -318,7 +318,7 @@ line level    source
  300   2            Event(ITASK_AUTO_UP);
  301   2          }
  302   1      }
-C51 COMPILER V9.00   INPUT                                                                 03/14/2019 19:14:17 PAGE 6   
+C51 COMPILER V9.00   INPUT                                                                 03/15/2019 15:48:39 PAGE 6   
 
  303          
  304          void AtDwEvent()            //自动落闸事件
@@ -382,7 +382,7 @@ line level    source
  362          
  363          void CoerOkEvt()
  364          {
-C51 COMPILER V9.00   INPUT                                                                 03/14/2019 19:14:17 PAGE 7   
+C51 COMPILER V9.00   INPUT                                                                 03/15/2019 15:48:39 PAGE 7   
 
  365   1        if(iTask== ITASK_COER_UP)
  366   1          if(PosRal== POS_HOR)

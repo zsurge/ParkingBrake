@@ -588,30 +588,3 @@ void mTaskControl()			//电机任务控制
 		}
 }
 
-//void InitLimitValue(void)
-//{
-//	memset(&gLimitValue, 0xFF,sizeof(gLimitValue) );
-//}
-
-
-//void GetLimitValue(void)
-//{
-//	#if type == M1S
-//		gLimitValue.InitSpeRin = 30;
-//		gLimitValue.SafetyLimit = 4;
-//		gLimitValue.TimeMinValue = 4;
-//	#elif type == M18S
-//		gLimitValue.InitSpeRin = 30;
-//		gLimitValue.SafetyLimit = 4;
-//		gLimitValue.TimeMinValue = 4;	
-//	#elif type == M38S
-//		gLimitValue.InitSpeRin = 30;
-//		gLimitValue.SafetyLimit = 4;
-//		gLimitValue.TimeMinValue = 4;	
-//	#else
-//		gLimitValue.InitSpeRin = 30;
-//		gLimitValue.SafetyLimit = 4;
-//		gLimitValue.TimeMinValue = 4;	
-//	#endif
-//}
-

@@ -275,7 +275,6 @@ void mRunClk();
 void mCtrClk();
 void mTaskControl();	
 void InitRepairMotor(void);
-//void InitLimitValue(void);
-//void GetLimitValue(void);
+
 #endif
 
