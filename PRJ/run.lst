@@ -1,4 +1,4 @@
-C51 COMPILER V9.00   RUN                                                                   03/15/2019 16:09:22 PAGE 1   
+C51 COMPILER V9.00   RUN                                                                   03/16/2019 17:13:31 PAGE 1   
 
 
 C51 COMPILER V9.00, COMPILATION OF MODULE RUN
@@ -62,7 +62,7 @@ line level    source
   44   1                 //计时器0工作于模式1 | Timer1    |    Timer0    |a
   45   1      //串口参数配置
   46   1      //  TH1=0xF4;   /*设定波特率为2400, 晶振11.0592MHz*/
-C51 COMPILER V9.00   RUN                                                                   03/15/2019 16:09:22 PAGE 2   
+C51 COMPILER V9.00   RUN                                                                   03/16/2019 17:13:31 PAGE 2   
 
   47   1      //  TH1=0xE8;   /*设定波特率为2400, 晶振22.1184MHz*/
   48   1      //  TH1=0xFD;   /*设定波特率为9600，晶振11.0592MHz*/
@@ -90,22 +90,22 @@ line level    source
   70          
   71          //定时器2初始化
   72          #if TIMER2
-  73          void Timer2_Init(void)
-  74          {
-  75   1        T2MOD = 0;    //初始化模式寄存器
-  76   1        T2CON = 0;    //初始化控制寄存器
-  77   1          TH2 = (65536 - 9216*5) / 256;   //设置定时初值
-  78   1        TL2 = (65536 - 9216*5) % 256;   //设置定时初值 46080--50ms 9216---10ms
-  79   1        TR2 = 1;    //定时器2开始计时
-  80   1      
-  81   1      
-  82   1        //  TH2 = (65536-9216)/256;
-  83   1        //  TL2 = (65536-9216)%256;
-  84   1        EA=1;                      //打开总中断
-  85   1        ET2=1;                     //打开定时器中断  
-  86   1        TR2=1;                     //打开定时器开关
-  87   1      }
-  88          #endif
+              void Timer2_Init(void)
+              {
+                T2MOD = 0;    //初始化模式寄存器
+                T2CON = 0;    //初始化控制寄存器
+                  TH2 = (65536 - 9216*5) / 256;   //设置定时初值
+                TL2 = (65536 - 9216*5) % 256;   //设置定时初值 46080--50ms 9216---10ms
+                
+              
+              
+                //  TH2 = (65536-9216)/256;
+                //  TL2 = (65536-9216)%256;
+                EA=1;                      //打开总中断
+                ET2=1;                     //打开定时器中断  
+                  TR2 = 1;    //定时器2开始计时
+              }
+              #endif
   89          
   90          
   91          
@@ -126,7 +126,7 @@ line level    source
  105   1          if(ComNum) ComNum--;
  106   1          if(COM1.RX_TimeOut) COM1.RX_TimeOut--;
  107   1        }
-C51 COMPILER V9.00   RUN                                                                   03/15/2019 16:09:22 PAGE 3   
+C51 COMPILER V9.00   RUN                                                                   03/16/2019 17:13:31 PAGE 3   
 
  108          
  109          void UpCtClk() { if(UpCtNum) UpCtNum--; }
@@ -137,8 +137,8 @@ line level    source
  114   1        intMcu(); 
  115   1        intUsart();
  116   1        #if TIMER2
- 117   1        Timer2_Init();
- 118   1        #endif
+                Timer2_Init();
+                #endif
  119   1        intRun();
  120   1        intBuzz();
  121   1        intErr();
@@ -190,7 +190,7 @@ line level    source
  167   3                case POS_INT:
  168   3                  speak(VICE_STA,mPosD2);
  169   3                  break;
-C51 COMPILER V9.00   RUN                                                                   03/15/2019 16:09:22 PAGE 4   
+C51 COMPILER V9.00   RUN                                                                   03/16/2019 17:13:31 PAGE 4   
 
  170   3                default: break;
  171   3              }
@@ -254,7 +254,7 @@ line level    source
  229          void iTaskControl()     //外部任务处理
  230          {
  231   1      
-C51 COMPILER V9.00   RUN                                                                   03/15/2019 16:09:22 PAGE 5   
+C51 COMPILER V9.00   RUN                                                                   03/16/2019 17:13:31 PAGE 5   
 
  232   1        ViceCtr();    //副机控制
  233   1        switch(iTask) //当前执行任务
@@ -318,26 +318,26 @@ line level    source
  291   1        mCtrClk();
  292   1        ComClk();
  293   1      //  LED=!LED;
-C51 COMPILER V9.00   RUN                                                                   03/15/2019 16:09:22 PAGE 6   
+C51 COMPILER V9.00   RUN                                                                   03/16/2019 17:13:31 PAGE 6   
 
  294   1      }
  295          
  296          
  297          
- 298          
- 299          //  落闸时分为5个阶段，分别是
- 300          //  1.起步阶段，垂直位到起步位
- 301          //  2.运行阶段，起步位到中段
- 302          //  3.减速阶段，中段到缓冲位
- 303          //  4.缓冲阶段，缓冲到平稳位
- 304          //  5.稳定阶段，平稳位到水平位
- 305          //  大概思路是，根据测试的数据，得出起步阶段和运行阶段的所需要的转数区间
- 306          //  然后从这个区间开始判定，根据进入定时器的次数，得到新的转数，以及总的时间
- 307          //  这个时间再根据经验值，判定是不是超出我们预期的转数区间，若是，则抬闸
- 308          
- 309          //预期的落闸时间为5秒，快于5秒，认为就有风险
- 310          
- 311          #if 0 
+ 298          #if 0 
+              //  落闸时分为5个阶段，分别是
+              //  1.起步阶段，垂直位到起步位
+              //  2.运行阶段，起步位到中段
+              //  3.减速阶段，中段到缓冲位
+              //  4.缓冲阶段，缓冲到平稳位
+              //  5.稳定阶段，平稳位到水平位
+              //  大概思路是，根据测试的数据，得出起步阶段和运行阶段的所需要的转数区间
+              //  然后从这个区间开始判定，根据进入定时器的次数，得到新的转数，以及总的时间
+              //  这个时间再根据经验值，判定是不是超出我们预期的转数区间，若是，则抬闸
+              
+              //预期的落闸时间为5秒，快于5秒，认为就有风险
+              
+              
               void testTimer2(void)
               { 
                 //首先判断是否到了减速阶段
@@ -382,7 +382,7 @@ line level    source
               
               //定时器中断2
               void Timer2_ISR(void) interrupt 5 //定时器2中断
-C51 COMPILER V9.00   RUN                                                                   03/15/2019 16:09:22 PAGE 7   
+C51 COMPILER V9.00   RUN                                                                   03/16/2019 17:13:31 PAGE 7   
 
               {
                 TF2=0;
@@ -394,14 +394,14 @@ line level    source
               }
               #endif 
  365          
- 366          #if CALCFUN
-              #define TIMER_FRE  5         //计算周期
-              #define BASIC_OFFSET_250MS 4 //每250ms测速环转到的圈数
-              #define SPRING_PARAM_OFFSET1 2//弹簧参数
-              #define SPRING_PARAM_OFFSET2 3//弹簧参数
-              #define SPRING_PARAM_OFFSET3 4//弹簧参数
-              #define BASIC_SPRING_NUM 46//弹簧标准值
-              #else
+ 366          
+ 367          //#define TIMER_FRE  5         //计算周期
+ 368          //#define BASIC_OFFSET_250MS 4 //每250ms测速环转到的圈数
+ 369          //#define SPRING_PARAM_OFFSET1 2//弹簧参数
+ 370          //#define SPRING_PARAM_OFFSET2 3//弹簧参数
+ 371          //#define SPRING_PARAM_OFFSET3 4//弹簧参数
+ 372          //#define BASIC_SPRING_NUM 46//弹簧标准值
+ 373          
  374          //#define START_POSITION 50   //从第50次进入中断开始计算
  375          //#define END_POSITION (START_POSITION+TIMER_FRE*SPRING_CHECK_NUM)  //从第50次进入中断开始计算
  376          //#define TIMER_FRE  5        //计算周期
@@ -411,206 +411,93 @@ line level    source
  380          //#define BASIC_OFFSET_250MS 4 //每250ms测速环转到的圈数
  381          //#define SPRING_CHECK_NUM 6//取样次数
  382          
- 383          #define START_POSITION 50   //从第50次进入中断开始计算
- 384          #define END_POSITION (START_POSITION+TIMER_FRE*SPRING_CHECK_NUM)  //从第50次进入中断开始计算
- 385          #define TIMER_FRE  5        //计算周期
- 386          #define THREE_SPRING_LOWER_LIMIT 18//16+2 //如果统计总的圈数差大于这个值，说明已经不是三根弹簧了
- 387          #define TWO_SPRINT_LOWER_LIMIT 28//26+2 //如果统计总的圈数差大于这个值，说明已经不是两根弹簧了
- 388          #define BASIC_SPRING_NUM 40//38+2//弹簧标准值
- 389          #define BASIC_OFFSET_250MS 4 //每250ms测速环转到的圈数
- 390          #define SPRING_CHECK_NUM 6//取样次数
- 391          #endif
- 392          
- 393          
- 394          
- 395          
- 396          
- 397          
- 398          void motorTimer2(void)
- 399          {
- 400   1      //    gRepairMotor.CurrentCounts++ ;
- 401   1      //    //打印当前测速环值
- 402   1      //    Uart_Print(3,gRepairMotor.Direction);   
- 403   1      
- 404   1      #if CALCFUN
-                  //每隔100毫秒进来判定一次
-                if(SpeRinN >= 1) //测速环转动才开始进来
-                {  
-                    gRepairMotor.CurrentCounts++ ;  
-                      
-                      
-                  //这里测试使用，先固定4.8电机，release时会使用宏定义，定义不同的计算方式和判定条件
-                  if(gRepairMotor.CurrentCounts  == TIMER_FRE*12)//46
-                  {   
-                      gRepairMotor.FlagValue = 0;
-                          gRepairMotor.AverageValue = 0;
-                      gRepairMotor.LastSpeRin = SpeRinN;
-                          if(SpeRinN >= BASIC_SPRING_NUM+BASIC_OFFSET_250MS)
-C51 COMPILER V9.00   RUN                                                                   03/15/2019 16:09:22 PAGE 8   
+ 383          #if TIMER2
+              #define START_POSITION 50   //从第50次进入中断开始计算
+              #define END_POSITION (START_POSITION+TIMER_FRE*SPRING_CHECK_NUM)  //从第50次进入中断开始计算
+              #define TIMER_FRE  5        //计算周期
+              #define THREE_SPRING_LOWER_LIMIT 18//16+2 //如果统计总的圈数差大于这个值，说明已经不是三根弹簧了
+              #define TWO_SPRINT_LOWER_LIMIT 28//26+2 //如果统计总的圈数差大于这个值，说明已经不是两根弹簧了
+              #define BASIC_SPRING_NUM 40//38+2//弹簧标准值
+              #define BASIC_OFFSET_250MS 4 //每250ms测速环转到的圈数
+              #define SPRING_CHECK_NUM 6//取样次数
+              
+              void motorTimer2(void)
+              {
+              //    gRepairMotor.CurrentCounts++ ;
+              //    //打印当前测速环值
+              //    Uart_Print(3,gRepairMotor.Direction);   
+              
+                  gRepairMotor.CurrentCounts++ ;
+                  //打印当前测速环值
+                  Uart_Print(3,gRepairMotor.Direction);  
+              
+              //    if(SpeRinN >= 1 && gRepairMotor.Direction == POS_DW) //测速环转动才开始进来
+              //    { 
+              //        gRepairMotor.CurrentCounts++ ; 
+              
+              //        if((gRepairMotor.CurrentCounts >= START_POSITION) && (gRepairMotor.CurrentCounts % TIMER_FRE == 
+             -0) && gRepairMotor.CurrentCounts <= END_POSITION)//38
+              //        {
+              //            gRepairMotor.Times++;
+              //            
+              //            if(SpeRinN >= BASIC_SPRING_NUM + BASIC_OFFSET_250MS*gRepairMotor.Times)
+              //            {
+              //                gRepairMotor.FlagValue ++;//这里应该不会出现，如果出现就是大问题
+              //            }   
+              
+              //            gRepairMotor.LastSpeRin = SpeRinN;
+C51 COMPILER V9.00   RUN                                                                   03/16/2019 17:13:31 PAGE 8   
 
-                          {
-                              gRepairMotor.FlagValue += 2;//很严重，疑似断了两根弹簧
-                          }
-                          else if(SpeRinN >= BASIC_SPRING_NUM+SPRING_PARAM_OFFSET2)
-                          {
-                              gRepairMotor.FlagValue += 1;//有可能断了一根弹簧
-                          }
-                          else
-                          {
-                              ;//认为还在可控区间
-                          }  
-                      }
-                      else if(gRepairMotor.CurrentCounts  == TIMER_FRE*13)//50
-                      {
-                          gRepairMotor.AverageValue = SpeRinN-gRepairMotor.LastSpeRin; //获取每次的差值
+              //            //计算当前多走了多少圈
+              //            if(gRepairMotor.LastSpeRin > (BASIC_SPRING_NUM+BASIC_OFFSET_250MS*(gRepairMotor.Times-1)))
+              //            {                
+              //                gRepairMotor.AverageValue += gRepairMotor.LastSpeRin-(BASIC_SPRING_NUM+BASIC_OFFSET_250M
+             -S*(gRepairMotor.Times-1));                
+              //            }
               
-                          if(SpeRinN >= BASIC_SPRING_NUM + BASIC_OFFSET_250MS*2)
-                          {
-                              gRepairMotor.FlagValue += 2;//很严重，疑似断了两根弹簧
-                          }
-                          else if(SpeRinN >= BASIC_SPRING_NUM+BASIC_OFFSET_250MS+SPRING_PARAM_OFFSET2)
-                          {
-                              gRepairMotor.FlagValue += 1;//有可能断了一根弹簧
-                          }
-                          else
-                          {
-                              ;//认为还在可控区间
-                          }
-                          gRepairMotor.LastSpeRin = SpeRinN;  
-                          
-                      }
-                      else if(gRepairMotor.CurrentCounts  == TIMER_FRE*14)//54
-                      {
-                          gRepairMotor.AverageValue += SpeRinN-gRepairMotor.LastSpeRin; //获取每次的差值和求平均数
+              //            if(gRepairMotor.Times <= 4 && gRepairMotor.AverageValue >= BASIC_OFFSET_250MS*3)
+              //            {
+              //                Event(ITASK_DG_UP);
+              //                err_volu(ERR_SPRI_ERR); 
+              //            }
+              // 
+              //            if (gRepairMotor.FlagValue >= 4 || gRepairMotor.AverageValue >= TWO_SPRINT_LOWER_LIMIT) //不
+             -需完全走完判定，可以直接认为是有问题的 
+              //            //if (gRepairMotor.FlagValue >= 4 )
+              //            {            
+              //                Event(ITASK_DG_UP);
+              //                err_volu(ERR_SPRI_ERR);
+              //                
+              //            }
               
-                          if(SpeRinN >= BASIC_SPRING_NUM + BASIC_OFFSET_250MS*3)
-                          {
-                              gRepairMotor.FlagValue += 2;//很严重，疑似断了两根弹簧
-                          }
-                          else if(SpeRinN >= BASIC_SPRING_NUM+BASIC_OFFSET_250MS*2+SPRING_PARAM_OFFSET2)
-                          {
-                              gRepairMotor.FlagValue += 1;//有可能断了一根弹簧
-                          }
-                          else
-                          {
-                              ;//认为还在可控区间
-                          }
-                          gRepairMotor.LastSpeRin = SpeRinN; 
+              //            if(gRepairMotor.AverageValue >= THREE_SPRING_LOWER_LIMIT)
+              //            {
+              //                //报警，只有两根弹簧   
+              //                err_volu(ERR_SPRI_LIT);
+              //            }
               
-                             
-                      }
-                      else if(gRepairMotor.CurrentCounts  == TIMER_FRE*15)//58
-                      {
-                          gRepairMotor.AverageValue += SpeRinN-gRepairMotor.LastSpeRin; //获取每次的差值和求平均数
-                          if(SpeRinN >= BASIC_SPRING_NUM + BASIC_OFFSET_250MS*4)
-                          {
-                              gRepairMotor.FlagValue += 2;//很严重，疑似断了两根弹簧
-                          }
-                          else if(SpeRinN >= BASIC_SPRING_NUM+BASIC_OFFSET_250MS*3+SPRING_PARAM_OFFSET2)
-                          {
-                              gRepairMotor.FlagValue += 1;//有可能断了一根弹簧
-                          }
-C51 COMPILER V9.00   RUN                                                                   03/15/2019 16:09:22 PAGE 9   
-
-                          else
-                          {
+              //            //打印当前测速环值
+              //        Uart_Print(3,gRepairMotor.Direction);            
+              //        }  
+              //        
+              //    }
               
-                          
-                          }     
-                      }
-                      else
-                      {
-                          ;
-                      }
+              }
               
-                    //打印当前测速环值
-                  Uart_Print(3,gRepairMotor.Direction);
-                }
-              #else
- 495   1          //gRepairMotor.CurrentCounts++ ;
- 496   1          //打印当前测速环值
- 497   1          //Uart_Print(3,gRepairMotor.Direction);  
- 498   1      
- 499   1          if(SpeRinN >= 1 && gRepairMotor.Direction == POS_DW) //测速环转动才开始进来
- 500   1          { 
- 501   2              gRepairMotor.CurrentCounts++ ; 
- 502   2      
- 503   2              if((gRepairMotor.CurrentCounts >= START_POSITION) && (gRepairMotor.CurrentCounts % TIMER_FRE == 0)
-             - && gRepairMotor.CurrentCounts <= END_POSITION)//40
- 504   2              {
- 505   3                  gRepairMotor.Times++;
- 506   3                  
- 507   3                  if(SpeRinN >= BASIC_SPRING_NUM + BASIC_OFFSET_250MS*gRepairMotor.Times)
- 508   3                  {
- 509   4                      gRepairMotor.FlagValue ++;//这里应该不会出现，如果出现就是大问题
- 510   4                  }   
- 511   3      
- 512   3                  gRepairMotor.LastSpeRin = SpeRinN;
- 513   3                  //计算当前多走了多少圈
- 514   3                  if(gRepairMotor.LastSpeRin > (BASIC_SPRING_NUM+BASIC_OFFSET_250MS*(gRepairMotor.Times-1)))
- 515   3                  {                
- 516   4                      gRepairMotor.AverageValue += gRepairMotor.LastSpeRin-(BASIC_SPRING_NUM+BASIC_OFFSET_250MS*
-             -(gRepairMotor.Times-1));                
- 517   4                  }
- 518   3      
- 519   3                  //如果开始就多走很多多于当前频数的75%,直接报错
- 520   3                  if(gRepairMotor.Times <= 4 && gRepairMotor.AverageValue >= BASIC_OFFSET_250MS*3)
- 521   3                  {
- 522   4                      Event(ITASK_DG_UP);
- 523   4                      err_volu(ERR_SPRI_ERR); 
- 524   4                  }
- 525   3      
- 526   3                  //同样的，若是圈数走的太多，就直接报错
- 527   3                  if (gRepairMotor.FlagValue >= 4 || gRepairMotor.AverageValue >= TWO_SPRINT_LOWER_LIMIT) //不需
-             -完全走完判定，可以直接认为是有问题的 
- 528   3                  //if (gRepairMotor.FlagValue >= 4 )
- 529   3                  {            
- 530   4                      Event(ITASK_DG_UP);
- 531   4                      err_volu(ERR_SPRI_ERR);
- 532   4                      
- 533   4                  }
- 534   3                  
- 535   3                  //两根弹簧报警
- 536   3                  if(gRepairMotor.AverageValue >= THREE_SPRING_LOWER_LIMIT)
- 537   3                  {
- 538   4                      //报警，只有两根弹簧   
-C51 COMPILER V9.00   RUN                                                                   03/15/2019 16:09:22 PAGE 10  
-
- 539   4                      err_volu(ERR_SPRI_LIT);
- 540   4                  }
- 541   3      
- 542   3                  //打印当前测速环值
- 543   3              Uart_Print(3,gRepairMotor.Direction);            
- 544   3              }  
- 545   2              
- 546   2          }
- 547   1      
- 548   1      #endif    
- 549   1      
- 550   1      
- 551   1      }
- 552          
- 553          //定时器中断2
- 554          void Timer2_ISR(void) interrupt 5 //定时器2中断
- 555          {
- 556   1        TF2=0;
- 557   1        EXF2 = 0;
- 558   1        motorTimer2(); 
- 559   1      }
- 560          
- 561          //void Timer2_Zero(void)
- 562          //{ 
- 563          //  TF2=0;
- 564          //  EXF2 = 0; 
- 565          //}
- 566          
- 567          
- 568          
- 569          
+              //定时器中断2
+              void Timer2_ISR(void) interrupt 5 //定时器2中断
+              {
+                TF2=0;
+                EXF2 = 0;
+                motorTimer2(); 
+              }
+              
+              #endif
+ 460          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1073    ----
+   CODE SIZE        =    768    ----
    CONSTANT SIZE    =    126    ----
    XDATA SIZE       =      7    ----
    PDATA SIZE       =   ----    ----

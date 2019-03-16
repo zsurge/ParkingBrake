@@ -105,30 +105,18 @@ void Uart_Print(u8 speakTask,u8 num)
 			sen_buff[8]=0x30+gRepairMotor.CurrentCounts/10%10;
 			sen_buff[9]=0x30+gRepairMotor.CurrentCounts%10;
 			sen_buff[10]=0x2c;            
-            sen_buff[11]=0x30+gRepairMotor.FlagValue%10;
-            sen_buff[12]=0x2c;
+//            sen_buff[11]=0x30+gRepairMotor.FlagValue%10;
+//            sen_buff[12]=0x2c;
+			sen_buff[11]=0x30+gRepairMotor.Times/100%10;
+			sen_buff[12]=0x30+gRepairMotor.Times/10%10;
             sen_buff[13]=0x30+gRepairMotor.Times%10;
+            
             sen_buff[14]=0x2c;
             sen_buff[15]=0x30+gRepairMotor.AverageValue/10%10;
             sen_buff[16]=0x30+gRepairMotor.AverageValue%10;
 			sen_buff[17]=0x3B;
-			break;
-		
-//			sen_buff[5]=0x30+gRepairMotor.LastSpeRin/100%10;
-//			sen_buff[6]=0x30+gRepairMotor.LastSpeRin/10%10;
-//			sen_buff[7]=0x30+gRepairMotor.LastSpeRin%10;
-//			sen_buff[8]=0x2c;
-//		
-//			sen_buff[9]=0x30+gRepairMotor.FlagValue/100%10;
-//			sen_buff[10]=0x30+gRepairMotor.FlagValue/10%10;
-//			sen_buff[11]=0x30+gRepairMotor.FlagValue%10;
-//			sen_buff[12]=0x2c;
-//		
-//			sen_buff[13]=0x30+gRepairMotor.CurrentCounts/100%10;
-//			sen_buff[14]=0x30+gRepairMotor.CurrentCounts/10%10;
-//			sen_buff[15]=0x30+gRepairMotor.CurrentCounts%10;
-//			sen_buff[16]=0x2c;		
-//			break;
+			break;	
+
 		default:
 			break;
 	}	

@@ -26,6 +26,7 @@ void main()
 		InputTask();
 		iTaskControl();
 		mTaskControl();
+        MonitorTask();//¼à¿Ø
 		err_task();
 		Buzz_task(BuzzMode);		//·äÃùÆ÷ÈÎÎñ
 		OPutTask();

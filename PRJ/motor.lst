@@ -1,4 +1,4 @@
-C51 COMPILER V9.00   MOTOR                                                                 03/15/2019 15:48:39 PAGE 1   
+C51 COMPILER V9.00   MOTOR                                                                 03/16/2019 17:13:31 PAGE 1   
 
 
 C51 COMPILER V9.00, COMPILATION OF MODULE MOTOR
@@ -62,574 +62,648 @@ line level    source
              -f(SpriBuf));
   52   1        StmSp= 0; StmSp2= 0; mRunTe= 0; DwSlo= 0; Stm= 0; StmSlow= 0; StmSlow2= 0; SpeSta= 0;
   53   1        InitRepairMotor();
-C51 COMPILER V9.00   MOTOR                                                                 03/15/2019 15:48:39 PAGE 2   
+C51 COMPILER V9.00   MOTOR                                                                 03/16/2019 17:13:31 PAGE 2   
 
-  54   1          gCurrentSpringNum = 3;
-  55   1      //  InitLimitValue();
-  56   1      }
-  57          
-  58          void InitRepairMotor(void)
-  59          {
-  60   1        memset(&gRepairMotor,0x00,sizeof(gRepairMotor));    
-  61   1      }
+  54   1      }
+  55          
+  56          void InitRepairMotor(void)
+  57          {
+  58   1        memset(&gRepairMotor,0x00,sizeof(gRepairMotor));    
+  59   1      }
+  60          
+  61          
   62          
-  63          
-  64          
-  65          void mRunClk()  { if(mRunNum) mRunNum--; }          //电机运行时间时钟
-  66          void mCtrClk()  { if(mCorNum) mCorNum--;  else StmNum++; }  //电机正反转切换时钟   //遇阻时钟 
+  63          void mRunClk()  { if(mRunNum) mRunNum--; }          //电机运行时间时钟
+  64          void mCtrClk()  { if(mCorNum) mCorNum--;  else StmNum++; }  //电机正反转切换时钟   //遇阻时钟 
+  65          
+  66          
   67          
   68          
-  69          
-  70          
-  71          //**********************************************//
-  72          //函数名:void StmInt(u8 type)
-  73          //作用:遇阻灵敏度的冗余计算
-  74          //输入:type-机芯类型
-  75          //返回: 无
-  76          //**********************************************//
-  77          void StmInt(u8 type)
-  78          {
-  79   1        if(type== M1S)
-  80   1          {
-  81   2            StmSp= StmSp2 + STP1S_REDUNDANCY_TIME;      //正常落闸时的遇阻灵敏度 = 实测测速环半圈的周期 + 该机芯的冗余
+  69          //**********************************************//
+  70          //函数名:void StmInt(u8 type)
+  71          //作用:遇阻灵敏度的冗余计算
+  72          //输入:type-机芯类型
+  73          //返回: 无
+  74          //**********************************************//
+  75          void StmInt(u8 type)
+  76          {
+  77   1        if(type== M1S)
+  78   1          {
+  79   2            StmSp= StmSp2 + STP1S_REDUNDANCY_TIME;      //正常落闸时的遇阻灵敏度 = 实测测速环半圈的周期 + 该机芯的冗余
              -值
-  82   2      //      StmSlow2= StmSp2 + SLOW1S_REDUNDANCY_TIME;    //减速、缓冲时的遇阻灵敏度 = 正常落闸时的遇阻灵敏度 * 3
-  83   2            StmSlow2= SpriBuf[SPRIBUF_END_MAX] + 60;
-  84   2          }
-  85   1        else if(type== M18S)
-  86   1          {
-  87   2            StmSp= StmSp2 + STP18S_REDUNDANCY_TIME;
-  88   2      //      StmSlow2= StmSp2 + SLOW18S_REDUNDANCY_TIME;
-  89   2            StmSlow2= SpriBuf[SPRIBUF_END_MAX] + 60;
-  90   2      
-  91   2          }
-  92   1        if(StmSlow2 > STMMAXTIME) StmSlow2= STMMAXTIME;     //减速、缓冲的遇阻灵敏度限制参数
-  93   1      }
+  80   2      //      StmSlow2= StmSp2 + SLOW1S_REDUNDANCY_TIME;    //减速、缓冲时的遇阻灵敏度 = 正常落闸时的遇阻灵敏度 * 3
+  81   2            StmSlow2= SpriBuf[SPRIBUF_END_MAX] + 60;
+  82   2          }
+  83   1        else if(type== M18S)
+  84   1          {
+  85   2            StmSp= StmSp2 + STP18S_REDUNDANCY_TIME;
+  86   2      //      StmSlow2= StmSp2 + SLOW18S_REDUNDANCY_TIME;
+  87   2            StmSlow2= SpriBuf[SPRIBUF_END_MAX] + 60;
+  88   2      
+  89   2          }
+  90   1        if(StmSlow2 > STMMAXTIME) StmSlow2= STMMAXTIME;     //减速、缓冲的遇阻灵敏度限制参数
+  91   1      }
+  92          
+  93          
   94          
   95          
   96          
-  97          
-  98          
-  99          //**********************************************//
- 100          //函数名:void KnowMtyp(u8 sta,u8 Prg,u8 pos)
- 101          //作用:开始减速、缓冲的计算、赋值
- 102          //输入:bm-拨码补偿倍数；  type-不同机芯类型参数补偿
- 103          //返回: 无
- 104          //**********************************************//
- 105          void DwSloInt(u8 bm,u8 type)
- 106          {
- 107   1        DwSloBri*=bm;           //拨码的倍数补偿
- 108   1        DwSloBri+=type;         //提前减速的圈数= 拨码补偿圈数 + 机芯补偿圈数
- 109   1        DwSlo= SpeRinN - DwSloBri/3*2;  //开始缓冲的圈数= 测速环总圈数 - 提前减速圈数的2/3
- 110   1        DwSloBri= SpeRinN - DwSloBri; //开始减速的圈数= 测速环总圈数 - 提前减速圈数
- 111   1      }
- 112          
- 113          
- 114          //**********************************************//
-C51 COMPILER V9.00   MOTOR                                                                 03/15/2019 15:48:39 PAGE 3   
+  97          //**********************************************//
+  98          //函数名:void KnowMtyp(u8 sta,u8 Prg,u8 pos)
+  99          //作用:开始减速、缓冲的计算、赋值
+ 100          //输入:bm-拨码补偿倍数；  type-不同机芯类型参数补偿
+ 101          //返回: 无
+ 102          //**********************************************//
+ 103          void DwSloInt(u8 bm,u8 type)
+ 104          {
+ 105   1        DwSloBri*=bm;           //拨码的倍数补偿
+ 106   1        DwSloBri+=type;         //提前减速的圈数= 拨码补偿圈数 + 机芯补偿圈数
+ 107   1        DwSlo= SpeRinN - DwSloBri/3*2;  //开始缓冲的圈数= 测速环总圈数 - 提前减速圈数的2/3
+ 108   1        DwSloBri= SpeRinN - DwSloBri; //开始减速的圈数= 测速环总圈数 - 提前减速圈数
+ 109   1      }
+ 110          
+ 111          
+ 112          //**********************************************//
+ 113          //函数名:  SpringTest(u8 cmd)
+ 114          //作用:弹簧拉力检测
+C51 COMPILER V9.00   MOTOR                                                                 03/16/2019 17:13:31 PAGE 3   
 
- 115          //函数名:  SpringTest(u8 cmd)
- 116          //作用:弹簧拉力检测
- 117          //输入:cmd-操作命令
- 118          //返回:无
- 119          //**********************************************//
- 120          u8 SpringTest(u8 cmd)
- 121          {
- 122   1        u16 data dat=0;
- 123   1        switch(cmd)
- 124   1          {
- 125   2            case SPRI_RED_PARA:
- 126   2              if(SpeRinN!= SpriBuf[SPRIBUF_DAT])
- 127   2                {
- 128   3                  SpriBuf[SPRIBUF_DAT]= SpeRinN;
- 129   3                  SpriBuf[SpriBuf[SPRIBUF_POIN]]= StmNum2;
- 130   3                  SpriBuf[SPRIBUF_POIN] ++;
- 131   3                  if(SpriBuf[SPRIBUF_POIN]== 12) SpriBuf[SPRIBUF_POIN]= 6;
- 132   3                }
- 133   2              break;
- 134   2              
- 135   2            case SPRI_LOG_PARA:
- 136   2              //********求前6圈的平均值 、最小值*************//
- 137   2              SpriBuf[SPRIBUF_FST_MIN]= 255;
- 138   2              for(SpriBuf[SPRIBUF_POIN]=0;SpriBuf[SPRIBUF_POIN] < 6;SpriBuf[SPRIBUF_POIN]++)
- 139   2                {
- 140   3                  dat+= SpriBuf[SpriBuf[SPRIBUF_POIN]];
- 141   3                  if(SpriBuf[SpriBuf[SPRIBUF_POIN]] < SpriBuf[SPRIBUF_FST_MIN]) SpriBuf[SPRIBUF_FST_MIN]= SpriBuf[Spri
+ 115          //输入:cmd-操作命令
+ 116          //返回:无
+ 117          //**********************************************//
+ 118          u8 SpringTest(u8 cmd)
+ 119          {
+ 120   1        u16 data dat=0;
+ 121   1        switch(cmd)
+ 122   1          {
+ 123   2            case SPRI_RED_PARA:
+ 124   2              if(SpeRinN!= SpriBuf[SPRIBUF_DAT])
+ 125   2                {
+ 126   3                  SpriBuf[SPRIBUF_DAT]= SpeRinN;
+ 127   3                  SpriBuf[SpriBuf[SPRIBUF_POIN]]= StmNum2;
+ 128   3                  SpriBuf[SPRIBUF_POIN] ++;
+ 129   3                  if(SpriBuf[SPRIBUF_POIN]== 12) SpriBuf[SPRIBUF_POIN]= 6;
+ 130   3                }
+ 131   2              break;
+ 132   2              
+ 133   2            case SPRI_LOG_PARA:
+ 134   2              //********求前6圈的平均值 、最小值*************//
+ 135   2              SpriBuf[SPRIBUF_FST_MIN]= 255;
+ 136   2              for(SpriBuf[SPRIBUF_POIN]=0;SpriBuf[SPRIBUF_POIN] < 6;SpriBuf[SPRIBUF_POIN]++)
+ 137   2                {
+ 138   3                  dat+= SpriBuf[SpriBuf[SPRIBUF_POIN]];
+ 139   3                  if(SpriBuf[SpriBuf[SPRIBUF_POIN]] < SpriBuf[SPRIBUF_FST_MIN]) SpriBuf[SPRIBUF_FST_MIN]= SpriBuf[Spri
              -Buf[SPRIBUF_POIN]];
- 142   3                }
- 143   2              dat/= 6;
- 144   2              SpriBuf[SPRIBUF_FST_AVER]= dat;
- 145   2      
- 146   2              //********求后6圈的平均值、最大值*************//
- 147   2              SpriBuf[SPRIBUF_END_MAX]= 0;
- 148   2              for(SpriBuf[SPRIBUF_POIN]=6;SpriBuf[SPRIBUF_POIN] < 12;SpriBuf[SPRIBUF_POIN]++)
- 149   2                {
- 150   3                  dat+= SpriBuf[SpriBuf[SPRIBUF_POIN]];
- 151   3                  if(SpriBuf[SpriBuf[SPRIBUF_POIN]] > SpriBuf[SPRIBUF_END_MAX]) SpriBuf[SPRIBUF_END_MAX]= SpriBuf[Spri
+ 140   3                }
+ 141   2              dat/= 6;
+ 142   2              SpriBuf[SPRIBUF_FST_AVER]= dat;
+ 143   2      
+ 144   2              //********求后6圈的平均值、最大值*************//
+ 145   2              SpriBuf[SPRIBUF_END_MAX]= 0;
+ 146   2              for(SpriBuf[SPRIBUF_POIN]=6;SpriBuf[SPRIBUF_POIN] < 12;SpriBuf[SPRIBUF_POIN]++)
+ 147   2                {
+ 148   3                  dat+= SpriBuf[SpriBuf[SPRIBUF_POIN]];
+ 149   3                  if(SpriBuf[SpriBuf[SPRIBUF_POIN]] > SpriBuf[SPRIBUF_END_MAX]) SpriBuf[SPRIBUF_END_MAX]= SpriBuf[Spri
              -Buf[SPRIBUF_POIN]];
- 152   3                }
- 153   2              dat/= 6;
- 154   2              SpriBuf[SPRIBUF_END_AVER]= dat;
- 155   2              
- 156   2              //********判断拉力方法*************//
- 157   2              if((SpriBuf[SPRIBUF_FST_AVER] > 20 && SpriBuf[SPRIBUF_FST_AVER] < 80) || SpriBuf[SPRIBUF_END_AVER] > 2
+ 150   3                }
+ 151   2              dat/= 6;
+ 152   2              SpriBuf[SPRIBUF_END_AVER]= dat;
+ 153   2              
+ 154   2              //********判断拉力方法*************//
+ 155   2              if((SpriBuf[SPRIBUF_FST_AVER] > 20 && SpriBuf[SPRIBUF_FST_AVER] < 80) || SpriBuf[SPRIBUF_END_AVER] > 2
              -20)
- 158   2                {
- 159   3                  if(SpriBuf[SPRIBUF_END_MAX] > 190 ) 
- 160   3                    { SpriBuf[SPRIBUF_STA]= SPRIFRCSTA_ERR; break; }  //拉力异常
- 161   3                    
- 162   3                  else if(SpriBuf[ SPRIBUF_END_MAX] > 150)
- 163   3                    { SpriBuf[SPRIBUF_STA]= SPRIFRCSTA_BIG; break; }  //拉力偏大
- 164   3                    
- 165   3                  else if(SpriBuf[SPRIBUF_END_MAX] > 110)
- 166   3                    { SpriBuf[SPRIBUF_STA]= SPRIFRCSTA_MID; break; }  //拉力中等  
- 167   3                    
- 168   3                  else if(SpriBuf[SPRIBUF_END_MAX] > 90 )
- 169   3                    { SpriBuf[SPRIBUF_STA]= SPRIFRCSTA_LIT; break; }  //拉力偏小
- 170   3      
- 171   3                  else SpriBuf[SPRIBUF_STA]= SPRIFRCSTA_ERR;
- 172   3                }
- 173   2              else SpriBuf[SPRIBUF_STA]= SPRIFRCSTA_ERR;
-C51 COMPILER V9.00   MOTOR                                                                 03/15/2019 15:48:39 PAGE 4   
+ 156   2                {
+ 157   3                  if(SpriBuf[SPRIBUF_END_MAX] > 190 ) 
+ 158   3                    { SpriBuf[SPRIBUF_STA]= SPRIFRCSTA_ERR; break; }  //拉力异常
+ 159   3                    
+ 160   3                  else if(SpriBuf[ SPRIBUF_END_MAX] > 150)
+ 161   3                    { SpriBuf[SPRIBUF_STA]= SPRIFRCSTA_BIG; break; }  //拉力偏大
+ 162   3                    
+ 163   3                  else if(SpriBuf[SPRIBUF_END_MAX] > 110)
+ 164   3                    { SpriBuf[SPRIBUF_STA]= SPRIFRCSTA_MID; break; }  //拉力中等  
+ 165   3                    
+ 166   3                  else if(SpriBuf[SPRIBUF_END_MAX] > 90 )
+ 167   3                    { SpriBuf[SPRIBUF_STA]= SPRIFRCSTA_LIT; break; }  //拉力偏小
+ 168   3      
+ 169   3                  else SpriBuf[SPRIBUF_STA]= SPRIFRCSTA_ERR;
+ 170   3                }
+ 171   2              else SpriBuf[SPRIBUF_STA]= SPRIFRCSTA_ERR;
+ 172   2              break;
+ 173   2      
+C51 COMPILER V9.00   MOTOR                                                                 03/16/2019 17:13:31 PAGE 4   
 
- 174   2              break;
- 175   2      
- 176   2            case SPRI_LOG_PARA1:
- 177   2              SpriBuf[SPRIBUF_END_MAX]= 0;
- 178   2              for(SpriBuf[SPRIBUF_POIN]=0;SpriBuf[SPRIBUF_POIN] < 12;SpriBuf[SPRIBUF_POIN]++)
- 179   2                {
- 180   3                  if(SpriBuf[SpriBuf[SPRIBUF_POIN]] > SpriBuf[SPRIBUF_END_MAX]) SpriBuf[SPRIBUF_END_MAX]= SpriBuf[Spri
+ 174   2            case SPRI_LOG_PARA1:
+ 175   2              SpriBuf[SPRIBUF_END_MAX]= 0;
+ 176   2              for(SpriBuf[SPRIBUF_POIN]=0;SpriBuf[SPRIBUF_POIN] < 12;SpriBuf[SPRIBUF_POIN]++)
+ 177   2                {
+ 178   3                  if(SpriBuf[SpriBuf[SPRIBUF_POIN]] > SpriBuf[SPRIBUF_END_MAX]) SpriBuf[SPRIBUF_END_MAX]= SpriBuf[Spri
              -Buf[SPRIBUF_POIN]];
- 181   3                }
- 182   2              break;
- 183   2              
- 184   2            case SPRI_CLR_PARA:
- 185   2              memset(&SpriBuf,0,sizeof(SpriBuf));
- 186   2              break;
- 187   2              
- 188   2            default: break;
- 189   2          }
- 190   1        return SpriBuf[SPRIBUF_STA];
- 191   1      }
+ 179   3                }
+ 180   2              break;
+ 181   2              
+ 182   2            case SPRI_CLR_PARA:
+ 183   2              memset(&SpriBuf,0,sizeof(SpriBuf));
+ 184   2              break;
+ 185   2              
+ 186   2            default: break;
+ 187   2          }
+ 188   1        return SpriBuf[SPRIBUF_STA];
+ 189   1      }
+ 190          
+ 191          
  192          
- 193          
- 194          
- 195          //**********************************************//
- 196          //函数名:void KnowMtyp(u8 sta,u8 Prg,u8 pos)
- 197          //作用:识别机芯类型，并赋值运行参数
- 198          //输入:sta-操作状态；  prg-识别过程；  pos-到达位置
- 199          //返回: 无
- 200          //**********************************************//
- 201          void KnowMtyp(u8 sta,u8 Prg,u8 pos) //机芯类型识别及参数赋值
- 202          {
- 203   1        if(sta== MNA)         //闸杆到位后，准备判断机芯类型
- 204   1          {
- 205   2            if(mType== Prg)     //识别过程
- 206   2              if(PosRal== pos)  //到达位置
- 207   2                { 
- 208   3                  switch(SpringTest(SPRI_LOG_PARA))
- 209   3                    {
- 210   4                      case SPRIFRCSTA_BIG: err_volu(ERR_SPRI_BIG); break;
- 211   4                      case SPRIFRCSTA_LIT: err_volu(ERR_SPRI_LIT); break;
- 212   4                      case SPRIFRCSTA_MID: err_volu(ERR_SPRI_MID); break;
- 213   4                      case SPRIFRCSTA_ERR: err_volu(ERR_SPRI_ERR); break;
- 214   4                      default: break;
- 215   4                    }
- 216   3                  if(SpeRinN < 80)              //单个行程，电机轴的圈数少于80圈为1秒机芯
- 217   3                    {
- 218   4                      mType= M1S;           //识别机芯类型-赋值
- 219   4                      mRunTe=M1SRUNTIME;        //赋值电机运行超时时间
- 220   4                      if(!StmSp2) StmSp2=50;      //第一次落闸遇阻时间未识别时，强行赋值
- 221   4                      StmInt(M1S);          //获取遇阻灵敏度
- 222   4                      DwSloInt(5,15);         //获取开始减速、缓冲的参数
- 223   4                    }
- 224   3                  else if(SpeRinN < 130)          //单个行程，电机轴的圈数少于130圈为1.8秒/3.8秒机芯
- 225   3                    {
- 226   4                      mType= M18S;          //识别机芯类型-赋值
- 227   4                      mRunTe=M18SRUNTIME;       //赋值电机运行超时时间
- 228   4                      if(!StmSp2) StmSp2=30;      //第一次落闸遇阻时间未识别时，强行赋值
- 229   4                      StmInt(M18S);         //获取遇阻灵敏度
- 230   4                      DwSloInt(10,35);        //获取开始减速、缓冲的参数
- 231   4                    }
- 232   3                  else                    //识别异常时
- 233   3                    {
- 234   4                      mType= M18S;          //识别机芯类型-赋值
-C51 COMPILER V9.00   MOTOR                                                                 03/15/2019 15:48:39 PAGE 5   
+ 193          //**********************************************//
+ 194          //函数名:void KnowMtyp(u8 sta,u8 Prg,u8 pos)
+ 195          //作用:识别机芯类型，并赋值运行参数
+ 196          //输入:sta-操作状态；  prg-识别过程；  pos-到达位置
+ 197          //返回: 无
+ 198          //**********************************************//
+ 199          void KnowMtyp(u8 sta,u8 Prg,u8 pos) //机芯类型识别及参数赋值
+ 200          {
+ 201   1        if(sta== MNA)         //闸杆到位后，准备判断机芯类型
+ 202   1          {
+ 203   2            if(mType== Prg)     //识别过程
+ 204   2              if(PosRal== pos)  //到达位置
+ 205   2                { 
+ 206   3                  switch(SpringTest(SPRI_LOG_PARA))
+ 207   3                    {
+ 208   4                      case SPRIFRCSTA_BIG: err_volu(ERR_SPRI_BIG); break;
+ 209   4                      case SPRIFRCSTA_LIT: err_volu(ERR_SPRI_LIT); break;
+ 210   4                      case SPRIFRCSTA_MID: err_volu(ERR_SPRI_MID); break;
+ 211   4                      case SPRIFRCSTA_ERR: err_volu(ERR_SPRI_ERR); break;
+ 212   4                      default: break;
+ 213   4                    }
+ 214   3                  if(SpeRinN < 80)              //单个行程，电机轴的圈数少于80圈为1秒机芯
+ 215   3                    {
+ 216   4                      mType= M1S;           //识别机芯类型-赋值
+ 217   4                      mRunTe=M1SRUNTIME;        //赋值电机运行超时时间
+ 218   4                      if(!StmSp2) StmSp2=50;      //第一次落闸遇阻时间未识别时，强行赋值
+ 219   4                      StmInt(M1S);          //获取遇阻灵敏度
+ 220   4                      DwSloInt(5,15);         //获取开始减速、缓冲的参数
+ 221   4                    }
+ 222   3                  else if(SpeRinN < 130)          //单个行程，电机轴的圈数少于130圈为1.8秒/3.8秒机芯
+ 223   3                    {
+ 224   4                      mType= M18S;          //识别机芯类型-赋值
+ 225   4                      mRunTe=M18SRUNTIME;       //赋值电机运行超时时间
+ 226   4                      if(!StmSp2) StmSp2=30;      //第一次落闸遇阻时间未识别时，强行赋值
+ 227   4                      StmInt(M18S);         //获取遇阻灵敏度
+ 228   4                      DwSloInt(10,35);        //获取开始减速、缓冲的参数
+ 229   4                    }
+ 230   3                  else                    //识别异常时
+ 231   3                    {
+ 232   4                      mType= M18S;          //识别机芯类型-赋值
+ 233   4                      mRunTe=M18SRUNTIME;       //赋值电机运行超时时间
+ 234   4                      if(!StmSp2) StmSp2=50;      //第一次落闸遇阻时间未识别时，强行赋值
+C51 COMPILER V9.00   MOTOR                                                                 03/16/2019 17:13:31 PAGE 5   
 
- 235   4                      mRunTe=M18SRUNTIME;       //赋值电机运行超时时间
- 236   4                      if(!StmSp2) StmSp2=50;      //第一次落闸遇阻时间未识别时，强行赋值
- 237   4                      StmInt(M18S);         //获取遇阻灵敏度
- 238   4                      DwSloInt(10,35);        //获取开始减速、缓冲的参数
- 239   4                    }
- 240   3                }
- 241   2          }
- 242   1        else                //标记识别状态: 目前只能在落闸时识别机芯类型
- 243   1          {
- 244   2            if(mType < Prg)       //机芯类型未识别
- 245   2              {
- 246   3                if(PosRal== pos)  //开始识别位置
- 247   3                  {
- 248   4      //              if(sta== MLN_UP) mType= MLN_UP;  //抬闸过程中识别机芯类型----取消，会影响落闸缓冲圈数获取精度
- 249   4                    if(sta== MLN_DW) mType= MLN_DW; 
- 250   4                  }
- 251   3                mRunTe=MAXRUNTIME;    //机芯类型未知时，获取默认运行时间参数
- 252   3                StmSp=STMMAXTIME;   //机芯类型未知时，获取默认灵敏度
- 253   3              }
- 254   2          }
- 255   1        
- 256   1      }
- 257          
- 258          //**********************************************//
- 259          //函数名:u8 StmCtr(u16 stmlm)
- 260          //作用:遇阻判断函数
- 261          //输入:灵敏度值
- 262          //返回:遇阻状态: 1-遇阻；   0-正常
- 263          //**********************************************//
- 264          u8 StmCtr(u16 stmlm)
- 265          {
- 266   1        if(!mCorNum)  //为零时，电机起步结束，开始判断是否遇阻
- 267   1          {
- 268   2            if(StmNum > stmlm)  //实测测速环半圈的周期 > 设定的周期 = 遇阻
- 269   2              { if(Stm) Stm--;  else return 1; }    //遇阻防抖判断
- 270   2            else Stm=2;
- 271   2          }
- 272   1        else Stm=2; 
- 273   1      
- 274   1        return 0;
- 275   1      }
+ 235   4                      StmInt(M18S);         //获取遇阻灵敏度
+ 236   4                      DwSloInt(10,35);        //获取开始减速、缓冲的参数
+ 237   4                    }
+ 238   3                }
+ 239   2          }
+ 240   1        else                //标记识别状态: 目前只能在落闸时识别机芯类型
+ 241   1          {
+ 242   2            if(mType < Prg)       //机芯类型未识别
+ 243   2              {
+ 244   3                if(PosRal== pos)  //开始识别位置
+ 245   3                  {
+ 246   4      //              if(sta== MLN_UP) mType= MLN_UP;  //抬闸过程中识别机芯类型----取消，会影响落闸缓冲圈数获取精度
+ 247   4                    if(sta== MLN_DW) mType= MLN_DW; 
+ 248   4                  }
+ 249   3                mRunTe=MAXRUNTIME;    //机芯类型未知时，获取默认运行时间参数
+ 250   3                StmSp=STMMAXTIME;   //机芯类型未知时，获取默认灵敏度
+ 251   3              }
+ 252   2          }
+ 253   1        
+ 254   1      }
+ 255          
+ 256          //**********************************************//
+ 257          //函数名:u8 StmCtr(u16 stmlm)
+ 258          //作用:遇阻判断函数
+ 259          //输入:灵敏度值
+ 260          //返回:遇阻状态: 1-遇阻；   0-正常
+ 261          //**********************************************//
+ 262          u8 StmCtr(u16 stmlm)
+ 263          {
+ 264   1        if(!mCorNum)  //为零时，电机起步结束，开始判断是否遇阻
+ 265   1          {
+ 266   2            if(StmNum > stmlm)  //实测测速环半圈的周期 > 设定的周期 = 遇阻
+ 267   2              { if(Stm) Stm--;  else return 1; }    //遇阻防抖判断
+ 268   2            else Stm=2;
+ 269   2          }
+ 270   1        else Stm=2; 
+ 271   1      
+ 272   1        return 0;
+ 273   1      }
+ 274          
+ 275          
  276          
  277          
- 278          
- 279          
- 280          //**********************************************//
- 281          //函数名:  u8 CalcuStm(u8 cmd)
- 282          //作用:自适应遇阻灵敏度，提高不同机芯兼容性
- 283          //输入:cmd-操作命令
- 284          //返回:状态/测速环半圈的平均周期
- 285          //**********************************************//
- 286          u8 CalcuStm(u8 cmd)
- 287          {
- 288   1        u8 i= 0;
- 289   1        switch(cmd)
- 290   1          {
- 291   2            //  每次落闸时，计量测速环10圈的平均周期；
- 292   2            case STMBUF_AVER_SPE:
- 293   2              if(StmNumBuf[STMBUF_POIN]== STMBUF_POST)
- 294   2                {
- 295   3                  StmNum3=0;
- 296   3                  for(i=0; i < (STMBUF_POST-1); i++)
-C51 COMPILER V9.00   MOTOR                                                                 03/15/2019 15:48:39 PAGE 6   
+ 278          //**********************************************//
+ 279          //函数名:  u8 CalcuStm(u8 cmd)
+ 280          //作用:自适应遇阻灵敏度，提高不同机芯兼容性
+ 281          //输入:cmd-操作命令
+ 282          //返回:状态/测速环半圈的平均周期
+ 283          //**********************************************//
+ 284          u8 CalcuStm(u8 cmd)
+ 285          {
+ 286   1        u8 i= 0;
+ 287   1        switch(cmd)
+ 288   1          {
+ 289   2            //  每次落闸时，计量测速环10圈的平均周期；
+ 290   2            case STMBUF_AVER_SPE:
+ 291   2              if(StmNumBuf[STMBUF_POIN]== STMBUF_POST)
+ 292   2                {
+ 293   3                  StmNum3=0;
+ 294   3                  for(i=0; i < (STMBUF_POST-1); i++)
+ 295   3                    {
+ 296   4                      if(StmNumBuf[i] > StmNum3) StmNum3= StmNumBuf[i];
+C51 COMPILER V9.00   MOTOR                                                                 03/16/2019 17:13:31 PAGE 6   
 
- 297   3                    {
- 298   4                      if(StmNumBuf[i] > StmNum3) StmNum3= StmNumBuf[i];
- 299   4                    }
- 300   3                  StmNumBuf[STMBUF_DATA]= StmNum3;
- 301   3                  StmNumBuf[STMBUF_POIN]= STMBUF_POST+1;
- 302   3                  return StmNumBuf[STMBUF_DATA];      //返回测速环半圈的平均周期
- 303   3                }
- 304   2              else if(StmNumBuf[STMBUF_POIN] < STMBUF_POST)
- 305   2                {
- 306   3                  if(StmNumBuf[STMBUF_POST]!= SpeRinN)
- 307   3                    {
- 308   4                      StmNumBuf[STMBUF_POST]= SpeRinN;
- 309   4                      StmNumBuf[StmNumBuf[STMBUF_POIN]]= StmNum2;
- 310   4                      StmNumBuf[STMBUF_POIN]++;
- 311   4                    }
- 312   3                }
- 313   2              return StmNumBuf[STMBUF_DATA];  //返回测速环半圈的平均周期
- 314   2              break;
- 315   2      
- 316   2            //  每正常落闸2次后，对比当前工作灵敏度，满足修正条件时，修正工作灵明度；//
- 317   2            case STMBUF_CALC_SPE:   
- 318   2              if(StmSp== STMMAXTIME + 1) StmInt(mType);   //遇阻后，在下一次落闸成功后重新赋值遇阻灵敏度
- 319   2              if(StmSp== STMMAXTIME) break;         //上电第一次落闸，不计算
- 320   2              
- 321   2              if(StmNumBuf2[2] < 2)
- 322   2                {
- 323   3                  if(StmSp2 > 20)
- 324   3                    {
- 325   4                      StmNumBuf2[StmNumBuf2[2]]= StmSp2;
- 326   4                      StmNumBuf2[2]++;
- 327   4                    }
- 328   3                }
- 329   2              if(StmNumBuf2[2]== 2)
- 330   2                {
- 331   3              //    if( (StmNumBuf2[0] > StmSp2 && StmNumBuf2[1] > StmSp2 ) || (StmNumBuf2[0] < StmSp2 && StmNumBuf2[1
+ 297   4                    }
+ 298   3                  StmNumBuf[STMBUF_DATA]= StmNum3;
+ 299   3                  StmNumBuf[STMBUF_POIN]= STMBUF_POST+1;
+ 300   3                  return StmNumBuf[STMBUF_DATA];      //返回测速环半圈的平均周期
+ 301   3                }
+ 302   2              else if(StmNumBuf[STMBUF_POIN] < STMBUF_POST)
+ 303   2                {
+ 304   3                  if(StmNumBuf[STMBUF_POST]!= SpeRinN)
+ 305   3                    {
+ 306   4                      StmNumBuf[STMBUF_POST]= SpeRinN;
+ 307   4                      StmNumBuf[StmNumBuf[STMBUF_POIN]]= StmNum2;
+ 308   4                      StmNumBuf[STMBUF_POIN]++;
+ 309   4                    }
+ 310   3                }
+ 311   2              return StmNumBuf[STMBUF_DATA];  //返回测速环半圈的平均周期
+ 312   2              break;
+ 313   2      
+ 314   2            //  每正常落闸2次后，对比当前工作灵敏度，满足修正条件时，修正工作灵明度；//
+ 315   2            case STMBUF_CALC_SPE:   
+ 316   2              if(StmSp== STMMAXTIME + 1) StmInt(mType);   //遇阻后，在下一次落闸成功后重新赋值遇阻灵敏度
+ 317   2              if(StmSp== STMMAXTIME) break;         //上电第一次落闸，不计算
+ 318   2              
+ 319   2              if(StmNumBuf2[2] < 2)
+ 320   2                {
+ 321   3                  if(StmSp2 > 20)
+ 322   3                    {
+ 323   4                      StmNumBuf2[StmNumBuf2[2]]= StmSp2;
+ 324   4                      StmNumBuf2[2]++;
+ 325   4                    }
+ 326   3                }
+ 327   2              if(StmNumBuf2[2]== 2)
+ 328   2                {
+ 329   3              //    if( (StmNumBuf2[0] > StmSp2 && StmNumBuf2[1] > StmSp2 ) || (StmNumBuf2[0] < StmSp2 && StmNumBuf2[1
              -] < StmSp2 ) )
- 332   3                  if(StmNumBuf2[0] > StmSp2 && StmNumBuf2[1] > StmSp2)
- 333   3                    {
- 334   4                      StmNum3= StmNumBuf[0] + StmNumBuf[1];
- 335   4                      StmNum3/= 2;
- 336   4                      StmSp2= StmNum3;
- 337   4                    }
- 338   3                  memset(StmNumBuf2,0,sizeof(StmNumBuf2));
- 339   3                  return 1;
- 340   3                }
- 341   2              return 0;
- 342   2              break;
- 343   2      
- 344   2              //数组1清零
- 345   2            case STMBUF_CLR1:
- 346   2              memset(StmNumBuf,0,sizeof(StmNumBuf));
- 347   2              break;
- 348   2      
- 349   2              //数组2清零
- 350   2            case STMBUF_CLR2: 
- 351   2              StmSlow2= 0;          //遇阻灵敏度--落闸缓冲时缓存清零，重新学习          
- 352   2              StmSp= STMMAXTIME+1;      //遇阻后暂时把遇阻灵明度调到最大；在下一次落闸成功后在计算遇阻灵敏度并赋值
- 353   2              memset(StmNumBuf2,0,sizeof(StmNumBuf2));
- 354   2              break;
- 355   2            default: break;
- 356   2          }
- 357   1        return 0;
-C51 COMPILER V9.00   MOTOR                                                                 03/15/2019 15:48:39 PAGE 7   
+ 330   3                  if(StmNumBuf2[0] > StmSp2 && StmNumBuf2[1] > StmSp2)
+ 331   3                    {
+ 332   4                      StmNum3= StmNumBuf[0] + StmNumBuf[1];
+ 333   4                      StmNum3/= 2;
+ 334   4                      StmSp2= StmNum3;
+ 335   4                    }
+ 336   3                  memset(StmNumBuf2,0,sizeof(StmNumBuf2));
+ 337   3                  return 1;
+ 338   3                }
+ 339   2              return 0;
+ 340   2              break;
+ 341   2      
+ 342   2              //数组1清零
+ 343   2            case STMBUF_CLR1:
+ 344   2              memset(StmNumBuf,0,sizeof(StmNumBuf));
+ 345   2              break;
+ 346   2      
+ 347   2              //数组2清零
+ 348   2            case STMBUF_CLR2: 
+ 349   2              StmSlow2= 0;          //遇阻灵敏度--落闸缓冲时缓存清零，重新学习          
+ 350   2              StmSp= STMMAXTIME+1;      //遇阻后暂时把遇阻灵明度调到最大；在下一次落闸成功后在计算遇阻灵敏度并赋值
+ 351   2              memset(StmNumBuf2,0,sizeof(StmNumBuf2));
+ 352   2              break;
+ 353   2            default: break;
+ 354   2          }
+ 355   1        return 0;
+ 356   1      }
+ 357          
+C51 COMPILER V9.00   MOTOR                                                                 03/16/2019 17:13:31 PAGE 7   
 
- 358   1      }
+ 358          
  359          
  360          
  361          
- 362          
- 363          
- 364          void mTaskControl()     //电机任务控制
- 365          {
- 366   1        if(SPE!=SpeSta) 
- 367   1          { 
- 368   2            SpeSta= SPE; StmNum2= StmNum; StmNum= 0; SpeRinN++; 
- 369   2      //      speak(3,1);
- 370   2          }
- 371   1      
- 372   1        switch(mTask)
- 373   1          {
- 374   2            case MTASK_NA:  
- 375   2              if(PosRal== POS_HOR) mTask= MTASK_DS; 
- 376   2              if(PosRal== POS_VER) mTask= MTASK_US; 
- 377   2              break;
+ 362          void mTaskControl()     //电机任务控制
+ 363          {
+ 364   1        if(SPE!=SpeSta) 
+ 365   1          { 
+ 366   2            SpeSta= SPE; StmNum2= StmNum; StmNum= 0; SpeRinN++; 
+ 367   2      //      speak(3,1);
+ 368   2          }
+ 369   1      
+ 370   1        switch(mTask)
+ 371   1          {
+ 372   2            case MTASK_NA:  
+ 373   2              if(PosRal== POS_HOR) mTask= MTASK_DS; 
+ 374   2              if(PosRal== POS_VER) mTask= MTASK_US; 
+ 375   2              break;
+ 376   2      /***********************************************************************************************/
+ 377   2      //          抬闸    
  378   2      /***********************************************************************************************/
- 379   2      //          抬闸    
- 380   2      /***********************************************************************************************/
- 381   2            case MTASK_UP:
- 382   2              InitRepairMotor();
- 383   2              gRepairMotor.Direction = POS_UP;        
- 384   2              BrakeClr();
- 385   2              KnowMtyp(MLN_UP,MTPYREAD,POS_HOR);
- 386   2              //GetLimitValue(mType);//获取边界值
- 387   2              SpringTest(SPRI_CLR_PARA);
- 388   2              SpeRinN= 0;
- 389   2              mCorNum= M_OF_TIME;
- 390   2              mTask= MTASK_UP1;
- 391   2              mPosD2= POS_UP;
- 392   2              M_CLOS;
- 393   2              break;
- 394   2            case MTASK_UP1:
- 395   2              if(!mCorNum) { MCR_UP; mCorNum= M_ON_TIME;  mTask= MTASK_UP2; }
- 396   2              break;
- 397   2            case MTASK_UP2:
- 398   2              if(!mCorNum)
- 399   2                {
- 400   3                  mRunNum= mRunTe;        //大电机运行时间限制
- 401   3                  mCorNum= M_CV_UP_TIME;      //正反转切换起步时间
- 402   3                  mTask= MTASK_UP3;
- 403   3                  if(mPosD== POS_DW)        //在落闸过程中抬闸
- 404   3                    {
- 405   4                      LitM= M_EN;       //落/抬切换时，小电机先抬闸1秒，抵消落闸时杆的惯性
- 406   4                    }
- 407   3                  mPosD= POS_UP;
- 408   3                  M_OPEN;
- 409   3                }
- 410   2              break;
- 411   2            case MTASK_UP3:
- 412   2              if(!mCorNum) LitM= M_NA;
- 413   2              if(!mRunNum) { mPosD=POS_INT; err_volu(ERR_UP_FAIL); }    //抬闸超时失败
- 414   2              else if(StmCtr(StmSp + StmSlow+80))
- 415   2                {
- 416   3                  err_volu(ERR_DW_DRAG); 
- 417   3                }
- 418   2              else;
- 419   2              break;  
-C51 COMPILER V9.00   MOTOR                                                                 03/15/2019 15:48:39 PAGE 8   
+ 379   2            case MTASK_UP:
+ 380   2              InitRepairMotor();
+ 381   2              gRepairMotor.Direction = POS_UP;        
+ 382   2              BrakeClr();
+ 383   2              KnowMtyp(MLN_UP,MTPYREAD,POS_HOR);
+ 384   2              //GetLimitValue(mType);//获取边界值
+ 385   2              SpringTest(SPRI_CLR_PARA);
+ 386   2              SpeRinN= 0;
+ 387   2              mCorNum= M_OF_TIME;
+ 388   2              mTask= MTASK_UP1;
+ 389   2              mPosD2= POS_UP;
+ 390   2              M_CLOS;
+ 391   2              break;
+ 392   2            case MTASK_UP1:
+ 393   2              if(!mCorNum) { MCR_UP; mCorNum= M_ON_TIME;  mTask= MTASK_UP2; }
+ 394   2              break;
+ 395   2            case MTASK_UP2:
+ 396   2              if(!mCorNum)
+ 397   2                {
+ 398   3                  mRunNum= mRunTe;        //大电机运行时间限制
+ 399   3                  mCorNum= M_CV_UP_TIME;      //正反转切换起步时间
+ 400   3                  mTask= MTASK_UP3;
+ 401   3                  if(mPosD== POS_DW)        //在落闸过程中抬闸
+ 402   3                    {
+ 403   4                      LitM= M_EN;       //落/抬切换时，小电机先抬闸1秒，抵消落闸时杆的惯性
+ 404   4                    }
+ 405   3                  mPosD= POS_UP;
+ 406   3                  M_OPEN;
+ 407   3                }
+ 408   2              break;
+ 409   2            case MTASK_UP3:
+ 410   2              if(!mCorNum) LitM= M_NA;
+ 411   2              if(!mRunNum) { mPosD=POS_INT; err_volu(ERR_UP_FAIL); }    //抬闸超时失败
+ 412   2              else if(StmCtr(StmSp + StmSlow+80))
+ 413   2                {
+ 414   3                  err_volu(ERR_DW_DRAG); 
+ 415   3                }
+ 416   2              else;
+ 417   2              break;  
+ 418   2      /***********************************************************************************************/
+ 419   2      //          抬闸缓冲    
+C51 COMPILER V9.00   MOTOR                                                                 03/16/2019 17:13:31 PAGE 8   
 
  420   2      /***********************************************************************************************/
- 421   2      //          抬闸缓冲    
- 422   2      /***********************************************************************************************/
- 423   2            case MTASK_US:
- 424   2              KnowMtyp( MNA,MLN_UP,POS_VER);
- 425   2              LitM= M_NA;
- 426   2              BigM5u= M_NA;
- 427   2              mCorNum= M_OF_TIME;
- 428   2              mTask= MTASK_US1;
- 429   2              mPosD= POS_VER;
- 430   2              mPosD2= POS_VER;
- 431   2              break;
- 432   2            case MTASK_US1:
- 433   2              if(!mCorNum) { MCR_UP; mCorNum= M_ON_TIME; mTask= MTASK_US2; }
- 434   2              break;
- 435   2            case MTASK_US2:
- 436   2              if(!mCorNum)
- 437   2                {
- 438   3                  M_SLOW;
- 439   3                  mRunNum= M_LIT_UP_TIME;
- 440   3                  mTask= MTASK_US3;
- 441   3                }
- 442   2              break;
- 443   2            case MTASK_US3:
- 444   2              if(!mRunNum)
- 445   2                {
- 446   3                  LitM= M_NA;
- 447   3                  if(PosRal== POS_VER) mTask= MTASK_US5;
- 448   3                  else { mTask= MTASK_US4; mPosD=POS_INT; }
- 449   3                }
- 450   2              else if(PosRal!= POS_VER) { mPosD=POS_INT; Event(ITASK_INER_DW); BrakeClr(); }
- 451   2              break;
- 452   2            case MTASK_US4:
- 453   2              if(PosRal== POS_VER) mTask= MTASK_US5; 
- 454   2               err_volu(ERR_US_FAIL);                 //抬闸缓冲失败
- 455   2              break;
- 456   2            case MTASK_US5:
- 457   2               if(PosRal!= POS_VER) { mPosD=POS_INT; Event(ITASK_INER_DW); BrakeClr(); break; }
- 458   2               if(mPosD== POS_INT) mPosD= POS_VER;
- 459   2      //         Timer2_Zero();
- 460   2              break;
- 461   2              
- 462   2      /***********************************************************************************************/
- 463   2      //                落闸    
- 464   2      /***********************************************************************************************/       
- 465   2            case MTASK_DW:
- 466   2              InitRepairMotor();
- 467   2              gRepairMotor.Direction = POS_DW;
- 468   2              BrakeClr();
- 469   2              KnowMtyp(MLN_DW,MTPYREAD,POS_VER);
- 470   2              CalcuStm(STMBUF_CLR1);
- 471   2              SpringTest(SPRI_CLR_PARA);
- 472   2              SpeRinN= 0;
- 473   2              mCorNum= M_OF_TIME;
- 474   2              mTask= MTASK_DW1;
- 475   2              mPosD= POS_DW;
- 476   2              mPosD2= POS_DW;
- 477   2              M_CLOS;
- 478   2              break;
- 479   2            case MTASK_DW1:
- 480   2              if(!mCorNum) { MCR_DW; mCorNum= M_ON_TIME; mTask= MTASK_DW2; }
- 481   2              break;
-C51 COMPILER V9.00   MOTOR                                                                 03/15/2019 15:48:39 PAGE 9   
+ 421   2            case MTASK_US:
+ 422   2              KnowMtyp( MNA,MLN_UP,POS_VER);
+ 423   2              LitM= M_NA;
+ 424   2              BigM5u= M_NA;
+ 425   2              mCorNum= M_OF_TIME;
+ 426   2              mTask= MTASK_US1;
+ 427   2              mPosD= POS_VER;
+ 428   2              mPosD2= POS_VER;
+ 429   2              break;
+ 430   2            case MTASK_US1:
+ 431   2              if(!mCorNum) { MCR_UP; mCorNum= M_ON_TIME; mTask= MTASK_US2; }
+ 432   2              break;
+ 433   2            case MTASK_US2:
+ 434   2              if(!mCorNum)
+ 435   2                {
+ 436   3                  M_SLOW;
+ 437   3                  mRunNum= M_LIT_UP_TIME;
+ 438   3                  mTask= MTASK_US3;
+ 439   3                }
+ 440   2              break;
+ 441   2            case MTASK_US3:
+ 442   2              if(!mRunNum)
+ 443   2                {
+ 444   3                  LitM= M_NA;
+ 445   3                  if(PosRal== POS_VER) mTask= MTASK_US5;
+ 446   3                  else { mTask= MTASK_US4; mPosD=POS_INT; }
+ 447   3                }
+ 448   2              else if(PosRal!= POS_VER) { mPosD=POS_INT; Event(ITASK_INER_DW); BrakeClr(); }
+ 449   2              break;
+ 450   2            case MTASK_US4:
+ 451   2              if(PosRal== POS_VER) mTask= MTASK_US5; 
+ 452   2               err_volu(ERR_US_FAIL);                 //抬闸缓冲失败
+ 453   2              break;
+ 454   2            case MTASK_US5:
+ 455   2               if(PosRal!= POS_VER) { mPosD=POS_INT; Event(ITASK_INER_DW); BrakeClr(); break; }
+ 456   2               if(mPosD== POS_INT) mPosD= POS_VER;
+ 457   2      //         Timer2_Zero();
+ 458   2              break;
+ 459   2              
+ 460   2      /***********************************************************************************************/
+ 461   2      //                落闸    
+ 462   2      /***********************************************************************************************/       
+ 463   2            case MTASK_DW:
+ 464   2              InitRepairMotor();
+ 465   2              gRepairMotor.Direction = POS_DW;                
+ 466   2              BrakeClr();
+ 467   2              KnowMtyp(MLN_DW,MTPYREAD,POS_VER);
+ 468   2              CalcuStm(STMBUF_CLR1);
+ 469   2              SpringTest(SPRI_CLR_PARA);
+ 470   2              SpeRinN= 0;
+ 471   2              mCorNum= M_OF_TIME;
+ 472   2              mTask= MTASK_DW1;
+ 473   2              mPosD= POS_DW;
+ 474   2              mPosD2= POS_DW;
+ 475   2              M_CLOS;
+ 476   2              break;
+ 477   2            case MTASK_DW1:
+ 478   2              if(!mCorNum) { MCR_DW; mCorNum= M_ON_TIME; mTask= MTASK_DW2; }
+ 479   2              break;
+ 480   2            case MTASK_DW2:
+ 481   2              if(!mCorNum)
+C51 COMPILER V9.00   MOTOR                                                                 03/16/2019 17:13:31 PAGE 9   
 
- 482   2            case MTASK_DW2:
- 483   2              if(!mCorNum)
- 484   2                {
- 485   3                  mRunNum= mRunTe;
- 486   3                  mCorNum= M_CV_DW_TIME;
- 487   3                  mTask= MTASK_DW3;
- 488   3                  M_OPEN;
- 489   3                }
- 490   2              break;
- 491   2            case MTASK_DW3:
- 492   2              if(mType > MTPYREAD)         //已识别机芯类型时，操作如下
- 493   2                {
- 494   3                  if(SpeRinN < 26)       //起步时，前26圈的遇阻灵敏度 = 默认灵敏度 + 工作灵敏度 
- 495   3                    StmSlow= STMMAXTIME;
- 496   3                  else if(SpeRinN > DwSlo)   //开始缓冲阶段
- 497   3                    {
- 498   4                      LitM= M_EN;      //缓冲
- 499   4                      SpringTest(SPRI_RED_PARA);  //获取弹簧的拉力数据
- 500   4                    }
- 501   3                  else if(SpeRinN > DwSloBri)  //开始减速阶段
- 502   3                    {
- 503   4                      BigM5u= M_NA;      //减速
- 504   4                      SpringTest(SPRI_RED_PARA);  //获取弹簧的拉力数据
- 505   4                      StmSlow= StmSlow2;   //落闸缓冲时，遇阻灵敏度调低(数值越大，灵敏度越低)
- 506   4                    }
- 507   3                  else StmSlow= 0;       //在正常落闸阶段，遇阻灵敏度的减速、缓冲补偿清零
- 508   3                  if(!mCorNum) StmSp2= CalcuStm(STMBUF_AVER_SPE); //获取落闸时平均速度
- 509   3                }
- 510   2              else                 //未识别机芯类型时，操作如下
- 511   2                {
- 512   3                  if(SpeRinN < 20)       //起步时，前20圈的遇阻灵明度 = 默认灵敏度的2倍
- 513   3                    StmSlow= STMMAXTIME;
- 514   3                  else StmSlow= 0;
- 515   3                  if(SpeRinN > 40)       //运行40圈后，用缓冲的方式落闸，确保首次上电落闸平稳
- 516   3                    { 
- 517   4                      BigM5u= M_NA; LitM= M_EN; //首次上电落闸提前减速和缓冲
- 518   4                      SpringTest(SPRI_RED_PARA);  //获取弹簧的拉力数据
- 519   4                    }
- 520   3                  if(!mCorNum) StmSp2= CalcuStm(STMBUF_AVER_SPE);   //获取第一次落闸的平均速度
- 521   3                }
- 522   2      
- 523   2              if(!mRunNum)              //超时停止落闸
- 524   2                {
- 525   3                  mPosD= POS_INT; 
- 526   3                  BigM5u= M_NA; 
- 527   3                  LitM= M_NA; 
- 528   3                  err_volu(ERR_DW_FAIL); 
- 529   3                }
- 530   2              else if(StmCtr(StmSp + StmSlow))   //落闸遇阻
- 531   2                {
- 532   3                  if(iTask== ITASK_COER_UP) break;  //水平位强制抬闸任务时，不执行遇阻任务
- 533   3                  Event(ITASK_DRAG_UP); 
- 534   3                  err_volu(ERR_DW_DRAG); 
- 535   3                  CalcuStm(STMBUF_CLR2);  //遇阻后，遇阻灵敏度判断修正数组清零
- 536   3                  DgStaClr();
- 537   3                  if(ViceSta==VICE_STA_EN) ViceSta=VICE_STA_DRAG;
- 538   3                  break;
- 539   3                }
- 540   2              else;
- 541   2              break;
- 542   2              
- 543   2      /***********************************************************************************************/
-C51 COMPILER V9.00   MOTOR                                                                 03/15/2019 15:48:39 PAGE 10  
+ 482   2                {
+ 483   3                  mRunNum= mRunTe;
+ 484   3                  mCorNum= M_CV_DW_TIME;
+ 485   3                  mTask= MTASK_DW3;
+ 486   3                  M_OPEN;
+ 487   3                }
+ 488   2              break;
+ 489   2            case MTASK_DW3:
+ 490   2              if(mType > MTPYREAD)         //已识别机芯类型时，操作如下
+ 491   2                {
+ 492   3                  if(SpeRinN < 26)       //起步时，前26圈的遇阻灵敏度 = 默认灵敏度 + 工作灵敏度 
+ 493   3                    StmSlow= STMMAXTIME;
+ 494   3                  else if(SpeRinN > DwSlo)   //开始缓冲阶段
+ 495   3                    {
+ 496   4                      LitM= M_EN;      //缓冲
+ 497   4                      SpringTest(SPRI_RED_PARA);  //获取弹簧的拉力数据
+ 498   4                    }
+ 499   3                  else if(SpeRinN > DwSloBri)  //开始减速阶段
+ 500   3                    {
+ 501   4                      BigM5u= M_NA;      //减速
+ 502   4                      SpringTest(SPRI_RED_PARA);  //获取弹簧的拉力数据
+ 503   4                      StmSlow= StmSlow2;   //落闸缓冲时，遇阻灵敏度调低(数值越大，灵敏度越低)
+ 504   4                    }
+ 505   3                  else StmSlow= 0;       //在正常落闸阶段，遇阻灵敏度的减速、缓冲补偿清零
+ 506   3                  if(!mCorNum) StmSp2= CalcuStm(STMBUF_AVER_SPE); //获取落闸时平均速度
+ 507   3                }
+ 508   2              else                 //未识别机芯类型时，操作如下
+ 509   2                {
+ 510   3                  if(SpeRinN < 20)       //起步时，前20圈的遇阻灵明度 = 默认灵敏度的2倍
+ 511   3                    StmSlow= STMMAXTIME;
+ 512   3                  else StmSlow= 0;
+ 513   3                  if(SpeRinN > 40)       //运行40圈后，用缓冲的方式落闸，确保首次上电落闸平稳
+ 514   3                    { 
+ 515   4                      BigM5u= M_NA; LitM= M_EN; //首次上电落闸提前减速和缓冲
+ 516   4                      SpringTest(SPRI_RED_PARA);  //获取弹簧的拉力数据
+ 517   4                    }
+ 518   3                  if(!mCorNum) StmSp2= CalcuStm(STMBUF_AVER_SPE);   //获取第一次落闸的平均速度
+ 519   3                }
+ 520   2      
+ 521   2              if(!mRunNum)              //超时停止落闸
+ 522   2                {
+ 523   3                  mPosD= POS_INT; 
+ 524   3                  BigM5u= M_NA; 
+ 525   3                  LitM= M_NA; 
+ 526   3                  err_volu(ERR_DW_FAIL); 
+ 527   3                }
+ 528   2              else if(StmCtr(StmSp + StmSlow))   //落闸遇阻
+ 529   2                {
+ 530   3                  if(iTask== ITASK_COER_UP) break;  //水平位强制抬闸任务时，不执行遇阻任务
+ 531   3                  Event(ITASK_DRAG_UP); 
+ 532   3                  err_volu(ERR_DW_DRAG); 
+ 533   3                  CalcuStm(STMBUF_CLR2);  //遇阻后，遇阻灵敏度判断修正数组清零
+ 534   3                  DgStaClr();
+ 535   3                  if(ViceSta==VICE_STA_EN) ViceSta=VICE_STA_DRAG;
+ 536   3                  break;
+ 537   3                }
+ 538   2              else;
+ 539   2              break;
+ 540   2              
+ 541   2      /***********************************************************************************************/
+ 542   2      //              落闸缓冲
+ 543   2      /***********************************************************************************************/ 
+C51 COMPILER V9.00   MOTOR                                                                 03/16/2019 17:13:31 PAGE 10  
 
- 544   2      //              落闸缓冲
- 545   2      /***********************************************************************************************/ 
- 546   2            case MTASK_DS:
- 547   2              SpringTest(SPRI_LOG_PARA1);
- 548   2              if(CalcuStm(STMBUF_CALC_SPE)) StmInt(mType);  //每落闸两次后，计算遇阻灵敏度是否要修正
- 549   2              KnowMtyp(MNA,MLN_DW,POS_HOR);
- 550   2              LitM= M_NA;
- 551   2              BigM5u= M_NA;
- 552   2              mCorNum= M_OF_TIME;
- 553   2              mTask= MTASK_DS1;
- 554   2              mPosD= POS_HOR; 
- 555   2              mPosD2= POS_HOR; 
- 556   2              break;
- 557   2            case MTASK_DS1:
- 558   2              if(!mCorNum) { MCR_DW; mCorNum= M_ON_TIME; mTask= MTASK_DS2; }
- 559   2              break;
- 560   2            case MTASK_DS2:
- 561   2              if(!mCorNum)
- 562   2                {
- 563   3                  M_SLOW;
- 564   3                  mRunNum= M_LIT_DW_TIME;
- 565   3                  mTask= MTASK_DS3;
- 566   3                }
- 567   2              break;
- 568   2            case MTASK_DS3:
- 569   2              if(!mRunNum)
- 570   2                {
- 571   3                  LitM= M_NA;
- 572   3                  if(PosRal== POS_HOR) mTask= MTASK_DS5;
- 573   3                  else { mTask= MTASK_DS4; mPosD=POS_INT; }
- 574   3                }
- 575   2              else if(PosRal!= POS_HOR) { mPosD= POS_INT; Event(ITASK_COER_UP); BrakeClr();}
- 576   2              break;
- 577   2            case MTASK_DS4:
- 578   2              if(PosRal== POS_HOR) mTask= MTASK_DS5;
- 579   2               err_volu(ERR_DS_FAIL);   //抬闸缓冲失败
- 580   2              break;
- 581   2            case MTASK_DS5:
- 582   2              if(mPosD== POS_INT) mPosD= POS_HOR;
- 583   2              if(PosRal!= POS_HOR) { mPosD= POS_INT; Event(ITASK_COER_UP); BrakeClr(); }
- 584   2      //        Timer2_Zero();
- 585   2              break;
- 586   2              
- 587   2            default:  break;
- 588   2          }
- 589   1      }
- 590          
+ 544   2            case MTASK_DS:
+ 545   2              SpringTest(SPRI_LOG_PARA1);
+ 546   2              if(CalcuStm(STMBUF_CALC_SPE)) StmInt(mType);  //每落闸两次后，计算遇阻灵敏度是否要修正
+ 547   2              KnowMtyp(MNA,MLN_DW,POS_HOR);
+ 548   2              LitM= M_NA;
+ 549   2              BigM5u= M_NA;
+ 550   2              mCorNum= M_OF_TIME;
+ 551   2              mTask= MTASK_DS1;
+ 552   2              mPosD= POS_HOR; 
+ 553   2              mPosD2= POS_HOR; 
+ 554   2              break;
+ 555   2            case MTASK_DS1:
+ 556   2              if(!mCorNum) { MCR_DW; mCorNum= M_ON_TIME; mTask= MTASK_DS2; }
+ 557   2              break;
+ 558   2            case MTASK_DS2:
+ 559   2              if(!mCorNum)
+ 560   2                {
+ 561   3                  M_SLOW;
+ 562   3                  mRunNum= M_LIT_DW_TIME;
+ 563   3                  mTask= MTASK_DS3;
+ 564   3                }
+ 565   2              break;
+ 566   2            case MTASK_DS3:
+ 567   2              if(!mRunNum)
+ 568   2                {
+ 569   3                  LitM= M_NA;
+ 570   3                  if(PosRal== POS_HOR) mTask= MTASK_DS5;
+ 571   3                  else { mTask= MTASK_DS4; mPosD=POS_INT; }
+ 572   3                }
+ 573   2              else if(PosRal!= POS_HOR) { mPosD= POS_INT; Event(ITASK_COER_UP); BrakeClr();}
+ 574   2              break;
+ 575   2            case MTASK_DS4:
+ 576   2              if(PosRal== POS_HOR) mTask= MTASK_DS5;
+ 577   2               err_volu(ERR_DS_FAIL);   //抬闸缓冲失败
+ 578   2              break;
+ 579   2            case MTASK_DS5:
+ 580   2              if(mPosD== POS_INT) mPosD= POS_HOR;
+ 581   2              if(PosRal!= POS_HOR) { mPosD= POS_INT; Event(ITASK_COER_UP); BrakeClr(); }
+ 582   2      //        Timer2_Zero();
+ 583   2              break;
+ 584   2              
+ 585   2            default:  break;
+ 586   2          }
+ 587   1      }
+ 588          
+ 589          void Monitor_clk(void)       //监控计数
+ 590          {
+ 591   1          if(gRepairMotor.CurrentCounts)
+ 592   1          {
+ 593   2              gRepairMotor.CurrentCounts--;
+ 594   2          }
+ 595   1      
+ 596   1      }
+ 597          
+ 598          
+ 599          void MonitorTask(void)
+ 600          {
+ 601   1      
+ 602   1      //    if(gRepairMotor.CurrentCounts == 0 && gRepairMotor.Direction == POS_DW)
+ 603   1      //    { 
+ 604   1      //        //打印当前测速环值
+ 605   1      //        Uart_Print(3,gRepairMotor.Direction);   
+C51 COMPILER V9.00   MOTOR                                                                 03/16/2019 17:13:31 PAGE 11  
+
+ 606   1      //        gRepairMotor.CurrentCounts = 5;
+ 607   1      
+ 608   1      //    }
+ 609   1      
+ 610   1          if(gRepairMotor.CurrentCounts == 0 && gRepairMotor.Direction == POS_DW) //测速环转动才开始进来
+ 611   1          { 
+ 612   2              if(gRepairMotor.Times >= 0 && gRepairMotor.Times < 120)//40
+ 613   2              {
+ 614   3                  gRepairMotor.Times++;
+ 615   3      
+ 616   3                  //打印当前测速环值
+ 617   3                  Uart_Print(3,gRepairMotor.Direction);  
+ 618   3                  
+ 619   3      //            if(SpeRinN >= BASIC_SPRING_NUM + BASIC_OFFSET_250MS*gRepairMotor.Times)
+ 620   3      //            {
+ 621   3      //                gRepairMotor.FlagValue ++;//这里应该不会出现，如果出现就是大问题
+ 622   3      //            }   
+ 623   3      
+ 624   3      //            gRepairMotor.LastSpeRin = SpeRinN;
+ 625   3      //            //计算当前多走了多少圈
+ 626   3      //            if(gRepairMotor.LastSpeRin > (BASIC_SPRING_NUM+BASIC_OFFSET_250MS*(gRepairMotor.Times-1)))
+ 627   3      //            {                
+ 628   3      //                gRepairMotor.AverageValue += gRepairMotor.LastSpeRin-(BASIC_SPRING_NUM+BASIC_OFFSET_250M
+             -S*(gRepairMotor.Times-1));                
+ 629   3      //            }
+ 630   3      
+ 631   3      //            //如果开始就多走很多多于当前频数的75%,直接报错
+ 632   3      //            if(gRepairMotor.Times <= 4 && gRepairMotor.AverageValue >= BASIC_OFFSET_250MS*3)
+ 633   3      //            {
+ 634   3      //                Event(ITASK_DG_UP);
+ 635   3      //                err_volu(ERR_SPRI_ERR); 
+ 636   3      //            }
+ 637   3      
+ 638   3      //            //同样的，若是圈数走的太多，就直接报错
+ 639   3      //            if (gRepairMotor.FlagValue >= 4 || gRepairMotor.AverageValue >= TWO_SPRINT_LOWER_LIMIT) //不
+             -需完全走完判定，可以直接认为是有问题的 
+ 640   3      //            //if (gRepairMotor.FlagValue >= 4 )
+ 641   3      //            {            
+ 642   3      //                Event(ITASK_DG_UP);
+ 643   3      //                err_volu(ERR_SPRI_ERR);
+ 644   3      //                
+ 645   3      //            }
+ 646   3      //            
+ 647   3      //            //两根弹簧报警
+ 648   3      //            if(gRepairMotor.AverageValue >= THREE_SPRING_LOWER_LIMIT)
+ 649   3      //            {
+ 650   3      //                //报警，只有两根弹簧   
+ 651   3      //                err_volu(ERR_SPRI_LIT);
+ 652   3      //            }
+ 653   3                  gRepairMotor.CurrentCounts = 5;
+ 654   3              }    
+ 655   2          }
+ 656   1      }
+ 657          
+ 658          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   2367    ----
+   CODE SIZE        =   2415    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =     34    ----
    PDATA SIZE       =   ----    ----
+C51 COMPILER V9.00   MOTOR                                                                 03/16/2019 17:13:31 PAGE 12  
+
    DATA SIZE        =     40       3
    IDATA SIZE       =   ----    ----
    BIT SIZE         =      1    ----

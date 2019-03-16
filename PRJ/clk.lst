@@ -1,4 +1,4 @@
-C51 COMPILER V9.00   CLK                                                                   03/15/2019 15:48:39 PAGE 1   
+C51 COMPILER V9.00   CLK                                                                   03/16/2019 17:13:31 PAGE 1   
 
 
 C51 COMPILER V9.00, COMPILATION OF MODULE CLK
@@ -48,39 +48,40 @@ line level    source
   38   2            Vup_clk();
   39   2            UpCtClk();
   40   2            BrakeClk();
-  41   2          }
-  42   1      
-  43   1        if(!T100MS)           //计时100MS
-  44   1          {
-  45   2            T100MS=T100MS_TIME;
-  46   2            if(T1000MS)T1000MS--;   
-  47   2      
-  48   2            AtRun_clk();
-  49   2            err_clk();
-  50   2            DZP_clk();
-  51   2            test_clk(); 
-  52   2            DZP_clk();
-  53   2            mRunClk();
-  54   2            UpDcClk();
-C51 COMPILER V9.00   CLK                                                                   03/15/2019 15:48:39 PAGE 2   
+  41   2                  Monitor_clk();//监控计数器
+  42   2          }
+  43   1      
+  44   1        if(!T100MS)           //计时100MS
+  45   1          {
+  46   2            T100MS=T100MS_TIME;
+  47   2            if(T1000MS)T1000MS--;   
+  48   2      
+  49   2            AtRun_clk();
+  50   2            err_clk();
+  51   2            DZP_clk();
+  52   2            test_clk(); 
+  53   2            DZP_clk();
+  54   2            mRunClk();
+C51 COMPILER V9.00   CLK                                                                   03/16/2019 17:13:31 PAGE 2   
 
-  55   2            
-  56   2      //      speak(2,1);
-  57   2          }
-  58   1        
-  59   1        if(!T1000MS)          //计时1000MS
-  60   1          {
-  61   2            T1000MS=T1000MS_TIME;
-  62   2      //            LED=!LED;
-  63   2            
-  64   2          }
-  65   1        test++;             //主程序在100MS内循环跑N次，此参数可观察单片机运行效率
-  66   1      }
-  67          
+  55   2            UpDcClk();
+  56   2            
+  57   2      //      speak(2,1);
+  58   2          }
+  59   1        
+  60   1        if(!T1000MS)          //计时1000MS
+  61   1          {
+  62   2            T1000MS=T1000MS_TIME;
+  63   2      //            LED=!LED;
+  64   2            
+  65   2          }
+  66   1        test++;             //主程序在100MS内循环跑N次，此参数可观察单片机运行效率
+  67   1      }
+  68          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    134    ----
+   CODE SIZE        =    137    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =      4    ----
    PDATA SIZE       =   ----    ----

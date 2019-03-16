@@ -26,8 +26,7 @@
 #define		DISABLE		0
 
 #define 	ISDEBUG 	1
-#define 	TIMER2      1
-#define     CALCFUN     0
+#define 	TIMER2      0
 
 
 //主副机通信周期
@@ -132,17 +131,9 @@ void UpCtClk();
 void UpDcClk();
 void delay(u8 cnt);
 
+#if TIMER2
 void Timer2_Init(void);
-//void Timer2_Zero(void);
-
-
-
-
-
-
-
-
-
+#endif
 
 #endif
 

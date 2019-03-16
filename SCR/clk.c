@@ -38,6 +38,7 @@ void clk()							//设备运行时钟
 			Vup_clk();
 			UpCtClk();
 			BrakeClk();
+            Monitor_clk();//监控计数器
 		}
 
 	if(!T100MS)						//计时100MS

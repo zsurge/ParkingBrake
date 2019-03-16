@@ -165,6 +165,16 @@
 #define M_CLOS 		{ BigM5u= M_NA; BigM3u= M_NA; LitM= M_NA;}			//
 #define M_OPEN 		{ BigM5u= M_EN; BigM3u= M_EN; }						//
 #define M_SLOW	 	{ BigM5u= M_NA; BigM3u= M_EN; LitM= M_EN; }			//
+#if 0
+#define START_POSITION          250  //从第2500毫秒进入中断开始计算
+#define END_POSITION (START_POSITION+TIMER_FRE*SPRING_CHECK_NUM)  //从第50次进入中断开始计算
+#define TIMER_FRE  5                //计算周期
+#define THREE_SPRING_LOWER_LIMIT 18 //16+2 //如果统计总的圈数差大于这个值，说明已经不是三根弹簧了
+#define TWO_SPRINT_LOWER_LIMIT 28   //26+2 //如果统计总的圈数差大于这个值，说明已经不是两根弹簧了
+#define BASIC_SPRING_NUM 40         //38+2//弹簧标准值
+#define BASIC_OFFSET_250MS 4        //每250ms测速环转到的圈数
+#define SPRING_CHECK_NUM 6          //取样次数
+#endif
 
 
 typedef struct TRepairMotor
@@ -180,13 +190,6 @@ typedef struct TRepairMotor
 	u8 Direction; //电机转动方向	
 	u8 FlagValue;   //统计超限次数
 }RepairMotor_t;
-
-typedef struct TLimitValue
-{
-	u8 InitSpeRin;
-	u8 SafetyLimit;
-	u8 TimeMinValue;
-}LimitValue_t;
 
 
 
@@ -259,8 +262,7 @@ extern volatile u8 xdata DwSloBri;	//开始减速圈数计算(即开始设置BigM5u=M_NA )
 extern volatile bit SpeSta;			//测速缓存比较标志
 
 extern volatile RepairMotor_t gRepairMotor;  //判定当前是否需要抬闸
-//extern volatile LimitValue_t gLimitValue;//设置判定条件
-extern volatile u8 xdata gCurrentSpringNum;//设置弹簧条数，默认为3
+
 
 
 
@@ -275,6 +277,12 @@ void mRunClk();
 void mCtrClk();
 void mTaskControl();	
 void InitRepairMotor(void);
+
+void MonitorTask(void);
+void Monitor_clk(void);		//监控计数
+
+
+
 
 #endif
 
