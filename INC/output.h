@@ -34,6 +34,7 @@
 #define	DZP_UP		{ DZP1=DZP_ON; DZP0= DZP_NA; }			//µ¿’¢Ãß’¢∑¥¿°
 #define	DZP_DW		{ DZP1=DZP_NA; DZP0= DZP_ON; }			//µ¿’¢¬‰’¢∑¥¿°
 #define	DZP_CL		{ DZP1=DZP_NA; DZP0= DZP_NA; }			//µ¿’¢∑¥¿°«Â¡„
+#define DZP_ER      { DZP1=DZP_ON; DZP0= DZP_ON; }          //µØª…∂œ add 0319
 
 
 
@@ -90,12 +91,6 @@ void DZP_clk();
 void BrakeClk();
 void OPutTask();
 void BrakeClr();
-
-
-
-
-
-
 
 
 #endif

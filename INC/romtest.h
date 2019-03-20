@@ -16,6 +16,7 @@
 
 
 
+
 /**************************************************************************** 
 * 宏定义
 ****************************************************************************/
@@ -49,11 +50,11 @@ extern volatile u8 code eight;
 * 函数原型
 ****************************************************************************/
 
+
 extern volatile void SectotE(u16 dx, u16 hf, u8 tt);
 extern volatile void SectotWT(u16 dx, u8 nu, u8 tt);
 extern volatile bit SectotRT(u16 dx, u8 nu, u8 tt);
 extern volatile void RomTest();
-
 
 
 

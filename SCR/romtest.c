@@ -14,7 +14,7 @@
 ////存储器测试
 //************************************************************************************************************//
 void RomTest()
-{
+{    
 	u8 t=0,i=0; u8 xdata buff[8];
 	WDT_CONTR=DISABLE;		//内部看门狗关闭
 	err=ERR_EEPROM_WRITE;
@@ -52,6 +52,7 @@ void RomTest()
 					err=ERR_EEPROM_WRITE1;
 				}
 		}
+
 }
 
 
@@ -67,6 +68,8 @@ void RomTest()
 //************************************************************************************************************
 void SectotE(u16 dx, u16 hf, u8 tt)
 {
+
+
 	u8 k;
 	for(k=0;k<tt;k++)
 		{	
@@ -85,6 +88,8 @@ void SectotE(u16 dx, u16 hf, u8 tt)
 //************************************************************************************************************
 void SectotWT(u16 dx, u8 nu, u8 tt)
 {
+
+
 	u8 k,i; u8 xdata buff[8];
 	for(k=0;k<8;k++) buff[k]=nu;
 	for(k=0;k<tt;k++)
@@ -99,6 +104,7 @@ void SectotWT(u16 dx, u8 nu, u8 tt)
 			
 			delay(30);
 		}
+  
 }
 					
 
@@ -110,6 +116,7 @@ void SectotWT(u16 dx, u8 nu, u8 tt)
 //************************************************************************************************************
 bit SectotRT(u16 dx, u8 nu, u8 tt)
 {
+
 	u8 k,u,i;		u8 xdata buff[8];		 u16 cnum=0;
 
 	for(k=0;k<tt;k++)
@@ -131,6 +138,7 @@ bit SectotRT(u16 dx, u8 nu, u8 tt)
 	if(cnum<(512*tt-1)) return 1;
 	else return 0;
 	return 0;
+
 }
 
 

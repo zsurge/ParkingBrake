@@ -180,13 +180,15 @@
 typedef struct TRepairMotor
 {
 	u8 LastSpeRin;      //上一个测速环的值
-	u8 CurrentSpeRin;   //当前测速环转动圈数
+	//u8 CurrentSpeRin;   //当前测速环转动圈数
 	u8 AverageValue;    //所计算圈数平均值
-	u8 Times;           //统计次数
-	u16 CurrentCounts;  //统计次数
+	u8 Times;           //定时器计数
+	u8 CurrentCounts;   //统计次数
+	u8 CalcCounts;      //计算次数
 //	u8 CurrentMotorType;//当前电机类型
 //	u8 CurrentSprintType;//当前弹簧类型
 //	u8 CurrentMotorPosition;//当前电机位置
+    u8 ExFlag;     //是否执行定时器的标志位
 	u8 Direction; //电机转动方向	
 	u8 FlagValue;   //统计超限次数
 }RepairMotor_t;

@@ -1,4 +1,4 @@
-C51 COMPILER V9.00   MOTOR                                                                 03/16/2019 17:13:31 PAGE 1   
+C51 COMPILER V9.00   MOTOR                                                                 03/20/2019 17:26:43 PAGE 1   
 
 
 C51 COMPILER V9.00, COMPILATION OF MODULE MOTOR
@@ -62,7 +62,7 @@ line level    source
              -f(SpriBuf));
   52   1        StmSp= 0; StmSp2= 0; mRunTe= 0; DwSlo= 0; Stm= 0; StmSlow= 0; StmSlow2= 0; SpeSta= 0;
   53   1        InitRepairMotor();
-C51 COMPILER V9.00   MOTOR                                                                 03/16/2019 17:13:31 PAGE 2   
+C51 COMPILER V9.00   MOTOR                                                                 03/20/2019 17:26:43 PAGE 2   
 
   54   1      }
   55          
@@ -126,7 +126,7 @@ line level    source
  112          //**********************************************//
  113          //º¯ÊýÃû:  SpringTest(u8 cmd)
  114          //×÷ÓÃ:µ¯»ÉÀ­Á¦¼ì²â
-C51 COMPILER V9.00   MOTOR                                                                 03/16/2019 17:13:31 PAGE 3   
+C51 COMPILER V9.00   MOTOR                                                                 03/20/2019 17:26:43 PAGE 3   
 
  115          //ÊäÈë:cmd-²Ù×÷ÃüÁî
  116          //·µ»Ø:ÎÞ
@@ -190,7 +190,7 @@ line level    source
  171   2              else SpriBuf[SPRIBUF_STA]= SPRIFRCSTA_ERR;
  172   2              break;
  173   2      
-C51 COMPILER V9.00   MOTOR                                                                 03/16/2019 17:13:31 PAGE 4   
+C51 COMPILER V9.00   MOTOR                                                                 03/20/2019 17:26:43 PAGE 4   
 
  174   2            case SPRI_LOG_PARA1:
  175   2              SpriBuf[SPRIBUF_END_MAX]= 0;
@@ -254,7 +254,7 @@ line level    source
  232   4                      mType= M18S;          //Ê¶±ð»úÐ¾ÀàÐÍ-¸³Öµ
  233   4                      mRunTe=M18SRUNTIME;       //¸³Öµµç»úÔËÐÐ³¬Ê±Ê±¼ä
  234   4                      if(!StmSp2) StmSp2=50;      //µÚÒ»´ÎÂäÕ¢Óö×èÊ±¼äÎ´Ê¶±ðÊ±£¬Ç¿ÐÐ¸³Öµ
-C51 COMPILER V9.00   MOTOR                                                                 03/16/2019 17:13:31 PAGE 5   
+C51 COMPILER V9.00   MOTOR                                                                 03/20/2019 17:26:43 PAGE 5   
 
  235   4                      StmInt(M18S);         //»ñÈ¡Óö×èÁéÃô¶È
  236   4                      DwSloInt(10,35);        //»ñÈ¡¿ªÊ¼¼õËÙ¡¢»º³åµÄ²ÎÊý
@@ -318,7 +318,7 @@ line level    source
  294   3                  for(i=0; i < (STMBUF_POST-1); i++)
  295   3                    {
  296   4                      if(StmNumBuf[i] > StmNum3) StmNum3= StmNumBuf[i];
-C51 COMPILER V9.00   MOTOR                                                                 03/16/2019 17:13:31 PAGE 6   
+C51 COMPILER V9.00   MOTOR                                                                 03/20/2019 17:26:43 PAGE 6   
 
  297   4                    }
  298   3                  StmNumBuf[STMBUF_DATA]= StmNum3;
@@ -382,7 +382,7 @@ line level    source
  355   1        return 0;
  356   1      }
  357          
-C51 COMPILER V9.00   MOTOR                                                                 03/16/2019 17:13:31 PAGE 7   
+C51 COMPILER V9.00   MOTOR                                                                 03/20/2019 17:26:43 PAGE 7   
 
  358          
  359          
@@ -407,303 +407,323 @@ line level    source
  378   2      /***********************************************************************************************/
  379   2            case MTASK_UP:
  380   2              InitRepairMotor();
- 381   2              gRepairMotor.Direction = POS_UP;        
- 382   2              BrakeClr();
- 383   2              KnowMtyp(MLN_UP,MTPYREAD,POS_HOR);
- 384   2              //GetLimitValue(mType);//»ñÈ¡±ß½çÖµ
- 385   2              SpringTest(SPRI_CLR_PARA);
- 386   2              SpeRinN= 0;
- 387   2              mCorNum= M_OF_TIME;
- 388   2              mTask= MTASK_UP1;
- 389   2              mPosD2= POS_UP;
- 390   2              M_CLOS;
- 391   2              break;
- 392   2            case MTASK_UP1:
- 393   2              if(!mCorNum) { MCR_UP; mCorNum= M_ON_TIME;  mTask= MTASK_UP2; }
- 394   2              break;
- 395   2            case MTASK_UP2:
- 396   2              if(!mCorNum)
- 397   2                {
- 398   3                  mRunNum= mRunTe;        //´óµç»úÔËÐÐÊ±¼äÏÞÖÆ
- 399   3                  mCorNum= M_CV_UP_TIME;      //Õý·´×ªÇÐ»»Æð²½Ê±¼ä
- 400   3                  mTask= MTASK_UP3;
- 401   3                  if(mPosD== POS_DW)        //ÔÚÂäÕ¢¹ý³ÌÖÐÌ§Õ¢
- 402   3                    {
- 403   4                      LitM= M_EN;       //Âä/Ì§ÇÐ»»Ê±£¬Ð¡µç»úÏÈÌ§Õ¢1Ãë£¬µÖÏûÂäÕ¢Ê±¸ËµÄ¹ßÐÔ
- 404   4                    }
- 405   3                  mPosD= POS_UP;
- 406   3                  M_OPEN;
- 407   3                }
- 408   2              break;
- 409   2            case MTASK_UP3:
- 410   2              if(!mCorNum) LitM= M_NA;
- 411   2              if(!mRunNum) { mPosD=POS_INT; err_volu(ERR_UP_FAIL); }    //Ì§Õ¢³¬Ê±Ê§°Ü
- 412   2              else if(StmCtr(StmSp + StmSlow+80))
- 413   2                {
- 414   3                  err_volu(ERR_DW_DRAG); 
- 415   3                }
- 416   2              else;
- 417   2              break;  
- 418   2      /***********************************************************************************************/
- 419   2      //          Ì§Õ¢»º³å    
-C51 COMPILER V9.00   MOTOR                                                                 03/16/2019 17:13:31 PAGE 8   
+ 381   2                      gRepairMotor.ExFlag = 1;
+ 382   2              gRepairMotor.Direction = POS_UP;        
+ 383   2              BrakeClr();
+ 384   2              KnowMtyp(MLN_UP,MTPYREAD,POS_HOR);
+ 385   2              //GetLimitValue(mType);//»ñÈ¡±ß½çÖµ
+ 386   2              SpringTest(SPRI_CLR_PARA);
+ 387   2              SpeRinN= 0;
+ 388   2              mCorNum= M_OF_TIME;
+ 389   2              mTask= MTASK_UP1;
+ 390   2              mPosD2= POS_UP;
+ 391   2              M_CLOS;
+ 392   2              break;
+ 393   2            case MTASK_UP1:
+ 394   2              if(!mCorNum) { MCR_UP; mCorNum= M_ON_TIME;  mTask= MTASK_UP2; }
+ 395   2              break;
+ 396   2            case MTASK_UP2:
+ 397   2              if(!mCorNum)
+ 398   2                {
+ 399   3                  mRunNum= mRunTe;        //´óµç»úÔËÐÐÊ±¼äÏÞÖÆ
+ 400   3                  mCorNum= M_CV_UP_TIME;      //Õý·´×ªÇÐ»»Æð²½Ê±¼ä
+ 401   3                  mTask= MTASK_UP3;
+ 402   3                  if(mPosD== POS_DW)        //ÔÚÂäÕ¢¹ý³ÌÖÐÌ§Õ¢
+ 403   3                    {
+ 404   4                      LitM= M_EN;       //Âä/Ì§ÇÐ»»Ê±£¬Ð¡µç»úÏÈÌ§Õ¢1Ãë£¬µÖÏûÂäÕ¢Ê±¸ËµÄ¹ßÐÔ
+ 405   4                    }
+ 406   3                  mPosD= POS_UP;
+ 407   3                  M_OPEN;
+ 408   3                }
+ 409   2              break;
+ 410   2            case MTASK_UP3:
+ 411   2              if(!mCorNum) LitM= M_NA;
+ 412   2              if(!mRunNum) { mPosD=POS_INT; err_volu(ERR_UP_FAIL); }    //Ì§Õ¢³¬Ê±Ê§°Ü
+ 413   2              else if(StmCtr(StmSp + StmSlow+80))
+ 414   2                {
+ 415   3                  err_volu(ERR_DW_DRAG); 
+ 416   3                }
+ 417   2              else;
+ 418   2              break;  
+ 419   2      /***********************************************************************************************/
+C51 COMPILER V9.00   MOTOR                                                                 03/20/2019 17:26:43 PAGE 8   
 
- 420   2      /***********************************************************************************************/
- 421   2            case MTASK_US:
- 422   2              KnowMtyp( MNA,MLN_UP,POS_VER);
- 423   2              LitM= M_NA;
- 424   2              BigM5u= M_NA;
- 425   2              mCorNum= M_OF_TIME;
- 426   2              mTask= MTASK_US1;
- 427   2              mPosD= POS_VER;
- 428   2              mPosD2= POS_VER;
- 429   2              break;
- 430   2            case MTASK_US1:
- 431   2              if(!mCorNum) { MCR_UP; mCorNum= M_ON_TIME; mTask= MTASK_US2; }
- 432   2              break;
- 433   2            case MTASK_US2:
- 434   2              if(!mCorNum)
- 435   2                {
- 436   3                  M_SLOW;
- 437   3                  mRunNum= M_LIT_UP_TIME;
- 438   3                  mTask= MTASK_US3;
- 439   3                }
- 440   2              break;
- 441   2            case MTASK_US3:
- 442   2              if(!mRunNum)
- 443   2                {
- 444   3                  LitM= M_NA;
- 445   3                  if(PosRal== POS_VER) mTask= MTASK_US5;
- 446   3                  else { mTask= MTASK_US4; mPosD=POS_INT; }
- 447   3                }
- 448   2              else if(PosRal!= POS_VER) { mPosD=POS_INT; Event(ITASK_INER_DW); BrakeClr(); }
- 449   2              break;
- 450   2            case MTASK_US4:
- 451   2              if(PosRal== POS_VER) mTask= MTASK_US5; 
- 452   2               err_volu(ERR_US_FAIL);                 //Ì§Õ¢»º³åÊ§°Ü
- 453   2              break;
- 454   2            case MTASK_US5:
- 455   2               if(PosRal!= POS_VER) { mPosD=POS_INT; Event(ITASK_INER_DW); BrakeClr(); break; }
- 456   2               if(mPosD== POS_INT) mPosD= POS_VER;
- 457   2      //         Timer2_Zero();
- 458   2              break;
- 459   2              
- 460   2      /***********************************************************************************************/
- 461   2      //                ÂäÕ¢    
- 462   2      /***********************************************************************************************/       
- 463   2            case MTASK_DW:
- 464   2              InitRepairMotor();
- 465   2              gRepairMotor.Direction = POS_DW;                
- 466   2              BrakeClr();
- 467   2              KnowMtyp(MLN_DW,MTPYREAD,POS_VER);
- 468   2              CalcuStm(STMBUF_CLR1);
- 469   2              SpringTest(SPRI_CLR_PARA);
- 470   2              SpeRinN= 0;
- 471   2              mCorNum= M_OF_TIME;
- 472   2              mTask= MTASK_DW1;
- 473   2              mPosD= POS_DW;
- 474   2              mPosD2= POS_DW;
- 475   2              M_CLOS;
- 476   2              break;
- 477   2            case MTASK_DW1:
- 478   2              if(!mCorNum) { MCR_DW; mCorNum= M_ON_TIME; mTask= MTASK_DW2; }
- 479   2              break;
- 480   2            case MTASK_DW2:
- 481   2              if(!mCorNum)
-C51 COMPILER V9.00   MOTOR                                                                 03/16/2019 17:13:31 PAGE 9   
+ 420   2      //          Ì§Õ¢»º³å    
+ 421   2      /***********************************************************************************************/
+ 422   2            case MTASK_US:
+ 423   2              KnowMtyp( MNA,MLN_UP,POS_VER);
+ 424   2              LitM= M_NA;
+ 425   2              BigM5u= M_NA;
+ 426   2              mCorNum= M_OF_TIME;
+ 427   2              mTask= MTASK_US1;
+ 428   2              mPosD= POS_VER;
+ 429   2              mPosD2= POS_VER;
+ 430   2              break;
+ 431   2            case MTASK_US1:
+ 432   2              if(!mCorNum) { MCR_UP; mCorNum= M_ON_TIME; mTask= MTASK_US2; }
+ 433   2              break;
+ 434   2            case MTASK_US2:
+ 435   2              if(!mCorNum)
+ 436   2                {
+ 437   3                  M_SLOW;
+ 438   3                  mRunNum= M_LIT_UP_TIME;
+ 439   3                  mTask= MTASK_US3;
+ 440   3                }
+ 441   2              break;
+ 442   2            case MTASK_US3:
+ 443   2              if(!mRunNum)
+ 444   2                {
+ 445   3                  LitM= M_NA;
+ 446   3                  if(PosRal== POS_VER) mTask= MTASK_US5;
+ 447   3                  else { mTask= MTASK_US4; mPosD=POS_INT; }
+ 448   3                }
+ 449   2              else if(PosRal!= POS_VER) { mPosD=POS_INT; Event(ITASK_INER_DW); BrakeClr(); }
+ 450   2              break;
+ 451   2            case MTASK_US4:
+ 452   2              if(PosRal== POS_VER) mTask= MTASK_US5; 
+ 453   2               err_volu(ERR_US_FAIL);                 //Ì§Õ¢»º³åÊ§°Ü
+ 454   2              break;
+ 455   2            case MTASK_US5:
+ 456   2               if(PosRal!= POS_VER) { mPosD=POS_INT; Event(ITASK_INER_DW); BrakeClr(); break; }
+ 457   2               if(mPosD== POS_INT) mPosD= POS_VER;
+ 458   2      //         Timer2_Zero();
+ 459   2              break;
+ 460   2              
+ 461   2      /***********************************************************************************************/
+ 462   2      //                ÂäÕ¢    
+ 463   2      /***********************************************************************************************/       
+ 464   2            case MTASK_DW:
+ 465   2              InitRepairMotor();
+ 466   2                      gRepairMotor.ExFlag = 0;
+ 467   2              gRepairMotor.Direction = POS_DW;                
+ 468   2              BrakeClr();
+ 469   2              KnowMtyp(MLN_DW,MTPYREAD,POS_VER);
+ 470   2              CalcuStm(STMBUF_CLR1);
+ 471   2              SpringTest(SPRI_CLR_PARA);
+ 472   2              SpeRinN= 0;
+ 473   2              mCorNum= M_OF_TIME;
+ 474   2              mTask= MTASK_DW1;
+ 475   2              mPosD= POS_DW;
+ 476   2              mPosD2= POS_DW;
+ 477   2              M_CLOS;
+ 478   2              break;
+ 479   2            case MTASK_DW1:
+ 480   2              if(!mCorNum) { MCR_DW; mCorNum= M_ON_TIME; mTask= MTASK_DW2; }
+ 481   2              break;
+C51 COMPILER V9.00   MOTOR                                                                 03/20/2019 17:26:43 PAGE 9   
 
- 482   2                {
- 483   3                  mRunNum= mRunTe;
- 484   3                  mCorNum= M_CV_DW_TIME;
- 485   3                  mTask= MTASK_DW3;
- 486   3                  M_OPEN;
- 487   3                }
- 488   2              break;
- 489   2            case MTASK_DW3:
- 490   2              if(mType > MTPYREAD)         //ÒÑÊ¶±ð»úÐ¾ÀàÐÍÊ±£¬²Ù×÷ÈçÏÂ
- 491   2                {
- 492   3                  if(SpeRinN < 26)       //Æð²½Ê±£¬Ç°26È¦µÄÓö×èÁéÃô¶È = Ä¬ÈÏÁéÃô¶È + ¹¤×÷ÁéÃô¶È 
- 493   3                    StmSlow= STMMAXTIME;
- 494   3                  else if(SpeRinN > DwSlo)   //¿ªÊ¼»º³å½×¶Î
- 495   3                    {
- 496   4                      LitM= M_EN;      //»º³å
- 497   4                      SpringTest(SPRI_RED_PARA);  //»ñÈ¡µ¯»ÉµÄÀ­Á¦Êý¾Ý
- 498   4                    }
- 499   3                  else if(SpeRinN > DwSloBri)  //¿ªÊ¼¼õËÙ½×¶Î
- 500   3                    {
- 501   4                      BigM5u= M_NA;      //¼õËÙ
- 502   4                      SpringTest(SPRI_RED_PARA);  //»ñÈ¡µ¯»ÉµÄÀ­Á¦Êý¾Ý
- 503   4                      StmSlow= StmSlow2;   //ÂäÕ¢»º³åÊ±£¬Óö×èÁéÃô¶Èµ÷µÍ(ÊýÖµÔ½´ó£¬ÁéÃô¶ÈÔ½µÍ)
- 504   4                    }
- 505   3                  else StmSlow= 0;       //ÔÚÕý³£ÂäÕ¢½×¶Î£¬Óö×èÁéÃô¶ÈµÄ¼õËÙ¡¢»º³å²¹³¥ÇåÁã
- 506   3                  if(!mCorNum) StmSp2= CalcuStm(STMBUF_AVER_SPE); //»ñÈ¡ÂäÕ¢Ê±Æ½¾ùËÙ¶È
- 507   3                }
- 508   2              else                 //Î´Ê¶±ð»úÐ¾ÀàÐÍÊ±£¬²Ù×÷ÈçÏÂ
- 509   2                {
- 510   3                  if(SpeRinN < 20)       //Æð²½Ê±£¬Ç°20È¦µÄÓö×èÁéÃ÷¶È = Ä¬ÈÏÁéÃô¶ÈµÄ2±¶
- 511   3                    StmSlow= STMMAXTIME;
- 512   3                  else StmSlow= 0;
- 513   3                  if(SpeRinN > 40)       //ÔËÐÐ40È¦ºó£¬ÓÃ»º³åµÄ·½Ê½ÂäÕ¢£¬È·±£Ê×´ÎÉÏµçÂäÕ¢Æ½ÎÈ
- 514   3                    { 
- 515   4                      BigM5u= M_NA; LitM= M_EN; //Ê×´ÎÉÏµçÂäÕ¢ÌáÇ°¼õËÙºÍ»º³å
- 516   4                      SpringTest(SPRI_RED_PARA);  //»ñÈ¡µ¯»ÉµÄÀ­Á¦Êý¾Ý
- 517   4                    }
- 518   3                  if(!mCorNum) StmSp2= CalcuStm(STMBUF_AVER_SPE);   //»ñÈ¡µÚÒ»´ÎÂäÕ¢µÄÆ½¾ùËÙ¶È
- 519   3                }
- 520   2      
- 521   2              if(!mRunNum)              //³¬Ê±Í£Ö¹ÂäÕ¢
- 522   2                {
- 523   3                  mPosD= POS_INT; 
- 524   3                  BigM5u= M_NA; 
- 525   3                  LitM= M_NA; 
- 526   3                  err_volu(ERR_DW_FAIL); 
- 527   3                }
- 528   2              else if(StmCtr(StmSp + StmSlow))   //ÂäÕ¢Óö×è
- 529   2                {
- 530   3                  if(iTask== ITASK_COER_UP) break;  //Ë®Æ½Î»Ç¿ÖÆÌ§Õ¢ÈÎÎñÊ±£¬²»Ö´ÐÐÓö×èÈÎÎñ
- 531   3                  Event(ITASK_DRAG_UP); 
- 532   3                  err_volu(ERR_DW_DRAG); 
- 533   3                  CalcuStm(STMBUF_CLR2);  //Óö×èºó£¬Óö×èÁéÃô¶ÈÅÐ¶ÏÐÞÕýÊý×éÇåÁã
- 534   3                  DgStaClr();
- 535   3                  if(ViceSta==VICE_STA_EN) ViceSta=VICE_STA_DRAG;
- 536   3                  break;
- 537   3                }
- 538   2              else;
- 539   2              break;
- 540   2              
- 541   2      /***********************************************************************************************/
- 542   2      //              ÂäÕ¢»º³å
- 543   2      /***********************************************************************************************/ 
-C51 COMPILER V9.00   MOTOR                                                                 03/16/2019 17:13:31 PAGE 10  
+ 482   2            case MTASK_DW2:
+ 483   2              if(!mCorNum)
+ 484   2                {
+ 485   3                  mRunNum= mRunTe;
+ 486   3                  mCorNum= M_CV_DW_TIME;
+ 487   3                  mTask= MTASK_DW3;
+ 488   3                  M_OPEN;
+ 489   3                }
+ 490   2              break;
+ 491   2            case MTASK_DW3:
+ 492   2              if(mType > MTPYREAD)         //ÒÑÊ¶±ð»úÐ¾ÀàÐÍÊ±£¬²Ù×÷ÈçÏÂ
+ 493   2                {
+ 494   3                  if(SpeRinN < 26)       //Æð²½Ê±£¬Ç°26È¦µÄÓö×èÁéÃô¶È = Ä¬ÈÏÁéÃô¶È + ¹¤×÷ÁéÃô¶È 
+ 495   3                    StmSlow= STMMAXTIME;
+ 496   3                  else if(SpeRinN > DwSlo)   //¿ªÊ¼»º³å½×¶Î
+ 497   3                    {
+ 498   4                      LitM= M_EN;      //»º³å
+ 499   4                      SpringTest(SPRI_RED_PARA);  //»ñÈ¡µ¯»ÉµÄÀ­Á¦Êý¾Ý
+ 500   4                    }
+ 501   3                  else if(SpeRinN > DwSloBri)  //¿ªÊ¼¼õËÙ½×¶Î
+ 502   3                    {
+ 503   4                      BigM5u= M_NA;      //¼õËÙ
+ 504   4                      SpringTest(SPRI_RED_PARA);  //»ñÈ¡µ¯»ÉµÄÀ­Á¦Êý¾Ý
+ 505   4                      StmSlow= StmSlow2;   //ÂäÕ¢»º³åÊ±£¬Óö×èÁéÃô¶Èµ÷µÍ(ÊýÖµÔ½´ó£¬ÁéÃô¶ÈÔ½µÍ)
+ 506   4                    }
+ 507   3                  else StmSlow= 0;       //ÔÚÕý³£ÂäÕ¢½×¶Î£¬Óö×èÁéÃô¶ÈµÄ¼õËÙ¡¢»º³å²¹³¥ÇåÁã
+ 508   3                  if(!mCorNum) StmSp2= CalcuStm(STMBUF_AVER_SPE); //»ñÈ¡ÂäÕ¢Ê±Æ½¾ùËÙ¶È
+ 509   3                }
+ 510   2              else                 //Î´Ê¶±ð»úÐ¾ÀàÐÍÊ±£¬²Ù×÷ÈçÏÂ
+ 511   2                {
+ 512   3                  if(SpeRinN < 20)       //Æð²½Ê±£¬Ç°20È¦µÄÓö×èÁéÃ÷¶È = Ä¬ÈÏÁéÃô¶ÈµÄ2±¶
+ 513   3                    StmSlow= STMMAXTIME;
+ 514   3                  else StmSlow= 0;
+ 515   3                  if(SpeRinN > 40)       //ÔËÐÐ40È¦ºó£¬ÓÃ»º³åµÄ·½Ê½ÂäÕ¢£¬È·±£Ê×´ÎÉÏµçÂäÕ¢Æ½ÎÈ
+ 516   3                    { 
+ 517   4                      BigM5u= M_NA; LitM= M_EN; //Ê×´ÎÉÏµçÂäÕ¢ÌáÇ°¼õËÙºÍ»º³å
+ 518   4                      SpringTest(SPRI_RED_PARA);  //»ñÈ¡µ¯»ÉµÄÀ­Á¦Êý¾Ý
+ 519   4                    }
+ 520   3                  if(!mCorNum) StmSp2= CalcuStm(STMBUF_AVER_SPE);   //»ñÈ¡µÚÒ»´ÎÂäÕ¢µÄÆ½¾ùËÙ¶È
+ 521   3                }
+ 522   2      
+ 523   2              if(!mRunNum)              //³¬Ê±Í£Ö¹ÂäÕ¢
+ 524   2                {
+ 525   3                  mPosD= POS_INT; 
+ 526   3                  BigM5u= M_NA; 
+ 527   3                  LitM= M_NA; 
+ 528   3                  err_volu(ERR_DW_FAIL); 
+ 529   3                }
+ 530   2              else if(StmCtr(StmSp + StmSlow))   //ÂäÕ¢Óö×è
+ 531   2                {
+ 532   3                  if(iTask== ITASK_COER_UP) break;  //Ë®Æ½Î»Ç¿ÖÆÌ§Õ¢ÈÎÎñÊ±£¬²»Ö´ÐÐÓö×èÈÎÎñ
+ 533   3                  Event(ITASK_DRAG_UP); 
+ 534   3                  err_volu(ERR_DW_DRAG); 
+ 535   3                  CalcuStm(STMBUF_CLR2);  //Óö×èºó£¬Óö×èÁéÃô¶ÈÅÐ¶ÏÐÞÕýÊý×éÇåÁã
+ 536   3                  DgStaClr();
+ 537   3                  if(ViceSta==VICE_STA_EN) ViceSta=VICE_STA_DRAG;
+ 538   3                  break;
+ 539   3                }
+ 540   2              else;
+ 541   2              break;
+ 542   2              
+ 543   2      /***********************************************************************************************/
+C51 COMPILER V9.00   MOTOR                                                                 03/20/2019 17:26:43 PAGE 10  
 
- 544   2            case MTASK_DS:
- 545   2              SpringTest(SPRI_LOG_PARA1);
- 546   2              if(CalcuStm(STMBUF_CALC_SPE)) StmInt(mType);  //Ã¿ÂäÕ¢Á½´Îºó£¬¼ÆËãÓö×èÁéÃô¶ÈÊÇ·ñÒªÐÞÕý
- 547   2              KnowMtyp(MNA,MLN_DW,POS_HOR);
- 548   2              LitM= M_NA;
- 549   2              BigM5u= M_NA;
- 550   2              mCorNum= M_OF_TIME;
- 551   2              mTask= MTASK_DS1;
- 552   2              mPosD= POS_HOR; 
- 553   2              mPosD2= POS_HOR; 
- 554   2              break;
- 555   2            case MTASK_DS1:
- 556   2              if(!mCorNum) { MCR_DW; mCorNum= M_ON_TIME; mTask= MTASK_DS2; }
- 557   2              break;
- 558   2            case MTASK_DS2:
- 559   2              if(!mCorNum)
- 560   2                {
- 561   3                  M_SLOW;
- 562   3                  mRunNum= M_LIT_DW_TIME;
- 563   3                  mTask= MTASK_DS3;
- 564   3                }
- 565   2              break;
- 566   2            case MTASK_DS3:
- 567   2              if(!mRunNum)
- 568   2                {
- 569   3                  LitM= M_NA;
- 570   3                  if(PosRal== POS_HOR) mTask= MTASK_DS5;
- 571   3                  else { mTask= MTASK_DS4; mPosD=POS_INT; }
- 572   3                }
- 573   2              else if(PosRal!= POS_HOR) { mPosD= POS_INT; Event(ITASK_COER_UP); BrakeClr();}
- 574   2              break;
- 575   2            case MTASK_DS4:
- 576   2              if(PosRal== POS_HOR) mTask= MTASK_DS5;
- 577   2               err_volu(ERR_DS_FAIL);   //Ì§Õ¢»º³åÊ§°Ü
- 578   2              break;
- 579   2            case MTASK_DS5:
- 580   2              if(mPosD== POS_INT) mPosD= POS_HOR;
- 581   2              if(PosRal!= POS_HOR) { mPosD= POS_INT; Event(ITASK_COER_UP); BrakeClr(); }
- 582   2      //        Timer2_Zero();
- 583   2              break;
- 584   2              
- 585   2            default:  break;
- 586   2          }
- 587   1      }
- 588          
- 589          void Monitor_clk(void)       //¼à¿Ø¼ÆÊý
- 590          {
- 591   1          if(gRepairMotor.CurrentCounts)
- 592   1          {
- 593   2              gRepairMotor.CurrentCounts--;
- 594   2          }
- 595   1      
- 596   1      }
- 597          
+ 544   2      //              ÂäÕ¢»º³å
+ 545   2      /***********************************************************************************************/ 
+ 546   2            case MTASK_DS:
+ 547   2              SpringTest(SPRI_LOG_PARA1);
+ 548   2              if(CalcuStm(STMBUF_CALC_SPE)) StmInt(mType);  //Ã¿ÂäÕ¢Á½´Îºó£¬¼ÆËãÓö×èÁéÃô¶ÈÊÇ·ñÒªÐÞÕý
+ 549   2              KnowMtyp(MNA,MLN_DW,POS_HOR);
+ 550   2              LitM= M_NA;
+ 551   2              BigM5u= M_NA;
+ 552   2              mCorNum= M_OF_TIME;
+ 553   2              mTask= MTASK_DS1;
+ 554   2              mPosD= POS_HOR; 
+ 555   2              mPosD2= POS_HOR; 
+ 556   2              break;
+ 557   2            case MTASK_DS1:
+ 558   2              if(!mCorNum) { MCR_DW; mCorNum= M_ON_TIME; mTask= MTASK_DS2; }
+ 559   2              break;
+ 560   2            case MTASK_DS2:
+ 561   2              if(!mCorNum)
+ 562   2                {
+ 563   3                  M_SLOW;
+ 564   3                  mRunNum= M_LIT_DW_TIME;
+ 565   3                  mTask= MTASK_DS3;
+ 566   3                }
+ 567   2              break;
+ 568   2            case MTASK_DS3:
+ 569   2              if(!mRunNum)
+ 570   2                {
+ 571   3                  LitM= M_NA;
+ 572   3                  if(PosRal== POS_HOR) mTask= MTASK_DS5;
+ 573   3                  else { mTask= MTASK_DS4; mPosD=POS_INT; }
+ 574   3                }
+ 575   2              else if(PosRal!= POS_HOR) { mPosD= POS_INT; Event(ITASK_COER_UP); BrakeClr();}
+ 576   2              break;
+ 577   2            case MTASK_DS4:
+ 578   2              if(PosRal== POS_HOR) mTask= MTASK_DS5;
+ 579   2               err_volu(ERR_DS_FAIL);   //Ì§Õ¢»º³åÊ§°Ü
+ 580   2              break;
+ 581   2            case MTASK_DS5:
+ 582   2              if(mPosD== POS_INT) mPosD= POS_HOR;
+ 583   2              if(PosRal!= POS_HOR) { mPosD= POS_INT; Event(ITASK_COER_UP); BrakeClr(); }
+ 584   2      //        Timer2_Zero();
+ 585   2              break;
+ 586   2              
+ 587   2            default:  break;
+ 588   2          }
+ 589   1      }
+ 590          
+ 591          void Monitor_clk(void)       //¼à¿Ø¼ÆÊý
+ 592          {
+ 593   1          if(gRepairMotor.Times)
+ 594   1          {
+ 595   2              gRepairMotor.Times--;
+ 596   2          }
+ 597   1      }
  598          
- 599          void MonitorTask(void)
- 600          {
- 601   1      
- 602   1      //    if(gRepairMotor.CurrentCounts == 0 && gRepairMotor.Direction == POS_DW)
- 603   1      //    { 
- 604   1      //        //´òÓ¡µ±Ç°²âËÙ»·Öµ
- 605   1      //        Uart_Print(3,gRepairMotor.Direction);   
-C51 COMPILER V9.00   MOTOR                                                                 03/16/2019 17:13:31 PAGE 11  
+ 599          #define START_POSITION 35   //´ÓµÚ50´Î½øÈëÖÐ¶Ï¿ªÊ¼¼ÆËã
+ 600          #define END_POSITION (START_POSITION+TIMER_FRE*SPRING_CHECK_NUM ) //´ÓµÚ50´Î½øÈëÖÐ¶Ï¿ªÊ¼¼ÆËã
+ 601          #define TIMER_FRE  5        //¼ÆËãÖÜÆÚ
+ 602          #define THREE_SPRING_LOWER_LIMIT 11//16+2 //Èç¹ûÍ³¼Æ×ÜµÄÈ¦Êý²î´óÓÚÕâ¸öÖµ£¬ËµÃ÷ÒÑ¾­²»ÊÇÈý¸ùµ¯»ÉÁË
+ 603          #define TWO_SPRINT_LOWER_LIMIT 28//26+2 //Èç¹ûÍ³¼Æ×ÜµÄÈ¦Êý²î´óÓÚÕâ¸öÖµ£¬ËµÃ÷ÒÑ¾­²»ÊÇÁ½¸ùµ¯»ÉÁË
+ 604          #define BASIC_SPRING_NUM 39   //³õÊ¼Öµ
+ 605          #define BASIC_OFFSET_250MS 6 //Ã¿250ms²âËÙ»·×ªµ½µÄÈ¦Êý
+C51 COMPILER V9.00   MOTOR                                                                 03/20/2019 17:26:43 PAGE 11  
 
- 606   1      //        gRepairMotor.CurrentCounts = 5;
- 607   1      
- 608   1      //    }
- 609   1      
- 610   1          if(gRepairMotor.CurrentCounts == 0 && gRepairMotor.Direction == POS_DW) //²âËÙ»·×ª¶¯²Å¿ªÊ¼½øÀ´
- 611   1          { 
- 612   2              if(gRepairMotor.Times >= 0 && gRepairMotor.Times < 120)//40
- 613   2              {
- 614   3                  gRepairMotor.Times++;
- 615   3      
- 616   3                  //´òÓ¡µ±Ç°²âËÙ»·Öµ
- 617   3                  Uart_Print(3,gRepairMotor.Direction);  
- 618   3                  
- 619   3      //            if(SpeRinN >= BASIC_SPRING_NUM + BASIC_OFFSET_250MS*gRepairMotor.Times)
- 620   3      //            {
- 621   3      //                gRepairMotor.FlagValue ++;//ÕâÀïÓ¦¸Ã²»»á³öÏÖ£¬Èç¹û³öÏÖ¾ÍÊÇ´óÎÊÌâ
- 622   3      //            }   
- 623   3      
- 624   3      //            gRepairMotor.LastSpeRin = SpeRinN;
- 625   3      //            //¼ÆËãµ±Ç°¶à×ßÁË¶àÉÙÈ¦
- 626   3      //            if(gRepairMotor.LastSpeRin > (BASIC_SPRING_NUM+BASIC_OFFSET_250MS*(gRepairMotor.Times-1)))
- 627   3      //            {                
- 628   3      //                gRepairMotor.AverageValue += gRepairMotor.LastSpeRin-(BASIC_SPRING_NUM+BASIC_OFFSET_250M
-             -S*(gRepairMotor.Times-1));                
- 629   3      //            }
- 630   3      
- 631   3      //            //Èç¹û¿ªÊ¼¾Í¶à×ßºÜ¶à¶àÓÚµ±Ç°ÆµÊýµÄ75%,Ö±½Ó±¨´í
- 632   3      //            if(gRepairMotor.Times <= 4 && gRepairMotor.AverageValue >= BASIC_OFFSET_250MS*3)
- 633   3      //            {
- 634   3      //                Event(ITASK_DG_UP);
- 635   3      //                err_volu(ERR_SPRI_ERR); 
- 636   3      //            }
- 637   3      
- 638   3      //            //Í¬ÑùµÄ£¬ÈôÊÇÈ¦Êý×ßµÄÌ«¶à£¬¾ÍÖ±½Ó±¨´í
- 639   3      //            if (gRepairMotor.FlagValue >= 4 || gRepairMotor.AverageValue >= TWO_SPRINT_LOWER_LIMIT) //²»
-             -ÐèÍêÈ«×ßÍêÅÐ¶¨£¬¿ÉÒÔÖ±½ÓÈÏÎªÊÇÓÐÎÊÌâµÄ 
- 640   3      //            //if (gRepairMotor.FlagValue >= 4 )
- 641   3      //            {            
- 642   3      //                Event(ITASK_DG_UP);
- 643   3      //                err_volu(ERR_SPRI_ERR);
- 644   3      //                
- 645   3      //            }
- 646   3      //            
- 647   3      //            //Á½¸ùµ¯»É±¨¾¯
- 648   3      //            if(gRepairMotor.AverageValue >= THREE_SPRING_LOWER_LIMIT)
- 649   3      //            {
- 650   3      //                //±¨¾¯£¬Ö»ÓÐÁ½¸ùµ¯»É   
- 651   3      //                err_volu(ERR_SPRI_LIT);
- 652   3      //            }
- 653   3                  gRepairMotor.CurrentCounts = 5;
- 654   3              }    
- 655   2          }
- 656   1      }
- 657          
- 658          
+ 606          #define SPRING_CHECK_NUM 8//È¡Ñù´ÎÊý
+ 607          
+ 608          
+ 609          void MonitorTask(void)
+ 610          {
+ 611   1      
+ 612   1      //    if(gRepairMotor.CurrentCounts == 0 && gRepairMotor.Direction == POS_DW)
+ 613   1      //    { 
+ 614   1      //        //´òÓ¡µ±Ç°²âËÙ»·Öµ
+ 615   1      //        Uart_Print(3,gRepairMotor.Direction);   
+ 616   1      //        gRepairMotor.CurrentCounts = 5;
+ 617   1      
+ 618   1      //    }
+ 619   1      
+ 620   1          if(gRepairMotor.Times == 0 && gRepairMotor.ExFlag == 0 && gRepairMotor.Direction == POS_DW) //²âËÙ»·×ª
+             -¶¯²Å¿ªÊ¼½øÀ´
+ 621   1          {
+ 622   2              gRepairMotor.CurrentCounts++;
+ 623   2              
+ 624   2              if((gRepairMotor.CurrentCounts >= START_POSITION) && (gRepairMotor.CurrentCounts%TIMER_FRE == 0) &
+             -& (gRepairMotor.CurrentCounts < END_POSITION))//39
+ 625   2              {   
+ 626   3                  gRepairMotor.CalcCounts++;
+ 627   3                  if(SpeRinN > BASIC_SPRING_NUM + BASIC_OFFSET_250MS*gRepairMotor.CalcCounts)
+ 628   3                  {
+ 629   4                      gRepairMotor.FlagValue += 1;//ÕâÀïÓ¦¸Ã²»»á³öÏÖ£¬Èç¹û³öÏÖ¾ÍÊÇ´óÎÊÌâ
+ 630   4                  }   
+ 631   3      
+ 632   3                  gRepairMotor.LastSpeRin = SpeRinN;
+ 633   3                  
+ 634   3                  //¼ÆËãµ±Ç°¶à×ßÁË¶àÉÙÈ¦
+ 635   3                  if(gRepairMotor.LastSpeRin > (BASIC_SPRING_NUM+BASIC_OFFSET_250MS*(gRepairMotor.CalcCounts-1))
+             -)
+ 636   3                  {                
+ 637   4                      gRepairMotor.AverageValue += gRepairMotor.LastSpeRin-(BASIC_SPRING_NUM+BASIC_OFFSET_250MS*
+             -(gRepairMotor.CalcCounts-1));                
+ 638   4                  }
+ 639   3                  
+ 640   3                  //Í¬ÑùµÄ£¬ÈôÊÇÈ¦Êý×ßµÄÌ«¶à£¬¾ÍÖ±½Ó±¨´í
+ 641   3                  if (gRepairMotor.FlagValue >= 2 || gRepairMotor.AverageValue > TWO_SPRINT_LOWER_LIMIT) //²»ÐèÍ
+             -êÈ«×ßÍêÅÐ¶¨£¬¿ÉÒÔÖ±½ÓÈÏÎªÊÇÓÐÎÊÌâµÄ 
+ 642   3                  {       
+ 643   4                      DZP_ER;
+ 644   4                      Event(ITASK_DG_UP);
+ 645   4                      Uart_Print(3,25);  
+ 646   4                      err_volu(ERR_SPRI_ERR);
+ 647   4                      
+ 648   4                  }
+ 649   3                  
+ 650   3                  //Á½¸ùµ¯»É±¨¾¯
+ 651   3                  if(gRepairMotor.AverageValue >= THREE_SPRING_LOWER_LIMIT)
+ 652   3                  {
+ 653   4      
+ 654   4                      //´òÓ¡µ±Ç°²âËÙ»·Öµ  
+ 655   4                      Uart_Print(3,21);  
+ 656   4                      //±¨¾¯£¬Ö»ÓÐÁ½¸ùµ¯»É   
+ 657   4                      err_volu(ERR_SPRI_LIT);
+ 658   4                      DZP_ER;
+ 659   4                  }
+ 660   3                 
+ 661   3      
+ 662   3                  if(gRepairMotor.CalcCounts == SPRING_CHECK_NUM)
+C51 COMPILER V9.00   MOTOR                                                                 03/20/2019 17:26:43 PAGE 12  
+
+ 663   3                  {
+ 664   4                      gRepairMotor.ExFlag = 1;
+ 665   4                  }
+ 666   3                  
+ 667   3                  //´òÓ¡µ±Ç°²âËÙ»·Öµ  
+ 668   3                  Uart_Print(3,gRepairMotor.Direction);            
+ 669   3      
+ 670   3              }    
+ 671   2              gRepairMotor.Times = 5;
+ 672   2          }    
+ 673   1      }
+ 674          
+ 675          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   2415    ----
+   CODE SIZE        =   2591    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =     34    ----
    PDATA SIZE       =   ----    ----
-C51 COMPILER V9.00   MOTOR                                                                 03/16/2019 17:13:31 PAGE 12  
-
    DATA SIZE        =     40       3
    IDATA SIZE       =   ----    ----
    BIT SIZE         =      1    ----

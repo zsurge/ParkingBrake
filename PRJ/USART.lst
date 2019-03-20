@@ -1,4 +1,4 @@
-C51 COMPILER V9.00   USART                                                                 03/16/2019 17:13:31 PAGE 1   
+C51 COMPILER V9.00   USART                                                                 03/20/2019 17:24:46 PAGE 1   
 
 
 C51 COMPILER V9.00, COMPILATION OF MODULE USART
@@ -62,7 +62,7 @@ line level    source
   51          {
   52   1        TX1_Buffer[COM1.TX_write] = dat;  //装发送缓冲
   53   1        if(++COM1.TX_write >= COM_TX1_Lenth)  COM1.TX_write = 0;
-C51 COMPILER V9.00   USART                                                                 03/16/2019 17:13:31 PAGE 2   
+C51 COMPILER V9.00   USART                                                                 03/20/2019 17:24:46 PAGE 2   
 
   54   1        if(COM1.B_TX_busy == 0)   //空闲
   55   1        {
@@ -112,391 +112,389 @@ line level    source
   99   2            sen_buff[3]=0x30+SpeRinN%10;
  100   2            sen_buff[4]=0x2c;
  101   2          
- 102   2            sen_buff[5]=0x30+gRepairMotor.CurrentCounts/10000%10;
- 103   2            sen_buff[6]=0x30+gRepairMotor.CurrentCounts/1000%10;
- 104   2            sen_buff[7]=0x30+gRepairMotor.CurrentCounts/100%10;
- 105   2            sen_buff[8]=0x30+gRepairMotor.CurrentCounts/10%10;
- 106   2            sen_buff[9]=0x30+gRepairMotor.CurrentCounts%10;
- 107   2            sen_buff[10]=0x2c;            
- 108   2      //            sen_buff[11]=0x30+gRepairMotor.FlagValue%10;
- 109   2      //            sen_buff[12]=0x2c;
- 110   2            sen_buff[11]=0x30+gRepairMotor.Times/100%10;
- 111   2            sen_buff[12]=0x30+gRepairMotor.Times/10%10;
- 112   2                  sen_buff[13]=0x30+gRepairMotor.Times%10;
- 113   2                  
- 114   2                  sen_buff[14]=0x2c;
- 115   2                  sen_buff[15]=0x30+gRepairMotor.AverageValue/10%10;
-C51 COMPILER V9.00   USART                                                                 03/16/2019 17:13:31 PAGE 3   
+ 102   2            sen_buff[5]=0x30+gRepairMotor.CalcCounts/100%10;
+ 103   2            sen_buff[6]=0x30+gRepairMotor.CalcCounts/10%10;
+ 104   2            sen_buff[7]=0x30+gRepairMotor.CalcCounts%10;
+ 105   2            sen_buff[8]=0x2c;            
+ 106   2                  sen_buff[9]=0x30+gRepairMotor.FlagValue%10;
+ 107   2                  sen_buff[10]=0x2c;
+ 108   2            sen_buff[11]=0x30+gRepairMotor.CurrentCounts/100%10;
+ 109   2            sen_buff[12]=0x30+gRepairMotor.CurrentCounts/10%10;
+ 110   2                  sen_buff[13]=0x30+gRepairMotor.CurrentCounts%10;
+ 111   2                  
+ 112   2                  sen_buff[14]=0x2c;
+ 113   2                  sen_buff[15]=0x30+gRepairMotor.AverageValue/10%10;
+ 114   2                  sen_buff[16]=0x30+gRepairMotor.AverageValue%10;
+ 115   2            sen_buff[17]=0x3B;
+C51 COMPILER V9.00   USART                                                                 03/20/2019 17:24:46 PAGE 3   
 
- 116   2                  sen_buff[16]=0x30+gRepairMotor.AverageValue%10;
- 117   2            sen_buff[17]=0x3B;
- 118   2            break;  
- 119   2      
- 120   2          default:
- 121   2            break;
- 122   2        } 
- 123   1      
- 124   1      
- 125   1        for(i=0;i<18;i++)
- 126   1        {
- 127   2          TX1_writebuff(sen_buff[i]);
- 128   2        }
- 129   1        
- 130   1        #endif
- 131   1      
- 132   1      }
- 133          
- 134          //speakTask:操作命令
- 135          //num:操作数
- 136          void speak(u8 speakTask,u8 num)
- 137          {
- 138   1        u8 xdata sen_buff[COM_TX1_Lenth];
- 139   1        memset(sen_buff,0,sizeof(sen_buff));
- 140   1        switch(speakTask)
- 141   1          {
- 142   2            case 1:
- 143   2              break;
- 144   2      
- 145   2      
- 146   2            case VICE_STA:
- 147   2              sen_buff[0]=num;
- 148   2              sen_buff[1]=num;
- 149   2              sen_buff[2]=num;
- 150   2              break;
- 151   2      
- 152   2      //      case 3:
- 153   2      //        sen_buff[0]=num + 63;
- 154   2      //        sen_buff[1]=0x30+SpeRinN/100%10;
- 155   2      //        sen_buff[2]=0x30+SpeRinN/10%10;
- 156   2      //        sen_buff[3]=0x30+SpeRinN%10;
- 157   2      //        sen_buff[4]=0x2c;
- 158   2      
- 159   2      //        sen_buff[5]=0x30+gRepairMotor.LastSpeRin/100%10;
- 160   2      //        sen_buff[6]=0x30+gRepairMotor.LastSpeRin/10%10;
- 161   2      //        sen_buff[7]=0x30+gRepairMotor.LastSpeRin%10;
- 162   2      //        sen_buff[8]=0x2c;
- 163   2      
- 164   2      //        sen_buff[9]=0x30+gRepairMotor.FlagValue/100%10;
- 165   2      //        sen_buff[10]=0x30+gRepairMotor.FlagValue/10%10;
- 166   2      //        sen_buff[11]=0x30+gRepairMotor.FlagValue%10;
- 167   2      //        sen_buff[12]=0x2c;
- 168   2      
- 169   2      //        sen_buff[13]=0x30+gRepairMotor.CurrentCounts/100%10;
- 170   2      //        sen_buff[14]=0x30+gRepairMotor.CurrentCounts/10%10;
- 171   2      //        sen_buff[15]=0x30+gRepairMotor.CurrentCounts%10;
- 172   2      //        sen_buff[16]=0x2c;
- 173   2      
- 174   2      //        break;
- 175   2      //        
- 176   2      //      case 2:
- 177   2      //        sen_buff[0]=num + 39;
-C51 COMPILER V9.00   USART                                                                 03/16/2019 17:13:31 PAGE 4   
+ 116   2            break;  
+ 117   2      
+ 118   2          default:
+ 119   2            break;
+ 120   2        } 
+ 121   1      
+ 122   1      
+ 123   1        for(i=0;i<18;i++)
+ 124   1        {
+ 125   2          TX1_writebuff(sen_buff[i]);
+ 126   2        }
+ 127   1        
+ 128   1        #endif
+ 129   1      
+ 130   1      }
+ 131          
+ 132          //speakTask:操作命令
+ 133          //num:操作数
+ 134          void speak(u8 speakTask,u8 num)
+ 135          {
+ 136   1        u8 xdata sen_buff[COM_TX1_Lenth];
+ 137   1        memset(sen_buff,0,sizeof(sen_buff));
+ 138   1        switch(speakTask)
+ 139   1          {
+ 140   2            case 1:
+ 141   2              break;
+ 142   2      
+ 143   2      
+ 144   2            case VICE_STA:
+ 145   2              sen_buff[0]=num;
+ 146   2              sen_buff[1]=num;
+ 147   2              sen_buff[2]=num;
+ 148   2              break;
+ 149   2      
+ 150   2      //      case 3:
+ 151   2      //        sen_buff[0]=num + 63;
+ 152   2      //        sen_buff[1]=0x30+SpeRinN/100%10;
+ 153   2      //        sen_buff[2]=0x30+SpeRinN/10%10;
+ 154   2      //        sen_buff[3]=0x30+SpeRinN%10;
+ 155   2      //        sen_buff[4]=0x2c;
+ 156   2      
+ 157   2      //        sen_buff[5]=0x30+gRepairMotor.LastSpeRin/100%10;
+ 158   2      //        sen_buff[6]=0x30+gRepairMotor.LastSpeRin/10%10;
+ 159   2      //        sen_buff[7]=0x30+gRepairMotor.LastSpeRin%10;
+ 160   2      //        sen_buff[8]=0x2c;
+ 161   2      
+ 162   2      //        sen_buff[9]=0x30+gRepairMotor.FlagValue/100%10;
+ 163   2      //        sen_buff[10]=0x30+gRepairMotor.FlagValue/10%10;
+ 164   2      //        sen_buff[11]=0x30+gRepairMotor.FlagValue%10;
+ 165   2      //        sen_buff[12]=0x2c;
+ 166   2      
+ 167   2      //        sen_buff[13]=0x30+gRepairMotor.CurrentCounts/100%10;
+ 168   2      //        sen_buff[14]=0x30+gRepairMotor.CurrentCounts/10%10;
+ 169   2      //        sen_buff[15]=0x30+gRepairMotor.CurrentCounts%10;
+ 170   2      //        sen_buff[16]=0x2c;
+ 171   2      
+ 172   2      //        break;
+ 173   2      //        
+ 174   2      //      case 2:
+ 175   2      //        sen_buff[0]=num + 39;
+ 176   2      //        sen_buff[1]=0x30+gRepairMotor.CurrentCounts/100%10;
+ 177   2      //        sen_buff[2]=0x30+gRepairMotor.CurrentCounts/10%10;
+C51 COMPILER V9.00   USART                                                                 03/20/2019 17:24:46 PAGE 4   
 
- 178   2      //        sen_buff[1]=0x30+gRepairMotor.CurrentCounts/100%10;
- 179   2      //        sen_buff[2]=0x30+gRepairMotor.CurrentCounts/10%10;
- 180   2      //        sen_buff[3]=0x30+gRepairMotor.CurrentCounts%10;
- 181   2      //        sen_buff[4]=0x3b;
- 182   2      //        sen_buff[5]=0x0a;
- 183   2              
- 184   2      //        sen_buff[0]=0x30+test_dly/10000%10;
- 185   2      //        sen_buff[1]=0x30+test_dly/1000%10;
- 186   2      //        sen_buff[2]=0x30+test_dly/100%10;
- 187   2      //        sen_buff[3]=0x30+test_dly/10%10;
- 188   2      //        sen_buff[4]=0x30+test_dly%10;
- 189   2      //        sen_buff[5]=0x3b;
- 190   2      //        sen_buff[6]=0x0a;
- 191   2      
- 192   2      //        sen_buff[0]=0x30+err/100%10;
- 193   2      //        sen_buff[1]=0x30+err/10%10;
- 194   2      //        sen_buff[2]=0x30+err%10;
- 195   2      //        sen_buff[3]=0x30+mTask/100%10;
- 196   2      //        sen_buff[4]=0x30+mTask/10%10;
- 197   2      //        sen_buff[5]=0x30+mTask%10;
- 198   2      //        sen_buff[6]=0x3b;
- 199   2      //        sen_buff[7]=0x0a;
- 200   2      
- 201   2      //        sen_buff[0]=0x30+mTask/10%10;
- 202   2      //        sen_buff[1]=0x30+mTask%10;
- 203   2      //        sen_buff[2]=0x30+iTask/10%10;
- 204   2      //        sen_buff[3]=0x30+iTask%10;
- 205   2      //        sen_buff[4]=0x30+Even/10%10;
- 206   2      //        sen_buff[5]=0x30+Even%10;
- 207   2      //        sen_buff[6]=0x30+mPosD/10%10;
- 208   2      //        sen_buff[7]=0x30+mPosD%10;
- 209   2      //        sen_buff[8]=0x3b;
- 210   2      //        sen_buff[9]=0x0a;
- 211   2              
- 212   2      //        sen_buff[0]=0x30+HupSta/100%10;
- 213   2      //        sen_buff[1]=0x30+HupSta/10%10;
- 214   2      //        sen_buff[2]=0x30+HupSta%10;
- 215   2      //        sen_buff[3]=0x30+HDwSta/100%10;
- 216   2      //        sen_buff[4]=0x30+HDwSta/10%10;
- 217   2      //        sen_buff[5]=0x30+HDwSta%10;
- 218   2      //        sen_buff[6]=0x3b;
- 219   2      //        sen_buff[7]=0x0a;
- 220   2      
- 221   2      //        sen_buff[0]=0x30+mRunNum/100%10;
- 222   2      //        sen_buff[1]=0x30+mRunNum/10%10;
- 223   2      //        sen_buff[2]=0x30+mRunNum%10;
- 224   2      //        sen_buff[3]=0x30+mRunTe/100%10;
- 225   2      //        sen_buff[4]=0x30+mRunTe/10%10;
- 226   2      //        sen_buff[5]=0x30+mRunTe%10;
- 227   2      //        sen_buff[6]=0x3b;
- 228   2      //        sen_buff[7]=0x0a;
- 229   2      
- 230   2      //        sen_buff[0]=0x30+FzSta/10%10;
- 231   2      //        sen_buff[1]=0x30+FzSta%10;
- 232   2      //        sen_buff[2]=0x30+DgSta/10%10;
- 233   2      //        sen_buff[3]=0x30+DgSta%10;
- 234   2      //        sen_buff[4]=0x30+PosRal/10%10;
- 235   2      //        sen_buff[5]=0x30+PosRal%10;
- 236   2      //        sen_buff[6]=0x3b;
- 237   2      //        sen_buff[7]=0x0a;
- 238   2      
- 239   2      //        sen_buff[0]=0x30+mType/100%10;
-C51 COMPILER V9.00   USART                                                                 03/16/2019 17:13:31 PAGE 5   
+ 178   2      //        sen_buff[3]=0x30+gRepairMotor.CurrentCounts%10;
+ 179   2      //        sen_buff[4]=0x3b;
+ 180   2      //        sen_buff[5]=0x0a;
+ 181   2              
+ 182   2      //        sen_buff[0]=0x30+test_dly/10000%10;
+ 183   2      //        sen_buff[1]=0x30+test_dly/1000%10;
+ 184   2      //        sen_buff[2]=0x30+test_dly/100%10;
+ 185   2      //        sen_buff[3]=0x30+test_dly/10%10;
+ 186   2      //        sen_buff[4]=0x30+test_dly%10;
+ 187   2      //        sen_buff[5]=0x3b;
+ 188   2      //        sen_buff[6]=0x0a;
+ 189   2      
+ 190   2      //        sen_buff[0]=0x30+err/100%10;
+ 191   2      //        sen_buff[1]=0x30+err/10%10;
+ 192   2      //        sen_buff[2]=0x30+err%10;
+ 193   2      //        sen_buff[3]=0x30+mTask/100%10;
+ 194   2      //        sen_buff[4]=0x30+mTask/10%10;
+ 195   2      //        sen_buff[5]=0x30+mTask%10;
+ 196   2      //        sen_buff[6]=0x3b;
+ 197   2      //        sen_buff[7]=0x0a;
+ 198   2      
+ 199   2      //        sen_buff[0]=0x30+mTask/10%10;
+ 200   2      //        sen_buff[1]=0x30+mTask%10;
+ 201   2      //        sen_buff[2]=0x30+iTask/10%10;
+ 202   2      //        sen_buff[3]=0x30+iTask%10;
+ 203   2      //        sen_buff[4]=0x30+Even/10%10;
+ 204   2      //        sen_buff[5]=0x30+Even%10;
+ 205   2      //        sen_buff[6]=0x30+mPosD/10%10;
+ 206   2      //        sen_buff[7]=0x30+mPosD%10;
+ 207   2      //        sen_buff[8]=0x3b;
+ 208   2      //        sen_buff[9]=0x0a;
+ 209   2              
+ 210   2      //        sen_buff[0]=0x30+HupSta/100%10;
+ 211   2      //        sen_buff[1]=0x30+HupSta/10%10;
+ 212   2      //        sen_buff[2]=0x30+HupSta%10;
+ 213   2      //        sen_buff[3]=0x30+HDwSta/100%10;
+ 214   2      //        sen_buff[4]=0x30+HDwSta/10%10;
+ 215   2      //        sen_buff[5]=0x30+HDwSta%10;
+ 216   2      //        sen_buff[6]=0x3b;
+ 217   2      //        sen_buff[7]=0x0a;
+ 218   2      
+ 219   2      //        sen_buff[0]=0x30+mRunNum/100%10;
+ 220   2      //        sen_buff[1]=0x30+mRunNum/10%10;
+ 221   2      //        sen_buff[2]=0x30+mRunNum%10;
+ 222   2      //        sen_buff[3]=0x30+mRunTe/100%10;
+ 223   2      //        sen_buff[4]=0x30+mRunTe/10%10;
+ 224   2      //        sen_buff[5]=0x30+mRunTe%10;
+ 225   2      //        sen_buff[6]=0x3b;
+ 226   2      //        sen_buff[7]=0x0a;
+ 227   2      
+ 228   2      //        sen_buff[0]=0x30+FzSta/10%10;
+ 229   2      //        sen_buff[1]=0x30+FzSta%10;
+ 230   2      //        sen_buff[2]=0x30+DgSta/10%10;
+ 231   2      //        sen_buff[3]=0x30+DgSta%10;
+ 232   2      //        sen_buff[4]=0x30+PosRal/10%10;
+ 233   2      //        sen_buff[5]=0x30+PosRal%10;
+ 234   2      //        sen_buff[6]=0x3b;
+ 235   2      //        sen_buff[7]=0x0a;
+ 236   2      
+ 237   2      //        sen_buff[0]=0x30+mType/100%10;
+ 238   2      //        sen_buff[1]=0x30+mType/10%10;
+ 239   2      //        sen_buff[2]=0x30+mType%10;
+C51 COMPILER V9.00   USART                                                                 03/20/2019 17:24:46 PAGE 5   
 
- 240   2      //        sen_buff[1]=0x30+mType/10%10;
- 241   2      //        sen_buff[2]=0x30+mType%10;
- 242   2      //        sen_buff[3]=0x30+SpeRinN/100%10;
- 243   2      //        sen_buff[4]=0x30+SpeRinN/10%10;
- 244   2      //        sen_buff[5]=0x30+SpeRinN%10;
- 245   2      //        sen_buff[6]=0x3b;
- 246   2      //        sen_buff[7]=0x0a;
- 247   2      
- 248   2      //        sen_buff[0]=0x30+err/100%10;
- 249   2      //        sen_buff[1]=0x30+err/10%10;
- 250   2      //        sen_buff[2]=0x30+err%10;
- 251   2      //        sen_buff[3]=0x30+mType/100%10;
- 252   2      //        sen_buff[4]=0x30+mType/10%10;
- 253   2      //        sen_buff[5]=0x30+mType%10;
- 254   2      //        sen_buff[6]=0x3b;
- 255   2      //        sen_buff[7]=0x0a;
- 256   2      
- 257   2      //        sen_buff[0]=0x30+DgSta/100%10;
- 258   2      //        sen_buff[1]=0x30+DgSta/10%10;
- 259   2      //        sen_buff[2]=0x30+DgSta%10;
- 260   2      //        sen_buff[3]=0x30+Even/100%10;
- 261   2      //        sen_buff[4]=0x30+Even/10%10;
- 262   2      //        sen_buff[5]=0x30+Even%10;
- 263   2      //        sen_buff[6]=0x3b;
- 264   2      //        sen_buff[7]=0x0a;
- 265   2      
- 266   2      //        sen_buff[0]=0x30+mTask/100%10;
- 267   2      //        sen_buff[1]=0x30+mTask/10%10;
- 268   2      //        sen_buff[2]=0x30+mTask%10;
- 269   2      //        sen_buff[3]=0x30+Even/100%10;
- 270   2      //        sen_buff[4]=0x30+Even/10%10;
- 271   2      //        sen_buff[5]=0x30+Even%10;
- 272   2      //        sen_buff[6]=0x30+iTask/100%10;
- 273   2      //        sen_buff[7]=0x30+iTask/10%10;
- 274   2      //        sen_buff[8]=0x30+iTask%10;
- 275   2      //        sen_buff[9]=0x30+iTask2/10%10;
- 276   2      //        sen_buff[10]=0x30+iTask2%10;
- 277   2      //        sen_buff[11]=0x30+mPosD/10%10;
- 278   2      //        sen_buff[12]=0x30+mPosD%10;
- 279   2      //        sen_buff[13]=0x3b;
- 280   2      //        sen_buff[14]=0x0a;
- 281   2      
- 282   2      //        sen_buff[0]=0x30+mType/100%10;
- 283   2      //        sen_buff[1]=0x30+mType/10%10;
- 284   2      //        sen_buff[2]=0x30+mType%10;
- 285   2      //        sen_buff[3]=0x30+mRunTe/100%10;
- 286   2      //        sen_buff[4]=0x30+mRunTe/10%10;
- 287   2      //        sen_buff[5]=0x30+mRunTe%10;
- 288   2      //        sen_buff[6]=0x30+StmSp/100%10;
- 289   2      //        sen_buff[7]=0x30+StmSp/10%10;
- 290   2      //        sen_buff[8]=0x30+StmSp%10;
- 291   2      //        sen_buff[9]=0x30+DwSlo/100%10;
- 292   2      //        sen_buff[10]=0x30+DwSlo/10%10;
- 293   2      //        sen_buff[11]=0x30+DwSlo%10;
- 294   2      //        sen_buff[12]=0x30+DwSloBri/100%10;
- 295   2      //        sen_buff[13]=0x30+DwSloBri/10%10;
- 296   2      //        sen_buff[14]=0x30+DwSloBri%10;
- 297   2      //        sen_buff[15]=0x3b;
- 298   2      //        sen_buff[16]=0x0a;
- 299   2      
- 300   2      //        sen_buff[0]=0x30+aLine%10;
- 301   2      //        sen_buff[1]=0x30+hafTest/10%10;
-C51 COMPILER V9.00   USART                                                                 03/16/2019 17:13:31 PAGE 6   
+ 240   2      //        sen_buff[3]=0x30+SpeRinN/100%10;
+ 241   2      //        sen_buff[4]=0x30+SpeRinN/10%10;
+ 242   2      //        sen_buff[5]=0x30+SpeRinN%10;
+ 243   2      //        sen_buff[6]=0x3b;
+ 244   2      //        sen_buff[7]=0x0a;
+ 245   2      
+ 246   2      //        sen_buff[0]=0x30+err/100%10;
+ 247   2      //        sen_buff[1]=0x30+err/10%10;
+ 248   2      //        sen_buff[2]=0x30+err%10;
+ 249   2      //        sen_buff[3]=0x30+mType/100%10;
+ 250   2      //        sen_buff[4]=0x30+mType/10%10;
+ 251   2      //        sen_buff[5]=0x30+mType%10;
+ 252   2      //        sen_buff[6]=0x3b;
+ 253   2      //        sen_buff[7]=0x0a;
+ 254   2      
+ 255   2      //        sen_buff[0]=0x30+DgSta/100%10;
+ 256   2      //        sen_buff[1]=0x30+DgSta/10%10;
+ 257   2      //        sen_buff[2]=0x30+DgSta%10;
+ 258   2      //        sen_buff[3]=0x30+Even/100%10;
+ 259   2      //        sen_buff[4]=0x30+Even/10%10;
+ 260   2      //        sen_buff[5]=0x30+Even%10;
+ 261   2      //        sen_buff[6]=0x3b;
+ 262   2      //        sen_buff[7]=0x0a;
+ 263   2      
+ 264   2      //        sen_buff[0]=0x30+mTask/100%10;
+ 265   2      //        sen_buff[1]=0x30+mTask/10%10;
+ 266   2      //        sen_buff[2]=0x30+mTask%10;
+ 267   2      //        sen_buff[3]=0x30+Even/100%10;
+ 268   2      //        sen_buff[4]=0x30+Even/10%10;
+ 269   2      //        sen_buff[5]=0x30+Even%10;
+ 270   2      //        sen_buff[6]=0x30+iTask/100%10;
+ 271   2      //        sen_buff[7]=0x30+iTask/10%10;
+ 272   2      //        sen_buff[8]=0x30+iTask%10;
+ 273   2      //        sen_buff[9]=0x30+iTask2/10%10;
+ 274   2      //        sen_buff[10]=0x30+iTask2%10;
+ 275   2      //        sen_buff[11]=0x30+mPosD/10%10;
+ 276   2      //        sen_buff[12]=0x30+mPosD%10;
+ 277   2      //        sen_buff[13]=0x3b;
+ 278   2      //        sen_buff[14]=0x0a;
+ 279   2      
+ 280   2      //        sen_buff[0]=0x30+mType/100%10;
+ 281   2      //        sen_buff[1]=0x30+mType/10%10;
+ 282   2      //        sen_buff[2]=0x30+mType%10;
+ 283   2      //        sen_buff[3]=0x30+mRunTe/100%10;
+ 284   2      //        sen_buff[4]=0x30+mRunTe/10%10;
+ 285   2      //        sen_buff[5]=0x30+mRunTe%10;
+ 286   2      //        sen_buff[6]=0x30+StmSp/100%10;
+ 287   2      //        sen_buff[7]=0x30+StmSp/10%10;
+ 288   2      //        sen_buff[8]=0x30+StmSp%10;
+ 289   2      //        sen_buff[9]=0x30+DwSlo/100%10;
+ 290   2      //        sen_buff[10]=0x30+DwSlo/10%10;
+ 291   2      //        sen_buff[11]=0x30+DwSlo%10;
+ 292   2      //        sen_buff[12]=0x30+DwSloBri/100%10;
+ 293   2      //        sen_buff[13]=0x30+DwSloBri/10%10;
+ 294   2      //        sen_buff[14]=0x30+DwSloBri%10;
+ 295   2      //        sen_buff[15]=0x3b;
+ 296   2      //        sen_buff[16]=0x0a;
+ 297   2      
+ 298   2      //        sen_buff[0]=0x30+aLine%10;
+ 299   2      //        sen_buff[1]=0x30+hafTest/10%10;
+ 300   2      //        sen_buff[2]=0x30+hafTest%10;
+ 301   2      //        sen_buff[3]=0x30+AtNum/100%10;
+C51 COMPILER V9.00   USART                                                                 03/20/2019 17:24:46 PAGE 6   
 
- 302   2      //        sen_buff[2]=0x30+hafTest%10;
- 303   2      //        sen_buff[3]=0x30+AtNum/100%10;
- 304   2      //        sen_buff[4]=0x30+AtNum/10%10;
- 305   2      //        sen_buff[5]=0x30+AtNum%10;
- 306   2      //        sen_buff[6]=0x30+iTask/100%10;
- 307   2      //        sen_buff[7]=0x30+iTask/10%10;
- 308   2      //        sen_buff[8]=0x30+iTask%10;
- 309   2      //        sen_buff[9]=0x3b;
- 310   2      //        sen_buff[10]=0x0a;
- 311   2      
- 312   2      //        sen_buff[0]=0x30+StmNum2/100%10;
- 313   2      //        sen_buff[1]=0x30+StmNum2/10%10;
- 314   2      //        sen_buff[2]=0x30+StmNum2%10;
- 315   2      //        sen_buff[3]=0x3b;
- 316   2      //        sen_buff[4]=0x0a;
- 317   2      
- 318   2      //        sen_buff[0]=0x30+ViceRal/10%10;
- 319   2      //        sen_buff[1]=0x30+ViceRal%10;
- 320   2      //        sen_buff[2]=0x3b;
- 321   2      //        sen_buff[3]=0x0a;
- 322   2      
- 323   2      
- 324   2      //        sen_buff[0]=0x30+StmSp/100%10;
- 325   2      //        sen_buff[1]=0x30+StmSp/10%10;
- 326   2      //        sen_buff[2]=0x30+StmSp%10;
- 327   2      //        sen_buff[3]=0x30+StmSp2/100%10;
- 328   2      //        sen_buff[4]=0x30+StmSp2/10%10;
- 329   2      //        sen_buff[5]=0x30+StmSp2%10;
- 330   2      //        sen_buff[6]=0x30+StmSlow/100%10;
- 331   2      //        sen_buff[7]=0x30+StmSlow/10%10;
- 332   2      //        sen_buff[8]=0x30+StmSlow%10;
- 333   2      //        sen_buff[9]=0x30+StmSlow2/100%10;
- 334   2      //        sen_buff[10]=0x30+StmSlow2/10%10;
- 335   2      //        sen_buff[11]=0x30+StmSlow2%10;
- 336   2      //        sen_buff[12]=0x3b;
- 337   2      //        sen_buff[13]=0x0a;
- 338   2      
- 339   2      //        sen_buff[0]=0x30+StmSp/1000%10;
- 340   2      //        sen_buff[1]=0x30+StmSp/100%10;
- 341   2      //        sen_buff[2]=0x30+StmSp/10%10;
- 342   2      //        sen_buff[3]=0x30+StmSp%10;
- 343   2      //        sen_buff[4]=0x30+StmSlow/1000%10;
- 344   2      //        sen_buff[5]=0x30+StmSlow/100%10;
- 345   2      //        sen_buff[6]=0x30+StmSlow/10%10;
- 346   2      //        sen_buff[7]=0x30+StmSlow%10;
- 347   2      //        sen_buff[8]=0x3b;
- 348   2      //        sen_buff[9]=0x0a;
- 349   2      
- 350   2      
- 351   2      //        sen_buff[0]=0x30+SpriBuf[SPRIBUF_FST_AVER]/100%10;
- 352   2      //        sen_buff[1]=0x30+SpriBuf[SPRIBUF_FST_AVER]/10%10;
- 353   2      //        sen_buff[2]=0x30+SpriBuf[SPRIBUF_FST_AVER]%10;
- 354   2      //        sen_buff[3]=0x30+SpriBuf[SPRIBUF_FST_MIN]/100%10;
- 355   2      //        sen_buff[4]=0x30+SpriBuf[SPRIBUF_FST_MIN]/10%10;
- 356   2      //        sen_buff[5]=0x30+SpriBuf[SPRIBUF_FST_MIN]%10;
- 357   2      //        sen_buff[6]=0x30+SpriBuf[SPRIBUF_END_AVER]/100%10;
- 358   2      //        sen_buff[7]=0x30+SpriBuf[SPRIBUF_END_AVER]/10%10;
- 359   2      //        sen_buff[8]=0x30+SpriBuf[SPRIBUF_END_AVER]%10;
- 360   2      //        sen_buff[9]=0x30+SpriBuf[SPRIBUF_END_MAX]/100%10;
- 361   2      //        sen_buff[10]=0x30+SpriBuf[SPRIBUF_END_MAX]/10%10;
- 362   2      //        sen_buff[11]=0x30+SpriBuf[SPRIBUF_END_MAX]%10;
- 363   2      
-C51 COMPILER V9.00   USART                                                                 03/16/2019 17:13:31 PAGE 7   
+ 302   2      //        sen_buff[4]=0x30+AtNum/10%10;
+ 303   2      //        sen_buff[5]=0x30+AtNum%10;
+ 304   2      //        sen_buff[6]=0x30+iTask/100%10;
+ 305   2      //        sen_buff[7]=0x30+iTask/10%10;
+ 306   2      //        sen_buff[8]=0x30+iTask%10;
+ 307   2      //        sen_buff[9]=0x3b;
+ 308   2      //        sen_buff[10]=0x0a;
+ 309   2      
+ 310   2      //        sen_buff[0]=0x30+StmNum2/100%10;
+ 311   2      //        sen_buff[1]=0x30+StmNum2/10%10;
+ 312   2      //        sen_buff[2]=0x30+StmNum2%10;
+ 313   2      //        sen_buff[3]=0x3b;
+ 314   2      //        sen_buff[4]=0x0a;
+ 315   2      
+ 316   2      //        sen_buff[0]=0x30+ViceRal/10%10;
+ 317   2      //        sen_buff[1]=0x30+ViceRal%10;
+ 318   2      //        sen_buff[2]=0x3b;
+ 319   2      //        sen_buff[3]=0x0a;
+ 320   2      
+ 321   2      
+ 322   2      //        sen_buff[0]=0x30+StmSp/100%10;
+ 323   2      //        sen_buff[1]=0x30+StmSp/10%10;
+ 324   2      //        sen_buff[2]=0x30+StmSp%10;
+ 325   2      //        sen_buff[3]=0x30+StmSp2/100%10;
+ 326   2      //        sen_buff[4]=0x30+StmSp2/10%10;
+ 327   2      //        sen_buff[5]=0x30+StmSp2%10;
+ 328   2      //        sen_buff[6]=0x30+StmSlow/100%10;
+ 329   2      //        sen_buff[7]=0x30+StmSlow/10%10;
+ 330   2      //        sen_buff[8]=0x30+StmSlow%10;
+ 331   2      //        sen_buff[9]=0x30+StmSlow2/100%10;
+ 332   2      //        sen_buff[10]=0x30+StmSlow2/10%10;
+ 333   2      //        sen_buff[11]=0x30+StmSlow2%10;
+ 334   2      //        sen_buff[12]=0x3b;
+ 335   2      //        sen_buff[13]=0x0a;
+ 336   2      
+ 337   2      //        sen_buff[0]=0x30+StmSp/1000%10;
+ 338   2      //        sen_buff[1]=0x30+StmSp/100%10;
+ 339   2      //        sen_buff[2]=0x30+StmSp/10%10;
+ 340   2      //        sen_buff[3]=0x30+StmSp%10;
+ 341   2      //        sen_buff[4]=0x30+StmSlow/1000%10;
+ 342   2      //        sen_buff[5]=0x30+StmSlow/100%10;
+ 343   2      //        sen_buff[6]=0x30+StmSlow/10%10;
+ 344   2      //        sen_buff[7]=0x30+StmSlow%10;
+ 345   2      //        sen_buff[8]=0x3b;
+ 346   2      //        sen_buff[9]=0x0a;
+ 347   2      
+ 348   2      
+ 349   2      //        sen_buff[0]=0x30+SpriBuf[SPRIBUF_FST_AVER]/100%10;
+ 350   2      //        sen_buff[1]=0x30+SpriBuf[SPRIBUF_FST_AVER]/10%10;
+ 351   2      //        sen_buff[2]=0x30+SpriBuf[SPRIBUF_FST_AVER]%10;
+ 352   2      //        sen_buff[3]=0x30+SpriBuf[SPRIBUF_FST_MIN]/100%10;
+ 353   2      //        sen_buff[4]=0x30+SpriBuf[SPRIBUF_FST_MIN]/10%10;
+ 354   2      //        sen_buff[5]=0x30+SpriBuf[SPRIBUF_FST_MIN]%10;
+ 355   2      //        sen_buff[6]=0x30+SpriBuf[SPRIBUF_END_AVER]/100%10;
+ 356   2      //        sen_buff[7]=0x30+SpriBuf[SPRIBUF_END_AVER]/10%10;
+ 357   2      //        sen_buff[8]=0x30+SpriBuf[SPRIBUF_END_AVER]%10;
+ 358   2      //        sen_buff[9]=0x30+SpriBuf[SPRIBUF_END_MAX]/100%10;
+ 359   2      //        sen_buff[10]=0x30+SpriBuf[SPRIBUF_END_MAX]/10%10;
+ 360   2      //        sen_buff[11]=0x30+SpriBuf[SPRIBUF_END_MAX]%10;
+ 361   2      
+ 362   2      //        sen_buff[0]=0x30+SpriBuf[0]/100%10;
+ 363   2      //        sen_buff[1]=0x30+SpriBuf[0]/10%10;
+C51 COMPILER V9.00   USART                                                                 03/20/2019 17:24:46 PAGE 7   
 
- 364   2      //        sen_buff[0]=0x30+SpriBuf[0]/100%10;
- 365   2      //        sen_buff[1]=0x30+SpriBuf[0]/10%10;
- 366   2      //        sen_buff[2]=0x30+SpriBuf[0]%10;
- 367   2      //        sen_buff[3]=0x30+SpriBuf[1]/100%10;
- 368   2      //        sen_buff[4]=0x30+SpriBuf[1]/10%10;
- 369   2      //        sen_buff[5]=0x30+SpriBuf[1]%10;
- 370   2      //        sen_buff[6]=0x30+SpriBuf[2]/100%10;
- 371   2      //        sen_buff[7]=0x30+SpriBuf[2]/10%10;
- 372   2      //        sen_buff[8]=0x30+SpriBuf[2]%10;
- 373   2      //        sen_buff[9]=0x30+SpriBuf[3]/100%10;
- 374   2      //        sen_buff[10]=0x30+SpriBuf[3]/10%10;
- 375   2      //        sen_buff[11]=0x30+SpriBuf[3]%10;
- 376   2      //        sen_buff[12]=0x30+SpriBuf[4]/100%10;
- 377   2      //        sen_buff[13]=0x30+SpriBuf[4]/10%10;
- 378   2      //        sen_buff[14]=0x30+SpriBuf[4]%10;
- 379   2      //        sen_buff[15]=0x30+SpriBuf[5]/100%10;
- 380   2      //        sen_buff[16]=0x30+SpriBuf[5]/10%10;
- 381   2      //        sen_buff[17]=0x30+SpriBuf[5]%10;
- 382   2      
- 383   2      //        sen_buff[0]=0x30+SpriBuf[6]/100%10;
- 384   2      //        sen_buff[1]=0x30+SpriBuf[6]/10%10;
- 385   2      //        sen_buff[2]=0x30+SpriBuf[6]%10;
- 386   2      //        sen_buff[3]=0x30+SpriBuf[7]/100%10;
- 387   2      //        sen_buff[4]=0x30+SpriBuf[7]/10%10;
- 388   2      //        sen_buff[5]=0x30+SpriBuf[7]%10;
- 389   2      //        sen_buff[6]=0x30+SpriBuf[8]/100%10;
- 390   2      //        sen_buff[7]=0x30+SpriBuf[8]/10%10;
- 391   2      //        sen_buff[8]=0x30+SpriBuf[8]%10;
- 392   2      //        sen_buff[9]=0x30+SpriBuf[9]/100%10;
- 393   2      //        sen_buff[10]=0x30+SpriBuf[9]/10%10;
- 394   2      //        sen_buff[11]=0x30+SpriBuf[9]%10;
- 395   2      //        sen_buff[12]=0x30+SpriBuf[10]/100%10;
- 396   2      //        sen_buff[13]=0x30+SpriBuf[10]/10%10;
- 397   2      //        sen_buff[14]=0x30+SpriBuf[10]%10;
- 398   2      //        sen_buff[15]=0x30+SpriBuf[11]/100%10;
- 399   2      //        sen_buff[16]=0x30+SpriBuf[11]/10%10;
- 400   2      //        sen_buff[17]=0x30+SpriBuf[11]%10;
- 401   2      //        sen_buff[18]=0x3b;
- 402   2      //        sen_buff[19]=0x0a;
- 403   2      
- 404   2      
- 405   2      //        sen_buff[0]=0x30+StmNumBuf[0]/100%10;
- 406   2      //        sen_buff[1]=0x30+StmNumBuf[0]/10%10;
- 407   2      //        sen_buff[2]=0x30+StmNumBuf[0]%10;
- 408   2      //        sen_buff[3]=0x30+StmNumBuf[5]/100%10;
- 409   2      //        sen_buff[4]=0x30+StmNumBuf[5]/10%10;
- 410   2      //        sen_buff[5]=0x30+StmNumBuf[5]%10;
- 411   2      //        sen_buff[6]=0x30+StmNumBuf[9]/100%10;
- 412   2      //        sen_buff[7]=0x30+StmNumBuf[9]/10%10;
- 413   2      //        sen_buff[8]=0x30+StmNumBuf[9]%10;
- 414   2      //        sen_buff[9]=0x30+StmNumBuf[STMBUF_DATA]/100%10;
- 415   2      //        sen_buff[10]=0x30+StmNumBuf[STMBUF_DATA]/10%10;
- 416   2      //        sen_buff[11]=0x30+StmNumBuf[STMBUF_DATA]%10;
- 417   2      
- 418   2      
- 419   2      //        sen_buff[12]=0x3b;
- 420   2      //        sen_buff[13]=0x0a;
- 421   2      
- 422   2      //        sen_buff[0]=0x30+StmNumBuf2[0]/100%10;
- 423   2      //        sen_buff[1]=0x30+StmNumBuf2[0]/10%10;
- 424   2      //        sen_buff[2]=0x30+StmNumBuf2[0]%10;
- 425   2      //        sen_buff[3]=0x30+StmNumBuf2[1]/100%10;
-C51 COMPILER V9.00   USART                                                                 03/16/2019 17:13:31 PAGE 8   
+ 364   2      //        sen_buff[2]=0x30+SpriBuf[0]%10;
+ 365   2      //        sen_buff[3]=0x30+SpriBuf[1]/100%10;
+ 366   2      //        sen_buff[4]=0x30+SpriBuf[1]/10%10;
+ 367   2      //        sen_buff[5]=0x30+SpriBuf[1]%10;
+ 368   2      //        sen_buff[6]=0x30+SpriBuf[2]/100%10;
+ 369   2      //        sen_buff[7]=0x30+SpriBuf[2]/10%10;
+ 370   2      //        sen_buff[8]=0x30+SpriBuf[2]%10;
+ 371   2      //        sen_buff[9]=0x30+SpriBuf[3]/100%10;
+ 372   2      //        sen_buff[10]=0x30+SpriBuf[3]/10%10;
+ 373   2      //        sen_buff[11]=0x30+SpriBuf[3]%10;
+ 374   2      //        sen_buff[12]=0x30+SpriBuf[4]/100%10;
+ 375   2      //        sen_buff[13]=0x30+SpriBuf[4]/10%10;
+ 376   2      //        sen_buff[14]=0x30+SpriBuf[4]%10;
+ 377   2      //        sen_buff[15]=0x30+SpriBuf[5]/100%10;
+ 378   2      //        sen_buff[16]=0x30+SpriBuf[5]/10%10;
+ 379   2      //        sen_buff[17]=0x30+SpriBuf[5]%10;
+ 380   2      
+ 381   2      //        sen_buff[0]=0x30+SpriBuf[6]/100%10;
+ 382   2      //        sen_buff[1]=0x30+SpriBuf[6]/10%10;
+ 383   2      //        sen_buff[2]=0x30+SpriBuf[6]%10;
+ 384   2      //        sen_buff[3]=0x30+SpriBuf[7]/100%10;
+ 385   2      //        sen_buff[4]=0x30+SpriBuf[7]/10%10;
+ 386   2      //        sen_buff[5]=0x30+SpriBuf[7]%10;
+ 387   2      //        sen_buff[6]=0x30+SpriBuf[8]/100%10;
+ 388   2      //        sen_buff[7]=0x30+SpriBuf[8]/10%10;
+ 389   2      //        sen_buff[8]=0x30+SpriBuf[8]%10;
+ 390   2      //        sen_buff[9]=0x30+SpriBuf[9]/100%10;
+ 391   2      //        sen_buff[10]=0x30+SpriBuf[9]/10%10;
+ 392   2      //        sen_buff[11]=0x30+SpriBuf[9]%10;
+ 393   2      //        sen_buff[12]=0x30+SpriBuf[10]/100%10;
+ 394   2      //        sen_buff[13]=0x30+SpriBuf[10]/10%10;
+ 395   2      //        sen_buff[14]=0x30+SpriBuf[10]%10;
+ 396   2      //        sen_buff[15]=0x30+SpriBuf[11]/100%10;
+ 397   2      //        sen_buff[16]=0x30+SpriBuf[11]/10%10;
+ 398   2      //        sen_buff[17]=0x30+SpriBuf[11]%10;
+ 399   2      //        sen_buff[18]=0x3b;
+ 400   2      //        sen_buff[19]=0x0a;
+ 401   2      
+ 402   2      
+ 403   2      //        sen_buff[0]=0x30+StmNumBuf[0]/100%10;
+ 404   2      //        sen_buff[1]=0x30+StmNumBuf[0]/10%10;
+ 405   2      //        sen_buff[2]=0x30+StmNumBuf[0]%10;
+ 406   2      //        sen_buff[3]=0x30+StmNumBuf[5]/100%10;
+ 407   2      //        sen_buff[4]=0x30+StmNumBuf[5]/10%10;
+ 408   2      //        sen_buff[5]=0x30+StmNumBuf[5]%10;
+ 409   2      //        sen_buff[6]=0x30+StmNumBuf[9]/100%10;
+ 410   2      //        sen_buff[7]=0x30+StmNumBuf[9]/10%10;
+ 411   2      //        sen_buff[8]=0x30+StmNumBuf[9]%10;
+ 412   2      //        sen_buff[9]=0x30+StmNumBuf[STMBUF_DATA]/100%10;
+ 413   2      //        sen_buff[10]=0x30+StmNumBuf[STMBUF_DATA]/10%10;
+ 414   2      //        sen_buff[11]=0x30+StmNumBuf[STMBUF_DATA]%10;
+ 415   2      
+ 416   2      
+ 417   2      //        sen_buff[12]=0x3b;
+ 418   2      //        sen_buff[13]=0x0a;
+ 419   2      
+ 420   2      //        sen_buff[0]=0x30+StmNumBuf2[0]/100%10;
+ 421   2      //        sen_buff[1]=0x30+StmNumBuf2[0]/10%10;
+ 422   2      //        sen_buff[2]=0x30+StmNumBuf2[0]%10;
+ 423   2      //        sen_buff[3]=0x30+StmNumBuf2[1]/100%10;
+ 424   2      //        sen_buff[4]=0x30+StmNumBuf2[1]/10%10;
+ 425   2      //        sen_buff[5]=0x30+StmNumBuf2[1]%10;
+C51 COMPILER V9.00   USART                                                                 03/20/2019 17:24:46 PAGE 8   
 
- 426   2      //        sen_buff[4]=0x30+StmNumBuf2[1]/10%10;
- 427   2      //        sen_buff[5]=0x30+StmNumBuf2[1]%10;
- 428   2      //        sen_buff[6]=0x30+StmNumBuf2[2]/100%10;
- 429   2      //        sen_buff[7]=0x30+StmNumBuf2[2]/10%10;
- 430   2      //        sen_buff[8]=0x30+StmNumBuf2[2]%10;
- 431   2      //        sen_buff[9]=0x3b;
- 432   2      //        sen_buff[10]=0x0a;
- 433   2      
- 434   2              break;
- 435   2          
- 436   2          }
- 437   1        
- 438   1        PrintString(sen_buff);  //SUART1发送一个字符串
- 439   1      }
- 440          
- 441          
+ 426   2      //        sen_buff[6]=0x30+StmNumBuf2[2]/100%10;
+ 427   2      //        sen_buff[7]=0x30+StmNumBuf2[2]/10%10;
+ 428   2      //        sen_buff[8]=0x30+StmNumBuf2[2]%10;
+ 429   2      //        sen_buff[9]=0x3b;
+ 430   2      //        sen_buff[10]=0x0a;
+ 431   2      
+ 432   2              break;
+ 433   2          
+ 434   2          }
+ 435   1        
+ 436   1        PrintString(sen_buff);  //SUART1发送一个字符串
+ 437   1      }
+ 438          
+ 439          
+ 440          /**************************************************************/
+ 441          /**************************************************************/
  442          /**************************************************************/
- 443          /**************************************************************/
- 444          /**************************************************************/
- 445          void uart_aly()
- 446          {
- 447   1      //  u8 xdata buf[COM_RX1_Lenth];
- 448   1      
- 449   1        if(!COM1.RX_TimeOut)  //超时计数
- 450   1          {
- 451   2            if(COM1.RX_Cnt>0)
- 452   2              {
- 453   3                COM1.RX_busy = 1;
- 454   3      //              memcpy(&buf,&RX1_Buffer,sizeof(RX1_Buffer));
- 455   3                if(RX1_Buffer[0]== RX1_Buffer[1] && RX1_Buffer[0]== RX1_Buffer[2]) ViceRal= RX1_Buffer[0];
- 456   3                memset(RX1_Buffer,0x00,sizeof(RX1_Buffer));
- 457   3                COM1.RX_Cnt = 0;
- 458   3                COM1.RX_busy = 0;
- 459   3                COM1.B_RX_OK = 1;
- 460   3              }
- 461   2           }
- 462   1        if(COM1.B_RX_OK)
- 463   1          {
- 464   2      //      if(buf[0]== buf[1] && buf[0]== buf[2]) ViceRal= buf[0];
- 465   2            COM1.B_RX_OK= 0;
- 466   2          }
- 467   1      }
+ 443          void uart_aly()
+ 444          {
+ 445   1      //  u8 xdata buf[COM_RX1_Lenth];
+ 446   1      
+ 447   1        if(!COM1.RX_TimeOut)  //超时计数
+ 448   1          {
+ 449   2            if(COM1.RX_Cnt>0)
+ 450   2              {
+ 451   3                COM1.RX_busy = 1;
+ 452   3      //              memcpy(&buf,&RX1_Buffer,sizeof(RX1_Buffer));
+ 453   3                if(RX1_Buffer[0]== RX1_Buffer[1] && RX1_Buffer[0]== RX1_Buffer[2]) ViceRal= RX1_Buffer[0];
+ 454   3                memset(RX1_Buffer,0x00,sizeof(RX1_Buffer));
+ 455   3                COM1.RX_Cnt = 0;
+ 456   3                COM1.RX_busy = 0;
+ 457   3                COM1.B_RX_OK = 1;
+ 458   3              }
+ 459   2           }
+ 460   1        if(COM1.B_RX_OK)
+ 461   1          {
+ 462   2      //      if(buf[0]== buf[1] && buf[0]== buf[2]) ViceRal= buf[0];
+ 463   2            COM1.B_RX_OK= 0;
+ 464   2          }
+ 465   1      }
+ 466          
+ 467          
  468          
- 469          
- 470          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    760    ----
+   CODE SIZE        =    702    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =     48      40
    PDATA SIZE       =   ----    ----

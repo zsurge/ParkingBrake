@@ -30,8 +30,14 @@ void OPutTask()
 	if(mTask== MTASK_UP1) 
 		{
 			RG= KK_GRE;
-			if(!BM3 && (iTask==ITASK_DG_UP || iTask==ITASK_FZ_UP || iTask==ITASK_DRAG_UP || iTask== ITASK_INER_DW)) { DZP_CL; }
-			else { DZP_UP;}
+			if(!BM3 && (iTask==ITASK_DG_UP || iTask==ITASK_FZ_UP || iTask==ITASK_DRAG_UP || iTask== ITASK_INER_DW)) 
+            { 
+                DZP_CL; 
+            }
+			else 
+            {
+                DZP_UP;
+            }
 			DZPnum=DZP_TIME;
 		}
 	else if(mTask== MTASK_DW1)

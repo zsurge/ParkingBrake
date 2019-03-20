@@ -378,6 +378,7 @@ void mTaskControl()			//电机任务控制
 /***********************************************************************************************/
 			case MTASK_UP:
 				InitRepairMotor();
+                gRepairMotor.ExFlag = 1;
 				gRepairMotor.Direction = POS_UP;				
 				BrakeClr();
 				KnowMtyp(MLN_UP,MTPYREAD,POS_HOR);
@@ -462,6 +463,7 @@ void mTaskControl()			//电机任务控制
 /***********************************************************************************************/				
 			case MTASK_DW:
 				InitRepairMotor();
+                gRepairMotor.ExFlag = 0;
 				gRepairMotor.Direction = POS_DW;                
 				BrakeClr();
 				KnowMtyp(MLN_DW,MTPYREAD,POS_VER);
@@ -588,12 +590,20 @@ void mTaskControl()			//电机任务控制
 
 void Monitor_clk(void)	     //监控计数
 {
-    if(gRepairMotor.CurrentCounts)
+    if(gRepairMotor.Times)
     {
-        gRepairMotor.CurrentCounts--;
+        gRepairMotor.Times--;
     }
-
 }
+
+#define START_POSITION 35   //从第50次进入中断开始计算
+#define END_POSITION (START_POSITION+TIMER_FRE*SPRING_CHECK_NUM ) //从第50次进入中断开始计算
+#define TIMER_FRE  5        //计算周期
+#define THREE_SPRING_LOWER_LIMIT 11//16+2 //如果统计总的圈数差大于这个值，说明已经不是三根弹簧了
+#define TWO_SPRINT_LOWER_LIMIT 28//26+2 //如果统计总的圈数差大于这个值，说明已经不是两根弹簧了
+#define BASIC_SPRING_NUM 39   //初始值
+#define BASIC_OFFSET_250MS 6 //每250ms测速环转到的圈数
+#define SPRING_CHECK_NUM 8//取样次数
 
 
 void MonitorTask(void)
@@ -607,52 +617,59 @@ void MonitorTask(void)
 
 //    }
 
-    if(gRepairMotor.CurrentCounts == 0 && gRepairMotor.Direction == POS_DW) //测速环转动才开始进来
-    { 
-        if(gRepairMotor.Times >= 0 && gRepairMotor.Times < 120)//40
-        {
-            gRepairMotor.Times++;
+    if(gRepairMotor.Times == 0 && gRepairMotor.ExFlag == 0 && gRepairMotor.Direction == POS_DW) //测速环转动才开始进来
+    {
+        gRepairMotor.CurrentCounts++;
+        
+        if((gRepairMotor.CurrentCounts >= START_POSITION) && (gRepairMotor.CurrentCounts%TIMER_FRE == 0) && (gRepairMotor.CurrentCounts < END_POSITION))//39
+        {   
+            gRepairMotor.CalcCounts++;
+            if(SpeRinN > BASIC_SPRING_NUM + BASIC_OFFSET_250MS*gRepairMotor.CalcCounts)
+            {
+                gRepairMotor.FlagValue += 1;//这里应该不会出现，如果出现就是大问题
+            }   
 
-            //打印当前测速环值
-            Uart_Print(3,gRepairMotor.Direction);  
+            gRepairMotor.LastSpeRin = SpeRinN;
             
-//            if(SpeRinN >= BASIC_SPRING_NUM + BASIC_OFFSET_250MS*gRepairMotor.Times)
-//            {
-//                gRepairMotor.FlagValue ++;//这里应该不会出现，如果出现就是大问题
-//            }   
+            //计算当前多走了多少圈
+            if(gRepairMotor.LastSpeRin > (BASIC_SPRING_NUM+BASIC_OFFSET_250MS*(gRepairMotor.CalcCounts-1)))
+            {                
+                gRepairMotor.AverageValue += gRepairMotor.LastSpeRin-(BASIC_SPRING_NUM+BASIC_OFFSET_250MS*(gRepairMotor.CalcCounts-1));                
+            }
+            
+            //同样的，若是圈数走的太多，就直接报错
+            if (gRepairMotor.FlagValue >= 2 || gRepairMotor.AverageValue > TWO_SPRINT_LOWER_LIMIT) //不需完全走完判定，可以直接认为是有问题的 
+            {       
+                DZP_ER;
+                Event(ITASK_DG_UP);
+                Uart_Print(3,25);  
+                err_volu(ERR_SPRI_ERR);
+                
+            }
+            
+            //两根弹簧报警
+            if(gRepairMotor.AverageValue >= THREE_SPRING_LOWER_LIMIT)
+            {
 
-//            gRepairMotor.LastSpeRin = SpeRinN;
-//            //计算当前多走了多少圈
-//            if(gRepairMotor.LastSpeRin > (BASIC_SPRING_NUM+BASIC_OFFSET_250MS*(gRepairMotor.Times-1)))
-//            {                
-//                gRepairMotor.AverageValue += gRepairMotor.LastSpeRin-(BASIC_SPRING_NUM+BASIC_OFFSET_250MS*(gRepairMotor.Times-1));                
-//            }
+                //打印当前测速环值  
+                Uart_Print(3,21);  
+                //报警，只有两根弹簧   
+                err_volu(ERR_SPRI_LIT);
+                DZP_ER;
+            }
+           
 
-//            //如果开始就多走很多多于当前频数的75%,直接报错
-//            if(gRepairMotor.Times <= 4 && gRepairMotor.AverageValue >= BASIC_OFFSET_250MS*3)
-//            {
-//                Event(ITASK_DG_UP);
-//                err_volu(ERR_SPRI_ERR); 
-//            }
+            if(gRepairMotor.CalcCounts == SPRING_CHECK_NUM)
+            {
+                gRepairMotor.ExFlag = 1;
+            }
+            
+            //打印当前测速环值  
+            Uart_Print(3,gRepairMotor.Direction);            
 
-//            //同样的，若是圈数走的太多，就直接报错
-//            if (gRepairMotor.FlagValue >= 4 || gRepairMotor.AverageValue >= TWO_SPRINT_LOWER_LIMIT) //不需完全走完判定，可以直接认为是有问题的 
-//            //if (gRepairMotor.FlagValue >= 4 )
-//            {            
-//                Event(ITASK_DG_UP);
-//                err_volu(ERR_SPRI_ERR);
-//                
-//            }
-//            
-//            //两根弹簧报警
-//            if(gRepairMotor.AverageValue >= THREE_SPRING_LOWER_LIMIT)
-//            {
-//                //报警，只有两根弹簧   
-//                err_volu(ERR_SPRI_LIT);
-//            }
-            gRepairMotor.CurrentCounts = 5;
         }    
-    }
+        gRepairMotor.Times = 5;
+    }    
 }
 
 

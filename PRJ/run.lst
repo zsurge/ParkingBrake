@@ -1,4 +1,4 @@
-C51 COMPILER V9.00   RUN                                                                   03/16/2019 17:13:31 PAGE 1   
+C51 COMPILER V9.00   RUN                                                                   03/20/2019 17:17:59 PAGE 1   
 
 
 C51 COMPILER V9.00, COMPILATION OF MODULE RUN
@@ -62,7 +62,7 @@ line level    source
   44   1                 //计时器0工作于模式1 | Timer1    |    Timer0    |a
   45   1      //串口参数配置
   46   1      //  TH1=0xF4;   /*设定波特率为2400, 晶振11.0592MHz*/
-C51 COMPILER V9.00   RUN                                                                   03/16/2019 17:13:31 PAGE 2   
+C51 COMPILER V9.00   RUN                                                                   03/20/2019 17:17:59 PAGE 2   
 
   47   1      //  TH1=0xE8;   /*设定波特率为2400, 晶振22.1184MHz*/
   48   1      //  TH1=0xFD;   /*设定波特率为9600，晶振11.0592MHz*/
@@ -120,211 +120,222 @@ line level    source
   99   1       while (--i);
  100   1      }
  101          
- 102          
- 103          void ComClk() 
- 104            { 
- 105   1          if(ComNum) ComNum--;
- 106   1          if(COM1.RX_TimeOut) COM1.RX_TimeOut--;
- 107   1        }
-C51 COMPILER V9.00   RUN                                                                   03/16/2019 17:13:31 PAGE 3   
+ 102          //void delay_ms(u8 ms)    
+ 103          //{  
+ 104          //    u16 i;  
+ 105          //    do{  
+ 106          //        i=MAIN_Fosc/9600;  
+ 107          //        while(--i);     //96T per loop  
+C51 COMPILER V9.00   RUN                                                                   03/20/2019 17:17:59 PAGE 3   
 
- 108          
- 109          void UpCtClk() { if(UpCtNum) UpCtNum--; }
- 110          void UpDcClk() { if(UpDcNum) UpDcNum--; }
+ 108          //    }while(--ms);       //--ms  ms=ms-1  
+ 109          //}  
+ 110          
  111          
- 112          void sysint()
- 113          {
- 114   1        intMcu(); 
- 115   1        intUsart();
- 116   1        #if TIMER2
+ 112          
+ 113          
+ 114          void ComClk() 
+ 115            { 
+ 116   1          if(ComNum) ComNum--;
+ 117   1          if(COM1.RX_TimeOut) COM1.RX_TimeOut--;
+ 118   1        }
+ 119          
+ 120          void UpCtClk() { if(UpCtNum) UpCtNum--; }
+ 121          void UpDcClk() { if(UpDcNum) UpDcNum--; }
+ 122          
+ 123          void sysint()
+ 124          {
+ 125   1        intMcu(); 
+ 126   1        intUsart();
+ 127   1        #if TIMER2
                 Timer2_Init();
                 #endif
- 119   1        intRun();
- 120   1        intBuzz();
- 121   1        intErr();
- 122   1        intInput();
- 123   1        intclk();
- 124   1        intMotor();
- 125   1        intOut(); 
- 126   1        intAtRun();
- 127   1        RomTest();
- 128   1      }
- 129          
- 130          
- 131          
- 132          void iTaskCtr()
- 133          {
- 134   1      
- 135   1        if(iTask < Even)
- 136   1          {
- 137   2            iTask2= iTask_buf[mPosD][Even];   //根据事件和状态查表，获取任务
- 138   2            
- 139   2            if(iTask2!= MTASK_NA) 
- 140   2              {
- 141   3                mTask= iTask2;
- 142   3                iTask= Even;
- 143   3                if(!JY) if(iTask== ITASK_DG_UP || iTask== ITASK_DRAG_UP)  UpCt++;
- 144   3              }
- 145   2          }
- 146   1      }
- 147          
- 148          
- 149          void ViceCtr()
- 150          {
- 151   1        if(McuId== MACHI_VICE)
- 152   1          {
- 153   2            switch(ViceRal)
- 154   2              {
- 155   3                case POS_HOR:
- 156   3                case POS_DW:
- 157   3                  Event(ITASK_COM_DW);
- 158   3                  speak(VICE_STA,mPosD2);
- 159   3                  break;
- 160   3                case POS_UP:
- 161   3                case POS_VER:
- 162   3                  HDwSta=STA_NA; HDwNum=HDW_ON_TIME;
- 163   3                  DgSta=STA_NA; DgNum=DG_OFF_TIME;
- 164   3                  Event(ITASK_COM_UP);
- 165   3                  speak(VICE_STA,mPosD2);
- 166   3                  break;
- 167   3                case POS_INT:
- 168   3                  speak(VICE_STA,mPosD2);
- 169   3                  break;
-C51 COMPILER V9.00   RUN                                                                   03/16/2019 17:13:31 PAGE 4   
+ 130   1        intRun();
+ 131   1        intBuzz();
+ 132   1        intErr();
+ 133   1        intInput();
+ 134   1        intclk();
+ 135   1        intMotor();
+ 136   1        intOut(); 
+ 137   1        intAtRun();
+ 138   1        RomTest();
+ 139   1      }
+ 140          
+ 141          
+ 142          
+ 143          void iTaskCtr()
+ 144          {
+ 145   1      
+ 146   1        if(iTask < Even)
+ 147   1          {
+ 148   2            iTask2= iTask_buf[mPosD][Even];   //根据事件和状态查表，获取任务
+ 149   2            
+ 150   2            if(iTask2!= MTASK_NA) 
+ 151   2              {
+ 152   3                mTask= iTask2;
+ 153   3                iTask= Even;
+ 154   3                if(!JY) if(iTask== ITASK_DG_UP || iTask== ITASK_DRAG_UP)  UpCt++;
+ 155   3              }
+ 156   2          }
+ 157   1      }
+ 158          
+ 159          
+ 160          void ViceCtr()
+ 161          {
+ 162   1        if(McuId== MACHI_VICE)
+ 163   1          {
+ 164   2            switch(ViceRal)
+ 165   2              {
+ 166   3                case POS_HOR:
+ 167   3                case POS_DW:
+ 168   3                  Event(ITASK_COM_DW);
+ 169   3                  speak(VICE_STA,mPosD2);
+C51 COMPILER V9.00   RUN                                                                   03/20/2019 17:17:59 PAGE 4   
 
- 170   3                default: break;
- 171   3              }
- 172   2            ViceRal=0;
- 173   2          }
- 174   1        if(McuId== MACHI_MASTER)
- 175   1          { 
- 176   2            if(iTask== ITASK_INT || iTask== ITASK_STR) return;
- 177   2            if(!ComNum) ComNum= COM_TIME;
- 178   2            else return;
- 179   2            switch(mPosD2)
- 180   2              {
- 181   3                case POS_HOR:
- 182   3                case POS_DW:
- 183   3                  switch(ViceRal)
- 184   3                    {
- 185   4                      case POS_HOR:
- 186   4                        ViceSta=0;
- 187   4                        speak(VICE_STA,POS_INT);
- 188   4                        break;
- 189   4                      case POS_DW:
- 190   4                        if(!ViceSta) ViceSta=VICE_STA_EN;
- 191   4                        if(ViceSta==VICE_STA_DGON)        speak(VICE_STA,POS_UP);
- 192   4                        else                  speak(VICE_STA,POS_INT);
- 193   4                        break;
- 194   4                      case POS_VER:
- 195   4                        if(!ViceSta) ViceSta=VICE_STA_EN; 
- 196   4                        if(mPosD2==POS_DW)            speak(VICE_STA,POS_DW);
- 197   4                        if(ViceSta==VICE_STA_DW)        speak(VICE_STA,POS_DW);
- 198   4                        else if(ViceSta==VICE_STA_DGOF)     { speak(VICE_STA,POS_DW); ViceSta=0; }
- 199   4                        else                  speak(VICE_STA,POS_INT);
- 200   4                        break;
- 201   4                      case POS_UP:
- 202   4                        if(ViceSta!=VICE_STA_DGON)        DgStaClr();
- 203   4                        if(!ViceSta)              ViceSta=VICE_STA_EN;
- 204   4                        if(mPosD2==POS_DW)            Event(ITASK_COM_UP);
- 205   4                        else if(ViceSta==VICE_STA_DGOF)     speak(VICE_STA,POS_DW);
- 206   4                        else                  speak(VICE_STA,POS_INT);
- 207   4                        break;
- 208   4                      default: 
- 209   4                        speak(VICE_STA,POS_INT);
- 210   4                        break;
- 211   4                    }
- 212   3                  ViceRal=0;
- 213   3                  break;
- 214   3                case POS_VER:
- 215   3                case POS_UP:
- 216   3                  speak(VICE_STA,mPosD2);
- 217   3                  break;
- 218   3                default: 
- 219   3                  speak(VICE_STA,mPosD2);
- 220   3                  break;
- 221   3              }
- 222   2          }
- 223   1        
- 224   1      
- 225   1        //***********************发送状态处理***********************//
- 226   1        
- 227   1      }
- 228          
- 229          void iTaskControl()     //外部任务处理
- 230          {
- 231   1      
-C51 COMPILER V9.00   RUN                                                                   03/16/2019 17:13:31 PAGE 5   
+ 170   3                  break;
+ 171   3                case POS_UP:
+ 172   3                case POS_VER:
+ 173   3                  HDwSta=STA_NA; HDwNum=HDW_ON_TIME;
+ 174   3                  DgSta=STA_NA; DgNum=DG_OFF_TIME;
+ 175   3                  Event(ITASK_COM_UP);
+ 176   3                  speak(VICE_STA,mPosD2);
+ 177   3                  break;
+ 178   3                case POS_INT:
+ 179   3                  speak(VICE_STA,mPosD2);
+ 180   3                  break;
+ 181   3                default: break;
+ 182   3              }
+ 183   2            ViceRal=0;
+ 184   2          }
+ 185   1        if(McuId== MACHI_MASTER)
+ 186   1          { 
+ 187   2            if(iTask== ITASK_INT || iTask== ITASK_STR) return;
+ 188   2            if(!ComNum) ComNum= COM_TIME;
+ 189   2            else return;
+ 190   2            switch(mPosD2)
+ 191   2              {
+ 192   3                case POS_HOR:
+ 193   3                case POS_DW:
+ 194   3                  switch(ViceRal)
+ 195   3                    {
+ 196   4                      case POS_HOR:
+ 197   4                        ViceSta=0;
+ 198   4                        speak(VICE_STA,POS_INT);
+ 199   4                        break;
+ 200   4                      case POS_DW:
+ 201   4                        if(!ViceSta) ViceSta=VICE_STA_EN;
+ 202   4                        if(ViceSta==VICE_STA_DGON)        speak(VICE_STA,POS_UP);
+ 203   4                        else                  speak(VICE_STA,POS_INT);
+ 204   4                        break;
+ 205   4                      case POS_VER:
+ 206   4                        if(!ViceSta) ViceSta=VICE_STA_EN; 
+ 207   4                        if(mPosD2==POS_DW)            speak(VICE_STA,POS_DW);
+ 208   4                        if(ViceSta==VICE_STA_DW)        speak(VICE_STA,POS_DW);
+ 209   4                        else if(ViceSta==VICE_STA_DGOF)     { speak(VICE_STA,POS_DW); ViceSta=0; }
+ 210   4                        else                  speak(VICE_STA,POS_INT);
+ 211   4                        break;
+ 212   4                      case POS_UP:
+ 213   4                        if(ViceSta!=VICE_STA_DGON)        DgStaClr();
+ 214   4                        if(!ViceSta)              ViceSta=VICE_STA_EN;
+ 215   4                        if(mPosD2==POS_DW)            Event(ITASK_COM_UP);
+ 216   4                        else if(ViceSta==VICE_STA_DGOF)     speak(VICE_STA,POS_DW);
+ 217   4                        else                  speak(VICE_STA,POS_INT);
+ 218   4                        break;
+ 219   4                      default: 
+ 220   4                        speak(VICE_STA,POS_INT);
+ 221   4                        break;
+ 222   4                    }
+ 223   3                  ViceRal=0;
+ 224   3                  break;
+ 225   3                case POS_VER:
+ 226   3                case POS_UP:
+ 227   3                  speak(VICE_STA,mPosD2);
+ 228   3                  break;
+ 229   3                default: 
+ 230   3                  speak(VICE_STA,mPosD2);
+ 231   3                  break;
+C51 COMPILER V9.00   RUN                                                                   03/20/2019 17:17:59 PAGE 5   
 
- 232   1        ViceCtr();    //副机控制
- 233   1        switch(iTask) //当前执行任务
- 234   1          {
- 235   2            case ITASK_INT:
- 236   2              BmRed();    //拨码参数读取
- 237   2              if(!HUP && !HDW && !HOR) AtNum= 30;
- 238   2              else AtNum= 6;
- 239   2              iTask=ITASK_STR;
- 240   2              break;
- 241   2      
- 242   2            case ITASK_STR:
- 243   2              if(!HUP && !HDW && !HOR && !AtNum) { aLine= 1;iTask= ITASK_NA; }
- 244   2              else if(!AtNum) { iTask=ITASK_NA; }
- 245   2              break;
- 246   2      
- 247   2            case ITASK_REACH_H:
- 248   2            case ITASK_REACH_V:
- 249   2            case ITASK_INER_OK:
- 250   2            case ITASK_COER_OK:
- 251   2              iTask=ITASK_NA;
- 252   2              break;
- 253   2              
- 254   2      
- 255   2            case ITASK_NA:
- 256   2            case ITASK_COER_UP:
- 257   2            case ITASK_INER_DW:
- 258   2              iTaskCtr();
- 259   2              break;
- 260   2              
- 261   2            case ITASK_DG_UP:
- 262   2            case ITASK_DRAG_UP:
- 263   2            case ITASK_FZ_UP:
- 264   2            case ITASK_AUTO_UP:
- 265   2            case ITASK_COM_UP:
- 266   2            case ITASK_VDO_UP:
- 267   2            case ITASK_HAN_UP:
- 268   2              iTaskCtr();
- 269   2              break;
- 270   2              
- 271   2            case ITASK_HAN_DW:
- 272   2            case ITASK_COM_DW:
- 273   2            case ITASK_AUTO_DW:
- 274   2            case ITASK_DG_DW:
- 275   2              iTaskCtr();
- 276   2              break;
- 277   2      
- 278   2              
- 279   2            default: iTask=ITASK_NA; break;   //电机相关变量初始化
- 280   2          }
- 281   1      }
- 282          
- 283          void t0_interrupt(void)  interrupt 1 //using 1
- 284          {
- 285   1        TF0= 0;
- 286   1        TL0 = 0xCD;   //设置定时初值
- 287   1        TH0 = 0xF8;   //设置定时初值
- 288   1      
- 289   1      
- 290   1        T1Ms_clk();
- 291   1        mCtrClk();
- 292   1        ComClk();
- 293   1      //  LED=!LED;
-C51 COMPILER V9.00   RUN                                                                   03/16/2019 17:13:31 PAGE 6   
+ 232   3              }
+ 233   2          }
+ 234   1        
+ 235   1      
+ 236   1        //***********************发送状态处理***********************//
+ 237   1        
+ 238   1      }
+ 239          
+ 240          void iTaskControl()     //外部任务处理
+ 241          {
+ 242   1      
+ 243   1        ViceCtr();    //副机控制
+ 244   1        switch(iTask) //当前执行任务
+ 245   1          {
+ 246   2            case ITASK_INT:
+ 247   2              BmRed();    //拨码参数读取
+ 248   2              if(!HUP && !HDW && !HOR) AtNum= 30;
+ 249   2              else AtNum= 6;
+ 250   2              iTask=ITASK_STR;
+ 251   2              break;
+ 252   2      
+ 253   2            case ITASK_STR:
+ 254   2              if(!HUP && !HDW && !HOR && !AtNum) { aLine= 1;iTask= ITASK_NA; }
+ 255   2              else if(!AtNum) { iTask=ITASK_NA; }
+ 256   2              break;
+ 257   2      
+ 258   2            case ITASK_REACH_H:
+ 259   2            case ITASK_REACH_V:
+ 260   2            case ITASK_INER_OK:
+ 261   2            case ITASK_COER_OK:
+ 262   2              iTask=ITASK_NA;
+ 263   2              break;
+ 264   2              
+ 265   2      
+ 266   2            case ITASK_NA:
+ 267   2            case ITASK_COER_UP:
+ 268   2            case ITASK_INER_DW:
+ 269   2              iTaskCtr();
+ 270   2              break;
+ 271   2              
+ 272   2            case ITASK_DG_UP:
+ 273   2            case ITASK_DRAG_UP:
+ 274   2            case ITASK_FZ_UP:
+ 275   2            case ITASK_AUTO_UP:
+ 276   2            case ITASK_COM_UP:
+ 277   2            case ITASK_VDO_UP:
+ 278   2            case ITASK_HAN_UP:
+ 279   2              iTaskCtr();
+ 280   2              break;
+ 281   2              
+ 282   2            case ITASK_HAN_DW:
+ 283   2            case ITASK_COM_DW:
+ 284   2            case ITASK_AUTO_DW:
+ 285   2            case ITASK_DG_DW:
+ 286   2              iTaskCtr();
+ 287   2              break;
+ 288   2      
+ 289   2              
+ 290   2            default: iTask=ITASK_NA; break;   //电机相关变量初始化
+ 291   2          }
+ 292   1      }
+ 293          
+C51 COMPILER V9.00   RUN                                                                   03/20/2019 17:17:59 PAGE 6   
 
- 294   1      }
- 295          
- 296          
- 297          
- 298          #if 0 
+ 294          void t0_interrupt(void)  interrupt 1 //using 1
+ 295          {
+ 296   1        TF0= 0;
+ 297   1        TL0 = 0xCD;   //设置定时初值
+ 298   1        TH0 = 0xF8;   //设置定时初值
+ 299   1      
+ 300   1      
+ 301   1        T1Ms_clk();
+ 302   1        mCtrClk();
+ 303   1        ComClk();
+ 304   1      //  LED=!LED;
+ 305   1      }
+ 306          
+ 307          
+ 308          
+ 309          #if 0 
               //  落闸时分为5个阶段，分别是
               //  1.起步阶段，垂直位到起步位
               //  2.运行阶段，起步位到中段
@@ -371,6 +382,8 @@ line level    source
                     }
               
                     gRepairMotor.LastSpeRin = SpeRinN;
+C51 COMPILER V9.00   RUN                                                                   03/20/2019 17:17:59 PAGE 7   
+
                     
                     //打印当前测速环值
                     Uart_Print(3,gRepairMotor.Direction);     
@@ -382,8 +395,6 @@ line level    source
               
               //定时器中断2
               void Timer2_ISR(void) interrupt 5 //定时器2中断
-C51 COMPILER V9.00   RUN                                                                   03/16/2019 17:13:31 PAGE 7   
-
               {
                 TF2=0;
                 EXF2 = 0;
@@ -393,33 +404,25 @@ line level    source
                 testTimer2();  
               }
               #endif 
- 365          
- 366          
- 367          //#define TIMER_FRE  5         //计算周期
- 368          //#define BASIC_OFFSET_250MS 4 //每250ms测速环转到的圈数
- 369          //#define SPRING_PARAM_OFFSET1 2//弹簧参数
- 370          //#define SPRING_PARAM_OFFSET2 3//弹簧参数
- 371          //#define SPRING_PARAM_OFFSET3 4//弹簧参数
- 372          //#define BASIC_SPRING_NUM 46//弹簧标准值
- 373          
- 374          //#define START_POSITION 50   //从第50次进入中断开始计算
- 375          //#define END_POSITION (START_POSITION+TIMER_FRE*SPRING_CHECK_NUM)  //从第50次进入中断开始计算
- 376          //#define TIMER_FRE  5        //计算周期
- 377          //#define THREE_SPRING_LOWER_LIMIT 16 //如果统计总的圈数差大于这个值，说明已经不是三根弹簧了
- 378          //#define TWO_SPRINT_LOWER_LIMIT 26 //如果统计总的圈数差大于这个值，说明已经不是两根弹簧了
- 379          //#define BASIC_SPRING_NUM 38//弹簧标准值
- 380          //#define BASIC_OFFSET_250MS 4 //每250ms测速环转到的圈数
- 381          //#define SPRING_CHECK_NUM 6//取样次数
- 382          
- 383          #if TIMER2
-              #define START_POSITION 50   //从第50次进入中断开始计算
-              #define END_POSITION (START_POSITION+TIMER_FRE*SPRING_CHECK_NUM)  //从第50次进入中断开始计算
-              #define TIMER_FRE  5        //计算周期
-              #define THREE_SPRING_LOWER_LIMIT 18//16+2 //如果统计总的圈数差大于这个值，说明已经不是三根弹簧了
-              #define TWO_SPRINT_LOWER_LIMIT 28//26+2 //如果统计总的圈数差大于这个值，说明已经不是两根弹簧了
-              #define BASIC_SPRING_NUM 40//38+2//弹簧标准值
-              #define BASIC_OFFSET_250MS 4 //每250ms测速环转到的圈数
-              #define SPRING_CHECK_NUM 6//取样次数
+ 376          
+ 377          
+ 378          //#define TIMER_FRE  5         //计算周期
+ 379          //#define BASIC_OFFSET_250MS 4 //每250ms测速环转到的圈数
+ 380          //#define SPRING_PARAM_OFFSET1 2//弹簧参数
+ 381          //#define SPRING_PARAM_OFFSET2 3//弹簧参数
+ 382          //#define SPRING_PARAM_OFFSET3 4//弹簧参数
+ 383          //#define BASIC_SPRING_NUM 46//弹簧标准值
+ 384          
+ 385          //#define START_POSITION 50   //从第50次进入中断开始计算
+ 386          //#define END_POSITION (START_POSITION+TIMER_FRE*SPRING_CHECK_NUM)  //从第50次进入中断开始计算
+ 387          //#define TIMER_FRE  5        //计算周期
+ 388          //#define THREE_SPRING_LOWER_LIMIT 16 //如果统计总的圈数差大于这个值，说明已经不是三根弹簧了
+ 389          //#define TWO_SPRINT_LOWER_LIMIT 26 //如果统计总的圈数差大于这个值，说明已经不是两根弹簧了
+ 390          //#define BASIC_SPRING_NUM 38//弹簧标准值
+ 391          //#define BASIC_OFFSET_250MS 4 //每250ms测速环转到的圈数
+ 392          //#define SPRING_CHECK_NUM 6//取样次数
+ 393          
+ 394          #if TIMER2
               
               void motorTimer2(void)
               {
@@ -443,11 +446,11 @@ line level    source
               //            if(SpeRinN >= BASIC_SPRING_NUM + BASIC_OFFSET_250MS*gRepairMotor.Times)
               //            {
               //                gRepairMotor.FlagValue ++;//这里应该不会出现，如果出现就是大问题
+C51 COMPILER V9.00   RUN                                                                   03/20/2019 17:17:59 PAGE 8   
+
               //            }   
               
               //            gRepairMotor.LastSpeRin = SpeRinN;
-C51 COMPILER V9.00   RUN                                                                   03/16/2019 17:13:31 PAGE 8   
-
               //            //计算当前多走了多少圈
               //            if(gRepairMotor.LastSpeRin > (BASIC_SPRING_NUM+BASIC_OFFSET_250MS*(gRepairMotor.Times-1)))
               //            {                
@@ -493,7 +496,7 @@ line level    source
               }
               
               #endif
- 460          
+ 463          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

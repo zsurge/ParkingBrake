@@ -19,7 +19,7 @@ u8 const code eight=((YEAR | MOON | DATE | BAIZHA)+DATE+3);
  /******************** Ö÷º¯Êý**************************/
 void main()
 {
-	sysint();	
+	sysint();        
 	while (1)
 	{
 		clk();
@@ -34,6 +34,7 @@ void main()
 		AtRun();
 		WDT_reset(7);
 	}
+
 }
 
 

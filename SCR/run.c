@@ -99,6 +99,17 @@ void delay(u8 cnt)  //   延时单位:
  while (--i);
 }
 
+//void delay_ms(u8 ms)    
+//{  
+//    u16 i;  
+//    do{  
+//        i=MAIN_Fosc/9600;  
+//        while(--i);     //96T per loop  
+//    }while(--ms);       //--ms  ms=ms-1  
+//}  
+
+
+
 
 void ComClk() 
 	{ 
@@ -381,14 +392,6 @@ void Timer2_ISR(void) interrupt 5 //定时器2中断
 //#define SPRING_CHECK_NUM 6//取样次数
 
 #if TIMER2
-#define START_POSITION 50   //从第50次进入中断开始计算
-#define END_POSITION (START_POSITION+TIMER_FRE*SPRING_CHECK_NUM)  //从第50次进入中断开始计算
-#define TIMER_FRE  5        //计算周期
-#define THREE_SPRING_LOWER_LIMIT 18//16+2 //如果统计总的圈数差大于这个值，说明已经不是三根弹簧了
-#define TWO_SPRINT_LOWER_LIMIT 28//26+2 //如果统计总的圈数差大于这个值，说明已经不是两根弹簧了
-#define BASIC_SPRING_NUM 40//38+2//弹簧标准值
-#define BASIC_OFFSET_250MS 4 //每250ms测速环转到的圈数
-#define SPRING_CHECK_NUM 6//取样次数
 
 void motorTimer2(void)
 {
