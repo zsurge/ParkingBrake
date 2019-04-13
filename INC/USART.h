@@ -13,14 +13,13 @@
 
 
 #ifndef __USART_H
-#define __USART_H	 
+#define __USART_H
 
 #include "reg52.h"
-#include "string.h"
 #include "clk.h"
 #include "RUN.h"
 
-
+#define 	ISDEBUG 	1
 
 #define	COM_SEND	1
 #define	COM_RECE	0
@@ -50,7 +49,7 @@
 #define	BRT_Timer1	1
 #define	BRT_Timer2	2
 
-/**************************************************************************** 
+/****************************************************************************
 * 使用端口定义
 ****************************************************************************/
 #define	PORT_DE			P1
@@ -59,7 +58,7 @@ sbit	DE				= PORT_DE ^ B_DE;
 
 
 typedef struct
-{ 
+{
 	u8  id;				//串口号
 
 	u8	TX_read;		//发送读指针
@@ -70,10 +69,10 @@ typedef struct
 	u8	RX_TimeOut;		//接收超时
 	u8	RX_busy;		//接收忙
 	u8	B_RX_OK;		//接收块完成
-} xdata COMx_Define; 
+} xdata COMx_Define;
 
 typedef struct
-{ 
+{
 	u8	UART_Mode;			//模式,         UART_ShiftRight,UART_8bit_BRTx,UART_9bit,UART_9bit_BRTx
 	u8	UART_BRT_Use;		//使用波特率,   BRT_Timer1,BRT_Timer2
 	u32	UART_BaudRate;		//波特率,       ENABLE,DISABLE
@@ -84,7 +83,7 @@ typedef struct
 	u8	UART_Polity;		//优先级,     PolityLow,PolityHigh
 	u8	UART_P_SW;			//切换端口,   UART1_SW_P30_P31,UART1_SW_P36_P37,UART1_SW_P16_P17(必须使用内部时钟)
 	u8	UART_RXD_TXD_Short;	//内部短路RXD与TXD, 做中继, ENABLE,DISABLE
-} xdata COMx_InitDefine; 
+} xdata COMx_InitDefine;
 
 extern	COMx_Define	COM1;
 extern volatile	u8 xdata TX1_Buffer[COM_TX1_Lenth];	//发送缓冲
@@ -93,14 +92,17 @@ extern volatile u8 xdata RX1_Buffer[COM_RX1_Lenth];	//接收缓冲
 
 
 
-void UART_config(void);
-void TX1_writebuff(u8 dat);	//写入发送缓冲，指针+1
-void PrintString(u8 *puts);
+void UART_config ( void );
+void TX1_writebuff ( u8 dat );	//写入发送缓冲，指针+1
+void PrintString ( u8* puts );
 void intUsart();
-void uart_aly(); 
-void speak(u8 speakTask,u8 num);
+void uart_aly();
+void speak ( u8 speakTask,u8 num );
 
-void Uart_Print(u8 speakTask,u8 num);
+void Uart_Print ( u8 printTask,u8 num );
+
+
+
 
 #endif
 

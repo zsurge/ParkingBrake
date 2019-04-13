@@ -1,0 +1,3 @@
+---- test_clk Matches (2 in 1 files) ----
+clk.c (SCR) line 34 : void test_clk()
+clk in clk.c (SCR) : 		test_clk();

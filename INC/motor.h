@@ -165,32 +165,33 @@
 #define M_CLOS 		{ BigM5u= M_NA; BigM3u= M_NA; LitM= M_NA;}			//
 #define M_OPEN 		{ BigM5u= M_EN; BigM3u= M_EN; }						//
 #define M_SLOW	 	{ BigM5u= M_NA; BigM3u= M_EN; LitM= M_EN; }			//
-#if 0
-#define START_POSITION          250  //从第2500毫秒进入中断开始计算
-#define END_POSITION (START_POSITION+TIMER_FRE*SPRING_CHECK_NUM)  //从第50次进入中断开始计算
-#define TIMER_FRE  5                //计算周期
-#define THREE_SPRING_LOWER_LIMIT 18 //16+2 //如果统计总的圈数差大于这个值，说明已经不是三根弹簧了
-#define TWO_SPRINT_LOWER_LIMIT 28   //26+2 //如果统计总的圈数差大于这个值，说明已经不是两根弹簧了
-#define BASIC_SPRING_NUM 40         //38+2//弹簧标准值
-#define BASIC_OFFSET_250MS 4        //每250ms测速环转到的圈数
-#define SPRING_CHECK_NUM 6          //取样次数
-#endif
 
+//电机监控
+#define START_POSITION 35   //从第50次进入中断开始计算
+#define END_POSITION (START_POSITION+TIMER_FRE*SPRING_CHECK_NUM ) //从第50次进入中断开始计算
+#define TIMER_FRE  5        //计算周期
+#define THREE_SPRING_LOWER_LIMIT 11//如果统计总的圈数差大于这个值，说明已经不是三根弹簧了
+#define TWO_SPRINT_LOWER_LIMIT 28//如果统计总的圈数差大于这个值，说明已经不是两根弹簧了
+#define BASIC_SPRING_NUM 39   //初始值
+#define BASIC_OFFSET_250MS 6 //每250ms测速环转到的圈数
+#define SPRING_CHECK_NUM 8//取样次数
 
-typedef struct TRepairMotor
+typedef struct 
 {
-	u8 LastSpeRin;      //上一个测速环的值
-	//u8 CurrentSpeRin;   //当前测速环转动圈数
-	u8 AverageValue;    //所计算圈数平均值
+    u8 OffsetSum;       //多走的圈数和
 	u8 Times;           //定时器计数
 	u8 CurrentCounts;   //统计次数
 	u8 CalcCounts;      //计算次数
+    u8 ExFlag;          //是否执行定时器的标志位
+	u8 Direction;       //电机转动方向	
+	u8 FlagValue;       //统计超限次数	
+	u8 BasicSpringNum;  //第一次落点的位置
+	u8 OutFlag;         //电平信号转换
 //	u8 CurrentMotorType;//当前电机类型
 //	u8 CurrentSprintType;//当前弹簧类型
 //	u8 CurrentMotorPosition;//当前电机位置
-    u8 ExFlag;     //是否执行定时器的标志位
-	u8 Direction; //电机转动方向	
-	u8 FlagValue;   //统计超限次数
+//  u8 CurrentSpeRin;   //当前测速环转动圈数
+//  u8 AverageValue;    //所计算圈数平均值    
 }RepairMotor_t;
 
 
@@ -223,14 +224,11 @@ sbit	MCR2				= PORT_MCR2 ^ B_MCR2;
 sbit	SPE					= PORT_SPE ^ B_SPE;
 
 
-
-
 #define BigM5u			BTA1
 #define BigM3u			BTA2
 #define LitM			BTA3
 #define BigMCR			MCR1
 #define LitMCR			MCR2
-
 
 
 /**************************************************************************** 

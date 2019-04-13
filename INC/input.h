@@ -120,8 +120,8 @@ sbit	BM4					= PORT_BM4 ^ B_BM4;
 extern volatile u8  data HupNum;			//
 extern volatile u8  data VupNum;			//
 extern volatile u8  data HDwNum;			//
-extern volatile u8  data DgNum;				//DG端无信号防抖计时
-extern volatile u8  data DgNum1;			//DG端有信号防抖计时
+extern volatile u8  data DgNum_NoSignal;    //DG端无信号防抖计时
+extern volatile u8  data DgNum_Signal;   	//DG端有信号防抖计时
 extern volatile u8  data FzNum;				//FZ端防抖计时
 extern volatile u8  data PosNum;			//位置检测计时
 

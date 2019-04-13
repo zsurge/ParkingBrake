@@ -11,47 +11,59 @@ u8 	xdata RX1_Buffer[COM_RX1_Lenth];	//接收缓冲
 
 
 /********************* UART1中断函数************************/
-void UART1_int (void) interrupt 4
+void UART1_int ( void ) interrupt 4
 {
-	if(RI)
+	if ( RI )
 	{
 		RI = 0;
-		if(!COM1.RX_busy)
+		if ( !COM1.RX_busy )
+		{
+			if ( COM1.RX_Cnt >= COM_RX1_Lenth )
 			{
-				if(COM1.RX_Cnt >= COM_RX1_Lenth)	
-					{ 
-						COM1.RX_Cnt = 0; 
-						memset(RX1_Buffer,0x00,sizeof(RX1_Buffer));
-						return;
-					}
-				RX1_Buffer[COM1.RX_Cnt] = SBUF;
-				COM1.RX_Cnt++;
-				COM1.RX_TimeOut = TimeOutSet1;	
+				COM1.RX_Cnt = 0;
+				memset ( RX1_Buffer,0x00,sizeof ( RX1_Buffer ) );
+				return;
 			}
+			RX1_Buffer[COM1.RX_Cnt] = SBUF;
+			COM1.RX_Cnt++;
+			COM1.RX_TimeOut = TimeOutSet1;
+		}
 	}
 
-	if(TI)
+	if ( TI )
 	{
 		TI = 0;
 		DE= COM_SEND;
-		if(COM1.TX_read != COM1.TX_write)
+		if ( COM1.TX_read != COM1.TX_write )
 		{
-		 	SBUF = TX1_Buffer[COM1.TX_read];
-			if(++COM1.TX_read >= COM_TX1_Lenth)		COM1.TX_read = 0;
+			SBUF = TX1_Buffer[COM1.TX_read];
+			if ( ++COM1.TX_read >= COM_TX1_Lenth )
+			{
+				COM1.TX_read = 0;
+			}
 		}
-		else	
-		{ COM1.B_TX_busy = 0; COM1.TX_read = 0; COM1.TX_write=0; DE= COM_RECE; memset(TX1_Buffer,0,sizeof(TX1_Buffer));}
+		else
+		{
+			COM1.B_TX_busy = 0;
+			COM1.TX_read = 0;
+			COM1.TX_write=0;
+			DE= COM_RECE;
+			memset ( TX1_Buffer,0,sizeof ( TX1_Buffer ) );
+		}
 	}
 }
 
 
 /*************** 装载串口发送缓冲 *******************************/
 
-void TX1_writebuff(u8 dat)	//写入发送缓冲，指针+1
+void TX1_writebuff ( u8 dat )	//写入发送缓冲，指针+1
 {
 	TX1_Buffer[COM1.TX_write] = dat;	//装发送缓冲
-	if(++COM1.TX_write >= COM_TX1_Lenth)	COM1.TX_write = 0;
-	if(COM1.B_TX_busy == 0)		//空闲
+	if ( ++COM1.TX_write >= COM_TX1_Lenth )
+	{
+		COM1.TX_write = 0;
+	}
+	if ( COM1.B_TX_busy == 0 )		//空闲
 	{
 		COM1.B_TX_busy = 1;		//标志忙
 		TI = 1;					//触发发送中断
@@ -59,49 +71,43 @@ void TX1_writebuff(u8 dat)	//写入发送缓冲，指针+1
 }
 
 
-void PrintString(u8 *puts)
+void PrintString ( u8* puts )
 {
-	#if ISDEBUG
-
-	while (*puts != '\0') 
+	while ( *puts != '\0' )
 	{
-		TX1_writebuff(*puts++);
-  	}
-
-	//TX1_writebuff(0x0d);
-    
-  #endif
+		TX1_writebuff ( *puts++ );
+	}
 }
 
 
 void intUsart()
 {
-	memset(&COM1, 0, sizeof(COM1));
-	memset(&TX1_Buffer, 0, sizeof(TX1_Buffer));
-	memset(&RX1_Buffer, 0, sizeof(RX1_Buffer));
+	memset ( &COM1, 0, sizeof ( COM1 ) );
+	memset ( &TX1_Buffer, 0, sizeof ( TX1_Buffer ) );
+	memset ( &RX1_Buffer, 0, sizeof ( RX1_Buffer ) );
 	DE= COM_RECE;
 }
 
-
-void Uart_Print(u8 speakTask,u8 num)
+void Uart_Print ( u8 speakTask,u8 num )
 {
 #if ISDEBUG
 	u8 xdata sen_buff[COM_TX1_Lenth];
 	u8 i = 0;
-	memset(sen_buff,0,sizeof(sen_buff));
-	
-	switch(speakTask)
+	memset ( sen_buff,0,sizeof ( sen_buff ) );
+
+	switch ( speakTask )
 	{
+
 		case 3:
-			sen_buff[0]=num + 63;
+          	sen_buff[0]=num + 63;
 			sen_buff[1]=0x30+SpeRinN/100%10;
 			sen_buff[2]=0x30+SpeRinN/10%10;
 			sen_buff[3]=0x30+SpeRinN%10;
 			sen_buff[4]=0x2c;
 		
-			sen_buff[5]=0x30+gRepairMotor.CalcCounts/100%10;
-			sen_buff[6]=0x30+gRepairMotor.CalcCounts/10%10;
-			sen_buff[7]=0x30+gRepairMotor.CalcCounts%10;
+			sen_buff[5]=0x30+gRepairMotor.BasicSpringNum/100%10;
+			sen_buff[6]=0x30+gRepairMotor.BasicSpringNum/10%10;
+			sen_buff[7]=0x30+gRepairMotor.BasicSpringNum%10;
 			sen_buff[8]=0x2c;            
             sen_buff[9]=0x30+gRepairMotor.FlagValue%10;
             sen_buff[10]=0x2c;
@@ -110,42 +116,67 @@ void Uart_Print(u8 speakTask,u8 num)
             sen_buff[13]=0x30+gRepairMotor.CurrentCounts%10;
             
             sen_buff[14]=0x2c;
-            sen_buff[15]=0x30+gRepairMotor.AverageValue/10%10;
-            sen_buff[16]=0x30+gRepairMotor.AverageValue%10;
-			sen_buff[17]=0x3B;
-			break;	
+            sen_buff[15]=0x30+gRepairMotor.CalcCounts/10%10;
+            sen_buff[16]=0x30+gRepairMotor.CalcCounts%10;
+			sen_buff[17]=0x2C;
+            sen_buff[18]=0x30+gRepairMotor.OffsetSum/10%10;
+            sen_buff[19]=0x30+gRepairMotor.OffsetSum%10;
+			break;
+
+
+//			sen_buff[0]=48+num;
+//			sen_buff[1]=0x2E;
+//			sen_buff[2]=0x30+SpeRinN/100%10;
+//			sen_buff[3]=0x30+SpeRinN/10%10;
+//			sen_buff[4]=0x30+SpeRinN%10;
+//			sen_buff[5]=0x30+mTask/10%10;
+//			sen_buff[6]=0x30+mTask%10;
+//			sen_buff[7]=0x30+iTask/10%10;
+//			sen_buff[8]=0x30+iTask%10;
+//			sen_buff[9]=0x30+iTask2/10%10;
+//			sen_buff[10]=0x30+iTask2%10;
+//			sen_buff[11]=0x30+mPosD/10%10;
+//			sen_buff[12]=0x30+mPosD%10;
+//			sen_buff[13]=0x30+DwSlo/100%10;
+//			sen_buff[14]=0x30+DwSlo/10%10;
+//			sen_buff[15]=0x30+DwSlo%10;
+//			sen_buff[16]=0x30+hafTest%10;
+//			sen_buff[17]=0x30+AtNum%10;
+//			sen_buff[18]=0x30+aLine%10;
+//			sen_buff[19]=0x3B;
+//			break;
 
 		default:
 			break;
-	}	
-
-
-	for(i=0;i<18;i++)
-	{
-		TX1_writebuff(sen_buff[i]);
 	}
-	
-  #endif
+
+
+	for ( i=0; i<strlen ( sen_buff ); i++ )
+	{
+		TX1_writebuff ( sen_buff[i] );
+	}
+
+#endif
 
 }
 
 //speakTask:操作命令
 //num:操作数
-void speak(u8 speakTask,u8 num)
+void speak ( u8 speakTask,u8 num )
 {
 	u8 xdata sen_buff[COM_TX1_Lenth];
-	memset(sen_buff,0,sizeof(sen_buff));
-	switch(speakTask)
-		{
-			case 1:
-				break;
+	memset ( sen_buff,0,sizeof ( sen_buff ) );
+	switch ( speakTask )
+	{
+		case 1:
+			break;
 
 
-			case VICE_STA:
-				sen_buff[0]=num;
-				sen_buff[1]=num;
-				sen_buff[2]=num;
-				break;
+		case VICE_STA:
+			sen_buff[0]=num;
+			sen_buff[1]=num;
+			sen_buff[2]=num;
+			break;
 
 //			case 3:
 //				sen_buff[0]=num + 63;
@@ -170,7 +201,7 @@ void speak(u8 speakTask,u8 num)
 //				sen_buff[16]=0x2c;
 
 //				break;
-//				
+//
 //			case 2:
 //				sen_buff[0]=num + 39;
 //				sen_buff[1]=0x30+gRepairMotor.CurrentCounts/100%10;
@@ -178,7 +209,7 @@ void speak(u8 speakTask,u8 num)
 //				sen_buff[3]=0x30+gRepairMotor.CurrentCounts%10;
 //				sen_buff[4]=0x3b;
 //				sen_buff[5]=0x0a;
-				
+
 //				sen_buff[0]=0x30+test_dly/10000%10;
 //				sen_buff[1]=0x30+test_dly/1000%10;
 //				sen_buff[2]=0x30+test_dly/100%10;
@@ -206,7 +237,7 @@ void speak(u8 speakTask,u8 num)
 //				sen_buff[7]=0x30+mPosD%10;
 //				sen_buff[8]=0x3b;
 //				sen_buff[9]=0x0a;
-				
+
 //				sen_buff[0]=0x30+HupSta/100%10;
 //				sen_buff[1]=0x30+HupSta/10%10;
 //				sen_buff[2]=0x30+HupSta%10;
@@ -429,11 +460,11 @@ void speak(u8 speakTask,u8 num)
 //				sen_buff[9]=0x3b;
 //				sen_buff[10]=0x0a;
 
-				break;
-		
-		}
-	
-	PrintString(sen_buff);	//SUART1发送一个字符串
+			break;
+
+	}
+
+	PrintString ( sen_buff );	//SUART1发送一个字符串
 }
 
 
@@ -444,24 +475,27 @@ void uart_aly()
 {
 //	u8 xdata buf[COM_RX1_Lenth];
 
-	if(!COM1.RX_TimeOut)	//超时计数
+	if ( !COM1.RX_TimeOut )	//超时计数
+	{
+		if ( COM1.RX_Cnt>0 )
 		{
-			if(COM1.RX_Cnt>0)
-				{
-					COM1.RX_busy = 1;
+			COM1.RX_busy = 1;
 //							memcpy(&buf,&RX1_Buffer,sizeof(RX1_Buffer));
-					if(RX1_Buffer[0]== RX1_Buffer[1] && RX1_Buffer[0]== RX1_Buffer[2]) ViceRal= RX1_Buffer[0];
-					memset(RX1_Buffer,0x00,sizeof(RX1_Buffer));
-					COM1.RX_Cnt = 0;
-					COM1.RX_busy = 0;
-					COM1.B_RX_OK = 1;
-				}
-		 }
-	if(COM1.B_RX_OK)
-		{
-//			if(buf[0]== buf[1] && buf[0]== buf[2]) ViceRal= buf[0];
-			COM1.B_RX_OK= 0;
+			if ( RX1_Buffer[0]== RX1_Buffer[1] && RX1_Buffer[0]== RX1_Buffer[2] )
+			{
+				ViceRal= RX1_Buffer[0];
+			}
+			memset ( RX1_Buffer,0x00,sizeof ( RX1_Buffer ) );
+			COM1.RX_Cnt = 0;
+			COM1.RX_busy = 0;
+			COM1.B_RX_OK = 1;
 		}
+	}
+	if ( COM1.B_RX_OK )
+	{
+//			if(buf[0]== buf[1] && buf[0]== buf[2]) ViceRal= buf[0];
+		COM1.B_RX_OK= 0;
+	}
 }
 
 

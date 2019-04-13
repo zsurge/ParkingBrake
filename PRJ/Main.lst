@@ -1,4 +1,4 @@
-C51 COMPILER V9.00   MAIN                                                                  03/20/2019 17:17:58 PAGE 1   
+C51 COMPILER V9.00   MAIN                                                                  04/13/2019 14:32:09 PAGE 1   
 
 
 C51 COMPILER V9.00, COMPILATION OF MODULE MAIN
@@ -17,38 +17,78 @@ line level    source
    7          ****************************************************************************/
    8          #include "main.h"
    9          
-  10          //设备程序版本号       
-  11          u8 const code PG_Version[]={VER0, VER1, VER2, YEAR, MOON, DATE};
+  10          //设备程序版本号
+  11          u8 const code PG_Version[]= {VER0, VER1, VER2, YEAR, MOON, DATE};
   12          
   13          //存储器写识别码
-  14          u8 const code eight=((YEAR | MOON | DATE | BAIZHA)+DATE+3);
+  14          u8 const code eight= ( ( YEAR | MOON | DATE | BAIZHA )+DATE+3 );
   15          
   16          
   17          
-  18           
-  19           /******************** 主函数**************************/
+  18          
+  19          /******************** 主函数**************************/
   20          void main()
   21          {
-  22   1        sysint();        
-  23   1        while (1)
+  22   1        sysint();
+  23   1        while ( 1 )
   24   1        {
   25   2          clk();
   26   2          InputTask();
   27   2          iTaskControl();
   28   2          mTaskControl();
-  29   2              MonitorTask();//监控
+  29   2          MonitorTask();//监控
   30   2          err_task();
-  31   2          Buzz_task(BuzzMode);    //蜂鸣器任务
+  31   2          Buzz_task ( BuzzMode );   //蜂鸣器任务
   32   2          OPutTask();
   33   2          uart_aly();
   34   2          AtRun();
-  35   2          WDT_reset(7);
+  35   2          WDT_reset ( 7 );
   36   2        }
   37   1      
   38   1      }
   39          
-  40          
-  41          
+  40          //void Test ( void )
+  41          //{
+  42          //    while (1)
+  43          //    {
+  44          //        delay_ms(250);
+  45          //        DZP_UP;
+  46          //        delay_ms(250);
+  47          //        delay_ms(250);
+  48          //        DZP_CL;
+  49          //        delay_ms(250);
+  50          //        delay_ms(250);
+  51          //        DZP_DW;
+  52          //        delay_ms(250);
+  53          //        delay_ms(250);
+  54          //        DZP_CL;
+C51 COMPILER V9.00   MAIN                                                                  04/13/2019 14:32:09 PAGE 2   
+
+  55          //        delay_ms(250);
+  56          //        delay_ms(250);
+  57          //        DZP_ER;
+  58          //        delay_ms(250);
+  59          //        delay_ms(250);
+  60          //        DZP_UP
+  61          //        delay_ms(250);
+  62          //        delay_ms(250);
+  63          //        DZP_DW;
+  64          //        delay_ms(250);
+  65          //        delay_ms(250);
+  66          //        DZP_CL;
+  67          //        delay_ms(250);
+  68          //        delay_ms(250);
+  69          //        DZP_DW;
+  70          //        delay_ms(250);
+  71          //        delay_ms(250);
+  72          //        DZP_UP;
+  73          //        delay_ms(250);
+  74          //        delay_ms(250);
+  75          //        DZP_CL;
+  76          //        delay_ms(250);
+  77          //    }
+  78          //}
+  79          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

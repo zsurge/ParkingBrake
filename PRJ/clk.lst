@@ -1,4 +1,4 @@
-C51 COMPILER V9.00   CLK                                                                   03/20/2019 17:17:58 PAGE 1   
+C51 COMPILER V9.00   CLK                                                                   04/13/2019 14:32:10 PAGE 1   
 
 
 C51 COMPILER V9.00, COMPILATION OF MODULE CLK
@@ -21,69 +21,86 @@ line level    source
   11          u8 T100MS;    //100毫秒计量变量
   12          u8 T1000MS;   //1000毫秒计量变量
   13          
-  14          u16 xdata test;     //主程序在100MS内循环跑N次，此参数可观察单片机运行效率
-  15          u16 xdata test_dly;   //主程序在100MS内循环跑N次，用作数码管显示使用
+  14          //u16 xdata test;     //主程序在100MS内循环跑N次，此参数可观察单片机运行效率
+  15          //u16 xdata test_dly;   //主程序在100MS内循环跑N次，用作数码管显示使用
   16          
   17          
   18          
-  19          void intclk() { T10MS=0; T100MS=0; T1000MS=0;}
-  20          
-  21          
-  22          void T1Ms_clk() { if(T10MS) T10MS--; }  //1毫秒时钟
-  23          void test_clk() { test_dly=test; test=0; }
-  24          
-  25          void clk()              //设备运行时钟
-  26          {
-  27   1        if(!T10MS)            //由定时器产生1毫秒中断，计时10MS
-  28   1          {
-  29   2            T10MS=T10MS_TIME;
-  30   2            if(T100MS)T100MS--;
-  31   2            
-  32   2            Buzz_clk();
-  33   2            Dg_clk();
-  34   2            Fz_clk();
-  35   2            Pos_clk();
-  36   2            Hup_clk();
-  37   2            Hdw_clk();
-  38   2            Vup_clk();
-  39   2            UpCtClk();
-  40   2            BrakeClk();
-  41   2                  Monitor_clk();//监控计数器
-  42   2          }
-  43   1      
-  44   1        if(!T100MS)           //计时100MS
-  45   1          {
-  46   2            T100MS=T100MS_TIME;
-  47   2            if(T1000MS)T1000MS--;   
-  48   2      
-  49   2            AtRun_clk();
-  50   2            err_clk();
-  51   2            DZP_clk();
-  52   2            test_clk(); 
-  53   2            DZP_clk();
-  54   2            mRunClk();
-C51 COMPILER V9.00   CLK                                                                   03/20/2019 17:17:58 PAGE 2   
+  19          void intclk()
+  20          {
+  21   1        T10MS=0;
+  22   1        T100MS=0;
+  23   1        T1000MS=0;
+  24   1      }
+  25          
+  26          
+  27          void T1Ms_clk()
+  28          {
+  29   1        if ( T10MS )
+  30   1        {
+  31   2          T10MS--;    //1毫秒时钟
+  32   2        }
+  33   1      }
+  34          //void test_clk()
+  35          //{
+  36          //  test_dly=test;
+  37          //  test=0;
+  38          //}
+  39          
+  40          void clk()  //设备运行时钟
+  41          {
+  42   1        if ( !T10MS )//由定时器产生1毫秒中断，计时10MS
+  43   1        {
+  44   2          T10MS=T10MS_TIME;
+  45   2          if ( T100MS )
+  46   2          {
+  47   3            T100MS--;
+  48   3          }
+  49   2      
+  50   2          Buzz_clk();
+  51   2          Dg_clk();
+  52   2          Fz_clk();
+  53   2          Pos_clk();
+  54   2          Hup_clk();
+C51 COMPILER V9.00   CLK                                                                   04/13/2019 14:32:10 PAGE 2   
 
-  55   2            UpDcClk();
-  56   2            
-  57   2      //      speak(2,1);
-  58   2          }
-  59   1        
-  60   1        if(!T1000MS)          //计时1000MS
-  61   1          {
-  62   2            T1000MS=T1000MS_TIME;
-  63   2      //            LED=!LED;
-  64   2            
-  65   2          }
-  66   1        test++;             //主程序在100MS内循环跑N次，此参数可观察单片机运行效率
-  67   1      }
-  68          
+  55   2          Hdw_clk();
+  56   2          Vup_clk();
+  57   2          UpCtClk();
+  58   2          BrakeClk();
+  59   2          Monitor_clk();//监控计数器
+  60   2        }
+  61   1      
+  62   1        if ( !T100MS )            //计时100MS
+  63   1        {
+  64   2          T100MS=T100MS_TIME;
+  65   2          if ( T1000MS )
+  66   2          {
+  67   3            T1000MS--;
+  68   3          }
+  69   2      
+  70   2          AtRun_clk();
+  71   2          err_clk();
+  72   2          DZP_clk();
+  73   2      //    test_clk();
+  74   2          DZP_clk();
+  75   2          mRunClk();
+  76   2          UpDcClk();
+  77   2        }
+  78   1      
+  79   1        if ( !T1000MS )         //计时1000MS
+  80   1        {
+  81   2          T1000MS=T1000MS_TIME;
+  82   2        }
+  83   1      //  test++;             //主程序在100MS内循环跑N次，此参数可观察单片机运行效率
+  84   1      }
+  85          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    137    ----
+   CODE SIZE        =     97    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =      4    ----
+   XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =      3    ----
    IDATA SIZE       =   ----    ----

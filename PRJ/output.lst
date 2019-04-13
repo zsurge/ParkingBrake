@@ -1,4 +1,4 @@
-C51 COMPILER V9.00   OUTPUT                                                                03/20/2019 17:17:58 PAGE 1   
+C51 COMPILER V9.00   OUTPUT                                                                04/13/2019 14:32:10 PAGE 1   
 
 
 C51 COMPILER V9.00, COMPILATION OF MODULE OUTPUT
@@ -17,76 +17,125 @@ line level    source
    7          ****************************************************************************/
    8          #include "Output.h"
    9          
-  10          
-  11          
-  12          u8 data DZPnum;
-  13          u8 data DlyBrakeNum;
-  14          u16 data BrakeNum;
-  15          u8 data BrakeSta;
-  16          
-  17          
-  18          
-  19          
-  20          
-  21          void intOut() { DZPnum=0; DlyBrakeNum=0; BrakeNum=0; BrakeSta=0; }
-  22          void DZP_clk()  { if(DZPnum)  DZPnum--; }   //道闸反馈信号时钟
-  23          void BrakeClk() { if(BrakeNum) BrakeNum--;  if(DlyBrakeNum) DlyBrakeNum--; }
-  24          
-  25          
-  26          void BrakeClr() { KK=1; BrakeNum=0; DlyBrakeNum=0; BrakeSta=0; }
-  27          
-  28          void OPutTask()
-  29          {
-  30   1        if(mTask== MTASK_UP1) 
-  31   1          {
-  32   2            RG= KK_GRE;
-  33   2            if(!BM3 && (iTask==ITASK_DG_UP || iTask==ITASK_FZ_UP || iTask==ITASK_DRAG_UP || iTask== ITASK_INER_DW))
-             - 
-  34   2                  { 
-  35   3                      DZP_CL; 
-  36   3                  }
-  37   2            else 
-  38   2                  {
-  39   3                      DZP_UP;
-  40   3                  }
-  41   2            DZPnum=DZP_TIME;
-  42   2          }
-  43   1        else if(mTask== MTASK_DW1)
-  44   1          {
-  45   2            RG= KK_RED;
-  46   2            DZP_DW;
-  47   2            DZPnum= DZP_TIME;
-  48   2          }
-  49   1        else if(!DZPnum) DZP_CL;
-  50   1      
-  51   1        switch(BrakeSta)
-  52   1          {
-  53   2            case 0:
-C51 COMPILER V9.00   OUTPUT                                                                03/20/2019 17:17:58 PAGE 2   
+  10          u8 data DZPnum;
+  11          u8 data DlyBrakeNum;
+  12          u16 data BrakeNum;
+  13          u8 data BrakeSta;
+  14          
+  15          void intOut()
+  16          {
+  17   1        DZPnum=0;
+  18   1        DlyBrakeNum=0;
+  19   1        BrakeNum=0;
+  20   1        BrakeSta=0;
+  21   1      }
+  22          void DZP_clk()
+  23          {
+  24   1        if ( DZPnum )
+  25   1        {
+  26   2          DZPnum--;    //道闸反馈信号时钟
+  27   2        }
+  28   1      }
+  29          void BrakeClk()
+  30          {
+  31   1        if ( BrakeNum )
+  32   1        {
+  33   2          BrakeNum--;
+  34   2        }
+  35   1        if ( DlyBrakeNum )
+  36   1        {
+  37   2          DlyBrakeNum--;
+  38   2        }
+  39   1      }
+  40          
+  41          
+  42          void BrakeClr()
+  43          {
+  44   1        KK=1;
+  45   1        BrakeNum=0;
+  46   1        DlyBrakeNum=0;
+  47   1        BrakeSta=0;
+  48   1      }
+  49          
+  50          void OPutTask()
+  51          {
+  52   1        if ( mTask== MTASK_UP1 )
+  53   1        {
+  54   2          RG= KK_GRE;
+C51 COMPILER V9.00   OUTPUT                                                                04/13/2019 14:32:10 PAGE 2   
 
-  54   2              if(mTask/10==MTASK_DS || mTask/10==MTASK_US){ DlyBrakeNum=DLYBRAKETIME; BrakeSta++; }
-  55   2              break;
-  56   2              
-  57   2            case 1:
-  58   2              if(!DlyBrakeNum) { KK=0; BrakeNum=BRAKETIME; BrakeSta++; }
-  59   2              break;
-  60   2              
-  61   2            case 2:
-  62   2              if(!BrakeNum) { KK=1; BrakeSta++; }
-  63   2              break;
-  64   2              
-  65   2            case 3: break;
-  66   2              
-  67   2            default: break;
-  68   2          }
-  69   1      }
-  70          
-  71          
-  72          
+  55   2          if ( !BM3 && ( iTask==ITASK_DG_UP || iTask==ITASK_FZ_UP || iTask==ITASK_DRAG_UP || iTask== ITASK_INER_DW
+             - ) )
+  56   2          {
+  57   3            DZP_CL;
+  58   3          }
+  59   2          else
+  60   2          {
+  61   3            DZP_UP;
+  62   3          }
+  63   2          DZPnum=DZP_TIME;
+  64   2        }
+  65   1        else if ( mTask== MTASK_DW1 )
+  66   1        {
+  67   2          RG= KK_RED;
+  68   2          DZP_DW;
+  69   2          DZPnum= DZP_TIME;
+  70   2        }
+  71   1        else if ( !DZPnum )
+  72   1        {
+  73   2          if ( gRepairMotor.OutFlag )
+  74   2          {
+  75   3            DZP_ER;
+  76   3          }
+  77   2          else
+  78   2          {
+  79   3            DZP_CL;
+  80   3          }
+  81   2        }
+  82   1      
+  83   1        switch ( BrakeSta )
+  84   1        {
+  85   2          case 0:
+  86   2            if ( mTask/10==MTASK_DS || mTask/10==MTASK_US )
+  87   2            {
+  88   3              DlyBrakeNum=DLYBRAKETIME;
+  89   3              BrakeSta++;
+  90   3            }
+  91   2            break;
+  92   2      
+  93   2          case 1:
+  94   2            if ( !DlyBrakeNum )
+  95   2            {
+  96   3              KK=0;
+  97   3              BrakeNum=BRAKETIME;
+  98   3              BrakeSta++;
+  99   3            }
+ 100   2            break;
+ 101   2      
+ 102   2          case 2:
+ 103   2            if ( !BrakeNum )
+ 104   2            {
+ 105   3              KK=1;
+ 106   3              BrakeSta++;
+ 107   3            }
+ 108   2            break;
+ 109   2      
+ 110   2          case 3:
+ 111   2            break;
+ 112   2      
+ 113   2          default:
+ 114   2            break;
+ 115   2        }
+C51 COMPILER V9.00   OUTPUT                                                                04/13/2019 14:32:10 PAGE 3   
+
+ 116   1      }
+ 117          
+ 118          
+ 119          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    190    ----
+   CODE SIZE        =    200    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----

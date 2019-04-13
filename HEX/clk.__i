@@ -1,1 +1,0 @@
-"..\SCR\clk.c" BROWSE INCDIR(..\INC) DEBUG OBJECTEXTEND PRINT(.\clk.lst) TABS (2) OBJECT(..\HEX\clk.obj)

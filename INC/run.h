@@ -25,16 +25,11 @@
 #define		ENABLE		1
 #define		DISABLE		0
 
-#define 	ISDEBUG 	1
-#define 	TIMER2      0
-
-//#define MAIN_Fosc        11059200UL    //定义主时钟HZ  
+#define     MAIN_Fosc   11059200UL    //定义主时钟HZ  
 
 
 //主副机通信周期
 #define COM_TIME		20		
-
-//#define 
 
 
 //执行的任务
@@ -86,14 +81,6 @@
 
 
 
-
-
-
-
-
-
-
-
 /**************************************************************************** 
 * 使用端口定义
 ****************************************************************************/
@@ -133,10 +120,5 @@ void UpCtClk();
 void UpDcClk();
 void delay(u8 cnt);
 //void delay_ms(u8 ms); 
-
-#if TIMER2
-void Timer2_Init(void);
-#endif
-
 #endif
 

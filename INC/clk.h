@@ -66,8 +66,8 @@ extern volatile u8 T1000MS; 	//1000毫秒计量变量
 
 
 
-extern volatile u16 xdata test;		//主程序在100MS内循环跑N次，此参数可观察单片机运行效率
-extern volatile u16 xdata test_dly;	//主程序在100MS内循环跑N次，用作数码管显示使用
+//extern volatile u16 xdata test;		//主程序在100MS内循环跑N次，此参数可观察单片机运行效率
+//extern volatile u16 xdata test_dly;	//主程序在100MS内循环跑N次，用作数码管显示使用
 
 
 

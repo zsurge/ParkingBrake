@@ -12,7 +12,7 @@
 // 返回: non.
 // 版本: V1.0, 2012-10-22
 //========================================================================
-void	DisableEEPROM(void)
+void	DisableEEPROM ( void )
 {
 	IAP_CONTR = 0;			//禁止ISP/IAP操作
 	IAP_CMD   = 0;			//去除ISP/IAP命令
@@ -31,7 +31,7 @@ void	DisableEEPROM(void)
 // 版本: V1.0, 2012-10-22
 //========================================================================
 
-void EEPROM_read_n(u16 EE_address,u8 *DataAddress,u16 number)
+void EEPROM_read_n ( u16 EE_address,u8* DataAddress,u16 number )
 {
 //	EA = 0;		//禁止中断
 
@@ -44,14 +44,15 @@ void EEPROM_read_n(u16 EE_address,u8 *DataAddress,u16 number)
 		IAP_TRIG=0X46;
 		IAP_TRIG=0XB9;
 		_nop_();
-		
+
 		*DataAddress = IAP_DATA;			//读出的数据送往
 		EE_address++;
 		DataAddress++;
 		DisableEEPROM();
-	}while(--number);
+	}
+	while ( --number );
 
-	
+
 //	EA = 1;		//重新允许中断
 }
 
@@ -64,7 +65,7 @@ void EEPROM_read_n(u16 EE_address,u8 *DataAddress,u16 number)
 // 返回: non.
 // 版本: V1.0, 2013-5-10
 //========================================================================
-void EEPROM_SectorErase(u16 EE_address)
+void EEPROM_SectorErase ( u16 EE_address )
 {
 //	EA = 0;		//禁止中断
 	IAP_CONTR = ENABLE_IAP;
@@ -87,11 +88,11 @@ void EEPROM_SectorErase(u16 EE_address)
 // 返回: non.
 // 版本: V1.0, 2012-10-22
 //========================================================================
-void EEPROM_write_n(u16 EE_address,u8 *DataAddress,u16 number)
+void EEPROM_write_n ( u16 EE_address,u8* DataAddress,u16 number )
 {
 //	EA = 0;		//禁止中断
 
-	
+
 
 	do
 	{
@@ -100,16 +101,17 @@ void EEPROM_write_n(u16 EE_address,u8 *DataAddress,u16 number)
 		IAP_ADDRH = EE_address / 256;		//送地址高字节（地址需要改变时才需重新送地址）
 		IAP_ADDRL = EE_address % 256;		//送地址低字节
 		IAP_DATA  = *DataAddress;			//送数据到ISP_DATA，只有数据改变时才需重新送
-		
+
 		IAP_TRIG=0X46;
 		IAP_TRIG=0XB9;
 		_nop_();
 		EE_address++;
 		DataAddress++;
 		DisableEEPROM();
-	}while(--number);
+	}
+	while ( --number );
 
-	
+
 //	EA = 1;		//重新允许中断
 }
 
