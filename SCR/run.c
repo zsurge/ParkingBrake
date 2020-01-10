@@ -22,6 +22,7 @@ u8  data UpDcNum;  		//抬闸计数超时减数
 
 
 
+
 u8 code iTask_buf[7][18]= 	//任务表
 {
 	/*  无事件  手动落闸 内部落闸 通信落闸 地感落闸 到水平位 强制抬杆 强抬复位 地感抬闸 防砸抬闸 遇阻抬闸 内部抬闸 通信抬闸 视频抬闸 手动抬闸 到垂直位 惯性掉杆 掉杆复位        事件	*///
@@ -33,8 +34,6 @@ u8 code iTask_buf[7][18]= 	//任务表
 	TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_DS, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_UP, TASK_UP, TASK_UP, TASK_UP, TASK_NA, TASK_NA, TASK_NA,	/* 水平状态 */
 	TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_DS, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_US, TASK_NA, TASK_NA,	/* 错误状态 */
 };
-
-
 
 void intMcu()
 {
@@ -139,6 +138,7 @@ void sysint()
 	intOut();
 	intAtRun();
 	RomTest();
+    SetLimit();//add 2019.04.19
 }
 
 

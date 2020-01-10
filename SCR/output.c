@@ -52,7 +52,10 @@ void OPutTask()
 	if ( mTask== MTASK_UP1 )
 	{
 		RG= KK_GRE;
-		if ( !BM3 && ( iTask==ITASK_DG_UP || iTask==ITASK_FZ_UP || iTask==ITASK_DRAG_UP || iTask== ITASK_INER_DW ) )
+//		if ( !BM3 && ( iTask==ITASK_DG_UP || iTask==ITASK_FZ_UP || iTask==ITASK_DRAG_UP || iTask== ITASK_INER_DW ) )
+        //modify 2019.04 19 张舵
+        //这里不需要BM3来判定，只要是非常规抬闸都不截图
+		if ( ( iTask==ITASK_DG_UP || iTask==ITASK_FZ_UP || iTask==ITASK_DRAG_UP || iTask== ITASK_INER_DW ) )
 		{
 			DZP_CL;
 		}

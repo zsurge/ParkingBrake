@@ -1,166 +1,166 @@
-C51 COMPILER V9.00   RUN                                                                   04/13/2019 14:32:10 PAGE 1   
+C51 COMPILER V9.59.0.0   RUN                                                               11/19/2019 17:35:36 PAGE 1   
 
 
-C51 COMPILER V9.00, COMPILATION OF MODULE RUN
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE RUN
 OBJECT MODULE PLACED IN ..\HEX\run.obj
-COMPILER INVOKED BY: c:\Keil\C51\BIN\C51.EXE ..\SCR\run.c BROWSE INCDIR(..\INC) DEBUG OBJECTEXTEND PRINT(.\run.lst) TABS
-                    -(2) OBJECT(..\HEX\run.obj)
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\SCR\run.c OPTIMIZE(9,SPEED) BROWSE INCDIR(..\INC) DEBUG OBJECTEXTEND 
+                    -PRINT(.\run.lst) OBJECT(..\HEX\run.obj)
 
 line level    source
 
    1          /****************************************************************************
-   2          * File:     RUN.c                           *
-   3          * Created:    2015-02-13                          *
-   4          * Last Change:                                *
-   5          * Author:   chen zhi peng                         *
-   6          * Description:  ³ÌÐòÔËÐÐÖ¸Ê¾ & º¯ÊýµÄ¼ÆÊ±                 *
+   2          * File:                 RUN.c                                                                                                           *
+   3          * Created:              2015-02-13                                                                                                      *
+   4          * Last Change:                                                                                                                          *
+   5          * Author:               chen zhi peng                                                                                           *
+   6          * Description:  ³ÌÐòÔËÐÐÖ¸Ê¾ & º¯ÊýµÄ¼ÆÊ±                                                                       *
    7          ****************************************************************************/
    8          #include "RUN.h"
    9          
   10          
-  11          u8 xdata iTask;     //µ±Ç°Ö´ÐÐµÄÈÎÎñ
-  12          u8 xdata iTask2;    //µ±Ç°Ö´ÐÐµÄÈÎÎñ
-  13          u8 xdata ViceDo;    //¸±»úÖ´ÐÐÈÎÎñ
-  14          u8 xdata ViceRal;   //¸±»úÊµ¼ÊÈÎÎñ×´Ì¬
-  15          u8 xdata ViceRal2;    //¸±»úÊµ¼ÊÈÎÎñ×´Ì¬
-  16          u8 xdata ViceSta;   //¸±»úÊµ¼ÊÈÎÎñ×´Ì¬
-  17          u8 data  ComNum;    //Ö÷¸±»úÍ¨ÐÅ¼ÆÊ±
-  18          u8 xdata UpCt;      //Ì§Õ¢¼ÆÊý
-  19          u8  data UpCtNum;     //Ì§Õ¢¼ÆÊý·À¶¶
-  20          u8  data UpDcNum;     //Ì§Õ¢¼ÆÊý³¬Ê±¼õÊý
+  11          u8 xdata iTask;                 //µ±Ç°Ö´ÐÐµÄÈÎÎñ
+  12          u8 xdata iTask2;                //µ±Ç°Ö´ÐÐµÄÈÎÎñ
+  13          u8 xdata ViceDo;                //¸±»úÖ´ÐÐÈÎÎñ
+  14          u8 xdata ViceRal;               //¸±»úÊµ¼ÊÈÎÎñ×´Ì¬
+  15          u8 xdata ViceRal2;              //¸±»úÊµ¼ÊÈÎÎñ×´Ì¬
+  16          u8 xdata ViceSta;               //¸±»úÊµ¼ÊÈÎÎñ×´Ì¬
+  17          u8 data  ComNum;                //Ö÷¸±»úÍ¨ÐÅ¼ÆÊ±
+  18          u8 xdata UpCt;                  //Ì§Õ¢¼ÆÊý
+  19          u8  data UpCtNum;               //Ì§Õ¢¼ÆÊý·À¶¶
+  20          u8  data UpDcNum;               //Ì§Õ¢¼ÆÊý³¬Ê±¼õÊý
   21          
   22          
   23          
   24          
-  25          u8 code iTask_buf[7][18]=   //ÈÎÎñ±í
-  26          {
-  27            /*  ÎÞÊÂ¼þ  ÊÖ¶¯ÂäÕ¢ ÄÚ²¿ÂäÕ¢ Í¨ÐÅÂäÕ¢ µØ¸ÐÂäÕ¢ µ½Ë®Æ½Î» Ç¿ÖÆÌ§¸Ë Ç¿Ì§¸´Î» µØ¸ÐÌ§Õ¢ ·ÀÔÒÌ§Õ¢ Óö×èÌ§Õ¢ ÄÚ²
-             -¿Ì§Õ¢ Í¨ÐÅÌ§Õ¢ ÊÓÆµÌ§Õ¢ ÊÖ¶¯Ì§Õ¢ µ½´¹Ö±Î» ¹ßÐÔµô¸Ë µô¸Ë¸´Î»        ÊÂ¼þ *///
-  28            TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_N
-             -A, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA,  /* ×´Ì¬Î´³õÊ¼»¯ */
-  29            TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_DS, TASK_DW, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_N
-             -A, TASK_UP, TASK_NA, TASK_UP, TASK_US, TASK_UP, TASK_NA,  /* ³õÊ¼Î´Öª×´Ì¬ */
-  30            TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_N
-             -A, TASK_NA, TASK_NA, TASK_NA, TASK_US, TASK_NA, TASK_US,  /* ÕýÔÚÌ§Õ¢×´Ì¬ */
-  31            TASK_NA, TASK_DW, TASK_DW, TASK_DW, TASK_DW, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_N
-             -A, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA,  /* ´¹Ö±×´Ì¬ */
-  32            TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_DS, TASK_NA, TASK_DS, TASK_UP, TASK_UP, TASK_UP, TASK_U
-             -P, TASK_UP, TASK_UP, TASK_UP, TASK_NA, TASK_NA, TASK_NA,  /* ÕýÔÚÂäÕ¢×´Ì¬ */
-  33            TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_DS, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_U
-             -P, TASK_UP, TASK_UP, TASK_UP, TASK_NA, TASK_NA, TASK_NA,  /* Ë®Æ½×´Ì¬ */
-  34            TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_DS, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_N
-             -A, TASK_NA, TASK_NA, TASK_NA, TASK_US, TASK_NA, TASK_NA,  /* ´íÎó×´Ì¬ */
-  35          };
-  36          
+  25          
+  26          u8 code iTask_buf[7][18]=       //ÈÎÎñ±í
+  27          {
+  28                  /*  ÎÞÊÂ¼þ  ÊÖ¶¯ÂäÕ¢ ÄÚ²¿ÂäÕ¢ Í¨ÐÅÂäÕ¢ µØ¸ÐÂäÕ¢ µ½Ë®Æ½Î» Ç¿ÖÆÌ§¸Ë Ç¿Ì§¸´Î» µØ¸ÐÌ§Õ¢ ·ÀÔÒÌ§Õ¢ Óö×èÌ§Õ¢ ÄÚ²
+             -¿Ì§Õ¢ Í¨ÐÅÌ§Õ¢ ÊÓÆµÌ§Õ¢ ÊÖ¶¯Ì§Õ¢ µ½´¹Ö±Î» ¹ßÐÔµô¸Ë µô¸Ë¸´Î»        ÊÂ¼þ       *///
+  29                  TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_N
+             -A, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA,      /* ×´Ì¬Î´³õÊ¼»¯ */
+  30                  TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_DS, TASK_DW, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_N
+             -A, TASK_UP, TASK_NA, TASK_UP, TASK_US, TASK_UP, TASK_NA,      /* ³õÊ¼Î´Öª×´Ì¬ */
+  31                  TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_N
+             -A, TASK_NA, TASK_NA, TASK_NA, TASK_US, TASK_NA, TASK_US,      /* ÕýÔÚÌ§Õ¢×´Ì¬ */
+  32                  TASK_NA, TASK_DW, TASK_DW, TASK_DW, TASK_DW, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_N
+             -A, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA,      /* ´¹Ö±×´Ì¬ */
+  33                  TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_DS, TASK_NA, TASK_DS, TASK_UP, TASK_UP, TASK_UP, TASK_U
+             -P, TASK_UP, TASK_UP, TASK_UP, TASK_NA, TASK_NA, TASK_NA,      /* ÕýÔÚÂäÕ¢×´Ì¬ */
+  34                  TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_DS, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_U
+             -P, TASK_UP, TASK_UP, TASK_UP, TASK_NA, TASK_NA, TASK_NA,      /* Ë®Æ½×´Ì¬ */
+  35                  TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_DS, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_NA, TASK_N
+             -A, TASK_NA, TASK_NA, TASK_NA, TASK_US, TASK_NA, TASK_NA,      /* ´íÎó×´Ì¬ */
+  36          };
   37          
-  38          
-  39          void intMcu()
-  40          {
-  41   1        EA=0;     //½ûÖ¹È«¾ÖÖÐ¶Ï
-  42   1      
-  43   1        SCON=0x50;  //´®ÐÐ½Ó¿Ú¹¤×÷ÓÚÄ£Ê½1£¬ÔÊÐí½ÓÊÕÊý¾ÝSM0 SM1 SM2 REN TB8 RB8 TI RI
-  44   1        TMOD=0x21;  //¼ÆÊ±Æ÷1¹¤×÷ÓÚÄ£Ê½2 | GATE C/T M1 M0 | GATE C/T M1 M0 |
-  45   1        //¼ÆÊ±Æ÷0¹¤×÷ÓÚÄ£Ê½1 |  Timer1    |    Timer0    |a
-  46   1      //´®¿Ú²ÎÊýÅäÖÃ
-C51 COMPILER V9.00   RUN                                                                   04/13/2019 14:32:10 PAGE 2   
+  38          void intMcu()
+  39          {
+  40   1              EA=0;       //½ûÖ¹È«¾ÖÖÐ¶Ï
+  41   1      
+  42   1              SCON=0x50;  //´®ÐÐ½Ó¿Ú¹¤×÷ÓÚÄ£Ê½1£¬ÔÊÐí½ÓÊÕÊý¾ÝSM0 SM1 SM2 REN TB8 RB8 TI RI
+  43   1              TMOD=0x21;  //¼ÆÊ±Æ÷1¹¤×÷ÓÚÄ£Ê½2 | GATE C/T M1 M0 | GATE C/T M1 M0 |
+  44   1              //¼ÆÊ±Æ÷0¹¤×÷ÓÚÄ£Ê½1 |  Timer1    |    Timer0      |a
+  45   1      //´®¿Ú²ÎÊýÅäÖÃ
+  46   1      //  TH1=0xF4;   /*Éè¶¨²¨ÌØÂÊÎª2400,     ¾§Õñ11.0592MHz*/
+C51 COMPILER V9.59.0.0   RUN                                                               11/19/2019 17:35:36 PAGE 2   
 
-  47   1      //  TH1=0xF4;   /*Éè¶¨²¨ÌØÂÊÎª2400, ¾§Õñ11.0592MHz*/
-  48   1      //  TH1=0xE8;   /*Éè¶¨²¨ÌØÂÊÎª2400, ¾§Õñ22.1184MHz*/
-  49   1      //  TH1=0xFD;   /*Éè¶¨²¨ÌØÂÊÎª9600£¬¾§Õñ11.0592MHz*/
-  50   1      //  TH1=0xFA;   /*Éè¶¨²¨ÌØÂÊÎª9600£¬¾§Õñ22.1184MHz*/
-  51   1        TH1=0xFD;   /*Éè¶¨²¨ÌØÂÊÎª19200£¬¾§Õñ22.1184MHz*/
-  52   1        TR1=1;    //Æô¶¯¼ÆÊ±Æ÷1¿ªÊ¼¼ÆÊý
-  53   1        ES=1;     //ÔÊÐí´®¿ÚÖÐ¶Ï
-  54   1      //¶¨Ê±Æ÷0ÅäÖÃ
-  55   1        TL0 = 0xCD;   //ÉèÖÃ¶¨Ê±³õÖµ
-  56   1        TH0 = 0xF8;   //ÉèÖÃ¶¨Ê±³õÖµ
-  57   1        TR0=1;    //Æô¶¯¶¨Ê±Æ÷0
-  58   1        ET0=1;      //ÔÊÐíT0ÖÐ¶Ï
-  59   1      //ÖÐ¶Ï0ÅäÖÃ
-  60   1      //  IT0=1;    //Íâ²¿ÖÐ¶Ï0µçÆ½Ìø±ä²úÉúÖÐ¶Ï
-  61   1        EX0=0;      //½ûÖ¹Íâ²¿ÖÐ¶Ï0
-  62   1      //ÖÐ¶Ï1ÅäÖÃ
-  63   1      //  IT1=1;      //Íâ²¿ÖÐ¶Ï1µçÆ½Ìø±ä²úÉúÖÐ¶Ï
-  64   1        EX1=0;    //½ûÖ¹Íâ²¿ÖÐ¶Ï1
-  65   1      //ÓÅÏÈ¼¶ÅäÖÃ
-  66   1        PS=1;     //Éè¶¨´®¿ÚÖÐ¶ÏÓÅÏÈ
-  67   1      //ÖÐ¶Ï×Ü¿ª¹ØÅäÖÃ
-  68   1        EA=1;
-  69   1      }
-  70          
-  71          void intRun()
-  72          {
-  73   1        iTask= ITASK_INT;
-  74   1        iTask2= ITASK_NA;
-  75   1        ViceDo= 0;
-  76   1        ViceRal= 0;
-  77   1        ViceRal2= 0;
-  78   1        ViceSta= 0;
-  79   1        UpCt=0;
-  80   1        UpCtNum=0;
-  81   1      }
-  82          
-  83          void delay ( u8 cnt ) //   ÑÓÊ±µ¥Î»:
-  84          {
-  85   1        u16 i;
-  86   1        i=cnt*200;
-  87   1        while ( --i );
-  88   1      }
-  89          
-  90          //void delay_ms(u8 ms)
-  91          //{
-  92          //    u16 i;
-  93          //    do{
-  94          //        i=MAIN_Fosc/9600;
-  95          //        while(--i);     //96T per loop
-  96          //    }while(--ms);       //--ms  ms=ms-1
-  97          //}
+  47   1      //  TH1=0xE8;   /*Éè¶¨²¨ÌØÂÊÎª2400, ¾§Õñ22.1184MHz*/
+  48   1      //      TH1=0xFD;   /*Éè¶¨²¨ÌØÂÊÎª9600£¬¾§Õñ11.0592MHz*/
+  49   1      //      TH1=0xFA;   /*Éè¶¨²¨ÌØÂÊÎª9600£¬¾§Õñ22.1184MHz*/
+  50   1              TH1=0xFD;   /*Éè¶¨²¨ÌØÂÊÎª19200£¬¾§Õñ22.1184MHz*/
+  51   1              TR1=1;          //Æô¶¯¼ÆÊ±Æ÷1¿ªÊ¼¼ÆÊý
+  52   1              ES=1;       //ÔÊÐí´®¿ÚÖÐ¶Ï
+  53   1      //¶¨Ê±Æ÷0ÅäÖÃ
+  54   1              TL0 = 0xCD;             //ÉèÖÃ¶¨Ê±³õÖµ
+  55   1              TH0 = 0xF8;             //ÉèÖÃ¶¨Ê±³õÖµ
+  56   1              TR0=1;          //Æô¶¯¶¨Ê±Æ÷0
+  57   1              ET0=1;      //ÔÊÐíT0ÖÐ¶Ï
+  58   1      //ÖÐ¶Ï0ÅäÖÃ
+  59   1      //      IT0=1;          //Íâ²¿ÖÐ¶Ï0µçÆ½Ìø±ä²úÉúÖÐ¶Ï
+  60   1              EX0=0;          //½ûÖ¹Íâ²¿ÖÐ¶Ï0
+  61   1      //ÖÐ¶Ï1ÅäÖÃ
+  62   1      //      IT1=1;      //Íâ²¿ÖÐ¶Ï1µçÆ½Ìø±ä²úÉúÖÐ¶Ï
+  63   1              EX1=0;          //½ûÖ¹Íâ²¿ÖÐ¶Ï1
+  64   1      //ÓÅÏÈ¼¶ÅäÖÃ
+  65   1              PS=1;       //Éè¶¨´®¿ÚÖÐ¶ÏÓÅÏÈ
+  66   1      //ÖÐ¶Ï×Ü¿ª¹ØÅäÖÃ
+  67   1              EA=1;
+  68   1      }
+  69          
+  70          void intRun()
+  71          {
+  72   1              iTask= ITASK_INT;
+  73   1              iTask2= ITASK_NA;
+  74   1              ViceDo= 0;
+  75   1              ViceRal= 0;
+  76   1              ViceRal2= 0;
+  77   1              ViceSta= 0;
+  78   1              UpCt=0;
+  79   1              UpCtNum=0;
+  80   1      }
+  81          
+  82          void delay ( u8 cnt ) //   ÑÓÊ±µ¥Î»:
+  83          {
+  84   1              u16 i;
+  85   1              i=cnt*200;
+  86   1              while ( --i );
+  87   1      }
+  88          
+  89          //void delay_ms(u8 ms)
+  90          //{
+  91          //    u16 i;
+  92          //    do{
+  93          //        i=MAIN_Fosc/9600;
+  94          //        while(--i);     //96T per loop
+  95          //    }while(--ms);       //--ms  ms=ms-1
+  96          //}
+  97          
   98          
   99          
  100          
- 101          
- 102          void ComClk()
- 103          {
- 104   1        if ( ComNum )
- 105   1        {
- 106   2          ComNum--;
- 107   2        }
- 108   1        if ( COM1.RX_TimeOut )
-C51 COMPILER V9.00   RUN                                                                   04/13/2019 14:32:10 PAGE 3   
+ 101          void ComClk()
+ 102          {
+ 103   1              if ( ComNum )
+ 104   1              {
+ 105   2                      ComNum--;
+ 106   2              }
+ 107   1              if ( COM1.RX_TimeOut )
+ 108   1              {
+C51 COMPILER V9.59.0.0   RUN                                                               11/19/2019 17:35:36 PAGE 3   
 
- 109   1        {
- 110   2          COM1.RX_TimeOut--;
- 111   2        }
- 112   1      }
- 113          
- 114          void UpCtClk()
- 115          {
- 116   1        if ( UpCtNum )
- 117   1        {
- 118   2          UpCtNum--;
- 119   2        }
- 120   1      }
- 121          void UpDcClk()
- 122          {
- 123   1        if ( UpDcNum )
- 124   1        {
- 125   2          UpDcNum--;
- 126   2        }
- 127   1      }
- 128          
- 129          void sysint()
- 130          {
- 131   1        intMcu();
- 132   1        intUsart();
- 133   1        intRun();
- 134   1        intBuzz();
- 135   1        intErr();
- 136   1        intInput();
- 137   1        intclk();
- 138   1        intMotor();
- 139   1        intOut();
- 140   1        intAtRun();
- 141   1        RomTest();
+ 109   2                      COM1.RX_TimeOut--;
+ 110   2              }
+ 111   1      }
+ 112          
+ 113          void UpCtClk()
+ 114          {
+ 115   1              if ( UpCtNum )
+ 116   1              {
+ 117   2                      UpCtNum--;
+ 118   2              }
+ 119   1      }
+ 120          void UpDcClk()
+ 121          {
+ 122   1              if ( UpDcNum )
+ 123   1              {
+ 124   2                      UpDcNum--;
+ 125   2              }
+ 126   1      }
+ 127          
+ 128          void sysint()
+ 129          {
+ 130   1              intMcu();
+ 131   1              intUsart();
+ 132   1              intRun();
+ 133   1              intBuzz();
+ 134   1              intErr();
+ 135   1              intInput();
+ 136   1              intclk();
+ 137   1              intMotor();
+ 138   1              intOut();
+ 139   1              intAtRun();
+ 140   1              RomTest();
+ 141   1          SetLimit();//add 2019.04.19
  142   1      }
  143          
  144          
@@ -168,248 +168,248 @@ line level    source
  146          void iTaskCtr()
  147          {
  148   1      
- 149   1        if ( iTask < Even )
- 150   1        {
- 151   2          iTask2= iTask_buf[mPosD][Even];   //¸ù¾ÝÊÂ¼þºÍ×´Ì¬²é±í£¬»ñÈ¡ÈÎÎñ
- 152   2          if ( iTask2!= MTASK_NA )
- 153   2          {
- 154   3            mTask= iTask2;
- 155   3            iTask= Even;
- 156   3            if ( !JY )
- 157   3              if ( iTask== ITASK_DG_UP || iTask== ITASK_DRAG_UP )
- 158   3              {
- 159   4                UpCt++;
- 160   4              }
- 161   3          }
+ 149   1              if ( iTask < Even )
+ 150   1              {
+ 151   2                      iTask2= iTask_buf[mPosD][Even];         //¸ù¾ÝÊÂ¼þºÍ×´Ì¬²é±í£¬»ñÈ¡ÈÎÎñ
+ 152   2                      if ( iTask2!= MTASK_NA )
+ 153   2                      {
+ 154   3                              mTask= iTask2;
+ 155   3                              iTask= Even;
+ 156   3                              if ( !JY )
+ 157   3                                      if ( iTask== ITASK_DG_UP || iTask== ITASK_DRAG_UP )
+ 158   3                                      {
+ 159   4                                              UpCt++;
+ 160   4                                      }
+ 161   3                      }
  162   2      
- 163   2        }
+ 163   2              }
  164   1      }
  165          
  166          
  167          void ViceCtr()
  168          {
- 169   1        if ( McuId== MACHI_VICE )
- 170   1        {
-C51 COMPILER V9.00   RUN                                                                   04/13/2019 14:32:10 PAGE 4   
+ 169   1              if ( McuId== MACHI_VICE )
+ 170   1              {
+C51 COMPILER V9.59.0.0   RUN                                                               11/19/2019 17:35:36 PAGE 4   
 
- 171   2          switch ( ViceRal )
- 172   2          {
- 173   3            case POS_HOR:
- 174   3            case POS_DW:
- 175   3              Event ( ITASK_COM_DW );
- 176   3              speak ( VICE_STA,mPosD2 );
- 177   3              break;
- 178   3            case POS_UP:
- 179   3            case POS_VER:
- 180   3              HDwSta=STA_NA;
- 181   3              HDwNum=HDW_ON_TIME;
- 182   3              DgSta=STA_NA;
- 183   3              DgNum_NoSignal=DG_OFF_TIME;
- 184   3              Event ( ITASK_COM_UP );
- 185   3              speak ( VICE_STA,mPosD2 );
- 186   3              break;
- 187   3            case POS_INT:
- 188   3              speak ( VICE_STA,mPosD2 );
- 189   3              break;
- 190   3            default:
- 191   3              break;
- 192   3          }
- 193   2          ViceRal=0;
- 194   2        }
- 195   1        if ( McuId== MACHI_MASTER )
- 196   1        {
- 197   2          if ( iTask== ITASK_INT || iTask== ITASK_STR )
- 198   2          {
- 199   3            return;
- 200   3          }
- 201   2          if ( !ComNum )
- 202   2          {
- 203   3            ComNum= COM_TIME;
- 204   3          }
- 205   2          else
- 206   2          {
- 207   3            return;
- 208   3          }
- 209   2          switch ( mPosD2 )
- 210   2          {
- 211   3            case POS_HOR:
- 212   3            case POS_DW:
- 213   3              switch ( ViceRal )
- 214   3              {
- 215   4                case POS_HOR:
- 216   4                  ViceSta=0;
- 217   4                  speak ( VICE_STA,POS_INT );
- 218   4                  break;
- 219   4                case POS_DW:
- 220   4                  if ( !ViceSta )
- 221   4                  {
- 222   5                    ViceSta=VICE_STA_EN;
- 223   5                  }
- 224   4                  if ( ViceSta==VICE_STA_DGON )
- 225   4                  {
- 226   5                    speak ( VICE_STA,POS_UP );
- 227   5                  }
- 228   4                  else
- 229   4                  {
- 230   5                    speak ( VICE_STA,POS_INT );
- 231   5                  }
- 232   4                  break;
-C51 COMPILER V9.00   RUN                                                                   04/13/2019 14:32:10 PAGE 5   
+ 171   2                      switch ( ViceRal )
+ 172   2                      {
+ 173   3                              case POS_HOR:
+ 174   3                              case POS_DW:
+ 175   3                                      Event ( ITASK_COM_DW );
+ 176   3                                      speak ( VICE_STA,mPosD2 );
+ 177   3                                      break;
+ 178   3                              case POS_UP:
+ 179   3                              case POS_VER:
+ 180   3                                      HDwSta=STA_NA;
+ 181   3                                      HDwNum=HDW_ON_TIME;
+ 182   3                                      DgSta=STA_NA;
+ 183   3                                      DgNum_NoSignal=DG_OFF_TIME;
+ 184   3                                      Event ( ITASK_COM_UP );
+ 185   3                                      speak ( VICE_STA,mPosD2 );
+ 186   3                                      break;
+ 187   3                              case POS_INT:
+ 188   3                                      speak ( VICE_STA,mPosD2 );
+ 189   3                                      break;
+ 190   3                              default:
+ 191   3                                      break;
+ 192   3                      }
+ 193   2                      ViceRal=0;
+ 194   2              }
+ 195   1              if ( McuId== MACHI_MASTER )
+ 196   1              {
+ 197   2                      if ( iTask== ITASK_INT || iTask== ITASK_STR )
+ 198   2                      {
+ 199   3                              return;
+ 200   3                      }
+ 201   2                      if ( !ComNum )
+ 202   2                      {
+ 203   3                              ComNum= COM_TIME;
+ 204   3                      }
+ 205   2                      else
+ 206   2                      {
+ 207   3                              return;
+ 208   3                      }
+ 209   2                      switch ( mPosD2 )
+ 210   2                      {
+ 211   3                              case POS_HOR:
+ 212   3                              case POS_DW:
+ 213   3                                      switch ( ViceRal )
+ 214   3                                      {
+ 215   4                                              case POS_HOR:
+ 216   4                                                      ViceSta=0;
+ 217   4                                                      speak ( VICE_STA,POS_INT );
+ 218   4                                                      break;
+ 219   4                                              case POS_DW:
+ 220   4                                                      if ( !ViceSta )
+ 221   4                                                      {
+ 222   5                                                              ViceSta=VICE_STA_EN;
+ 223   5                                                      }
+ 224   4                                                      if ( ViceSta==VICE_STA_DGON )
+ 225   4                                                      {
+ 226   5                                                              speak ( VICE_STA,POS_UP );
+ 227   5                                                      }
+ 228   4                                                      else
+ 229   4                                                      {
+ 230   5                                                              speak ( VICE_STA,POS_INT );
+ 231   5                                                      }
+ 232   4                                                      break;
+C51 COMPILER V9.59.0.0   RUN                                                               11/19/2019 17:35:36 PAGE 5   
 
- 233   4                case POS_VER:
- 234   4                  if ( !ViceSta )
- 235   4                  {
- 236   5                    ViceSta=VICE_STA_EN;
- 237   5                  }
- 238   4                  if ( mPosD2==POS_DW )
- 239   4                  {
- 240   5                    speak ( VICE_STA,POS_DW );
- 241   5                  }
- 242   4                  if ( ViceSta==VICE_STA_DW )
- 243   4                  {
- 244   5                    speak ( VICE_STA,POS_DW );
- 245   5                  }
- 246   4                  else if ( ViceSta==VICE_STA_DGOF )
- 247   4                  {
- 248   5                    speak ( VICE_STA,POS_DW );
- 249   5                    ViceSta=0;
- 250   5                  }
- 251   4                  else
- 252   4                  {
- 253   5                    speak ( VICE_STA,POS_INT );
- 254   5                  }
- 255   4                  break;
- 256   4                case POS_UP:
- 257   4                  if ( ViceSta!=VICE_STA_DGON )
- 258   4                  {
- 259   5                    DgStaClr();
- 260   5                  }
- 261   4                  if ( !ViceSta )
- 262   4                  {
- 263   5                    ViceSta=VICE_STA_EN;
- 264   5                  }
- 265   4                  if ( mPosD2==POS_DW )
- 266   4                  {
- 267   5                    Event ( ITASK_COM_UP );
- 268   5                  }
- 269   4                  else if ( ViceSta==VICE_STA_DGOF )
- 270   4                  {
- 271   5                    speak ( VICE_STA,POS_DW );
- 272   5                  }
- 273   4                  else
- 274   4                  {
- 275   5                    speak ( VICE_STA,POS_INT );
- 276   5                  }
- 277   4                  break;
- 278   4                default:
- 279   4                  speak ( VICE_STA,POS_INT );
- 280   4                  break;
- 281   4              }
- 282   3              ViceRal=0;
- 283   3              break;
- 284   3            case POS_VER:
- 285   3            case POS_UP:
- 286   3              speak ( VICE_STA,mPosD2 );
- 287   3              break;
- 288   3            default:
- 289   3              speak ( VICE_STA,mPosD2 );
- 290   3              break;
- 291   3          }
- 292   2        }
+ 233   4                                              case POS_VER:
+ 234   4                                                      if ( !ViceSta )
+ 235   4                                                      {
+ 236   5                                                              ViceSta=VICE_STA_EN;
+ 237   5                                                      }
+ 238   4                                                      if ( mPosD2==POS_DW )
+ 239   4                                                      {
+ 240   5                                                              speak ( VICE_STA,POS_DW );
+ 241   5                                                      }
+ 242   4                                                      if ( ViceSta==VICE_STA_DW )
+ 243   4                                                      {
+ 244   5                                                              speak ( VICE_STA,POS_DW );
+ 245   5                                                      }
+ 246   4                                                      else if ( ViceSta==VICE_STA_DGOF )
+ 247   4                                                      {
+ 248   5                                                              speak ( VICE_STA,POS_DW );
+ 249   5                                                              ViceSta=0;
+ 250   5                                                      }
+ 251   4                                                      else
+ 252   4                                                      {
+ 253   5                                                              speak ( VICE_STA,POS_INT );
+ 254   5                                                      }
+ 255   4                                                      break;
+ 256   4                                              case POS_UP:
+ 257   4                                                      if ( ViceSta!=VICE_STA_DGON )
+ 258   4                                                      {
+ 259   5                                                              DgStaClr();
+ 260   5                                                      }
+ 261   4                                                      if ( !ViceSta )
+ 262   4                                                      {
+ 263   5                                                              ViceSta=VICE_STA_EN;
+ 264   5                                                      }
+ 265   4                                                      if ( mPosD2==POS_DW )
+ 266   4                                                      {
+ 267   5                                                              Event ( ITASK_COM_UP );
+ 268   5                                                      }
+ 269   4                                                      else if ( ViceSta==VICE_STA_DGOF )
+ 270   4                                                      {
+ 271   5                                                              speak ( VICE_STA,POS_DW );
+ 272   5                                                      }
+ 273   4                                                      else
+ 274   4                                                      {
+ 275   5                                                              speak ( VICE_STA,POS_INT );
+ 276   5                                                      }
+ 277   4                                                      break;
+ 278   4                                              default:
+ 279   4                                                      speak ( VICE_STA,POS_INT );
+ 280   4                                                      break;
+ 281   4                                      }
+ 282   3                                      ViceRal=0;
+ 283   3                                      break;
+ 284   3                              case POS_VER:
+ 285   3                              case POS_UP:
+ 286   3                                      speak ( VICE_STA,mPosD2 );
+ 287   3                                      break;
+ 288   3                              default:
+ 289   3                                      speak ( VICE_STA,mPosD2 );
+ 290   3                                      break;
+ 291   3                      }
+ 292   2              }
  293   1      
  294   1      
-C51 COMPILER V9.00   RUN                                                                   04/13/2019 14:32:10 PAGE 6   
+C51 COMPILER V9.59.0.0   RUN                                                               11/19/2019 17:35:36 PAGE 6   
 
- 295   1        //***********************·¢ËÍ×´Ì¬´¦Àí***********************//
+ 295   1              //***********************·¢ËÍ×´Ì¬´¦Àí***********************//
  296   1      
  297   1      }
  298          
- 299          void iTaskControl()     //Íâ²¿ÈÎÎñ´¦Àí
+ 299          void iTaskControl()                     //Íâ²¿ÈÎÎñ´¦Àí
  300          {
- 301   1        ViceCtr();    //¸±»ú¿ØÖÆ
- 302   1        switch ( iTask )  //µ±Ç°Ö´ÐÐÈÎÎñ
- 303   1        {
- 304   2          case ITASK_INT:
- 305   2            BmRed();    //²¦Âë²ÎÊý¶ÁÈ¡
- 306   2            if ( !HUP && !HDW && !HOR )
- 307   2            {
- 308   3              AtNum= 30;
- 309   3            }
- 310   2            else
- 311   2            {
- 312   3              AtNum= 6;
- 313   3            }
- 314   2            iTask=ITASK_STR;
- 315   2            break;
+ 301   1              ViceCtr();              //¸±»ú¿ØÖÆ
+ 302   1              switch ( iTask )        //µ±Ç°Ö´ÐÐÈÎÎñ
+ 303   1              {
+ 304   2                      case ITASK_INT:
+ 305   2                              BmRed();                //²¦Âë²ÎÊý¶ÁÈ¡
+ 306   2                              if ( !HUP && !HDW && !HOR )
+ 307   2                              {
+ 308   3                                      AtNum= 30;
+ 309   3                              }
+ 310   2                              else
+ 311   2                              {
+ 312   3                                      AtNum= 6;
+ 313   3                              }
+ 314   2                              iTask=ITASK_STR;
+ 315   2                              break;
  316   2      
- 317   2          case ITASK_STR:
- 318   2            if ( !HUP && !HDW && !HOR && !AtNum )
- 319   2            {
- 320   3              aLine= 1;
- 321   3              iTask= ITASK_NA;
- 322   3            }
- 323   2            else if ( !AtNum )
- 324   2            {
- 325   3              iTask=ITASK_NA;
- 326   3            }
- 327   2            break;
+ 317   2                      case ITASK_STR:
+ 318   2                              if ( !HUP && !HDW && !HOR && !AtNum )
+ 319   2                              {
+ 320   3                                      aLine= 1;
+ 321   3                                      iTask= ITASK_NA;
+ 322   3                              }
+ 323   2                              else if ( !AtNum )
+ 324   2                              {
+ 325   3                                      iTask=ITASK_NA;
+ 326   3                              }
+ 327   2                              break;
  328   2      
- 329   2          case ITASK_REACH_H:
- 330   2          case ITASK_REACH_V:
- 331   2          case ITASK_INER_OK:
- 332   2          case ITASK_COER_OK:
- 333   2            iTask=ITASK_NA;
- 334   2            break;
+ 329   2                      case ITASK_REACH_H:
+ 330   2                      case ITASK_REACH_V:
+ 331   2                      case ITASK_INER_OK:
+ 332   2                      case ITASK_COER_OK:
+ 333   2                              iTask=ITASK_NA;
+ 334   2                              break;
  335   2      
  336   2      
- 337   2          case ITASK_NA:
- 338   2          case ITASK_COER_UP:
- 339   2          case ITASK_INER_DW:
- 340   2      //        iTaskCtr();
- 341   2      //        break;
+ 337   2                      case ITASK_NA:
+ 338   2                      case ITASK_COER_UP:
+ 339   2                      case ITASK_INER_DW:
+ 340   2      //                              iTaskCtr();
+ 341   2      //                              break;
  342   2      
- 343   2          case ITASK_DG_UP:
- 344   2          case ITASK_DRAG_UP:
- 345   2          case ITASK_FZ_UP:
- 346   2          case ITASK_AUTO_UP:
- 347   2          case ITASK_COM_UP:
- 348   2          case ITASK_VDO_UP:
- 349   2          case ITASK_HAN_UP:
- 350   2      //        iTaskCtr();
- 351   2      //        break;
+ 343   2                      case ITASK_DG_UP:
+ 344   2                      case ITASK_DRAG_UP:
+ 345   2                      case ITASK_FZ_UP:
+ 346   2                      case ITASK_AUTO_UP:
+ 347   2                      case ITASK_COM_UP:
+ 348   2                      case ITASK_VDO_UP:
+ 349   2                      case ITASK_HAN_UP:
+ 350   2      //                              iTaskCtr();
+ 351   2      //                              break;
  352   2      
- 353   2          case ITASK_HAN_DW:
- 354   2          case ITASK_COM_DW:
- 355   2          case ITASK_AUTO_DW:
- 356   2          case ITASK_DG_DW:
-C51 COMPILER V9.00   RUN                                                                   04/13/2019 14:32:10 PAGE 7   
+ 353   2                      case ITASK_HAN_DW:
+ 354   2                      case ITASK_COM_DW:
+ 355   2                      case ITASK_AUTO_DW:
+ 356   2                      case ITASK_DG_DW:
+C51 COMPILER V9.59.0.0   RUN                                                               11/19/2019 17:35:36 PAGE 7   
 
- 357   2            iTaskCtr();
- 358   2            break;
+ 357   2                              iTaskCtr();
+ 358   2                              break;
  359   2      
  360   2      
- 361   2          default:
- 362   2            iTask=ITASK_NA;
- 363   2            break;    //µç»úÏà¹Ø±äÁ¿³õÊ¼»¯
- 364   2        }
+ 361   2                      default:
+ 362   2                              iTask=ITASK_NA;
+ 363   2                              break;          //µç»úÏà¹Ø±äÁ¿³õÊ¼»¯
+ 364   2              }
  365   1      }
  366          
  367          void t0_interrupt ( void )  interrupt 1 //using 1
  368          {
- 369   1        TF0= 0;
- 370   1        TL0 = 0xCD;   //ÉèÖÃ¶¨Ê±³õÖµ
- 371   1        TH0 = 0xF8;   //ÉèÖÃ¶¨Ê±³õÖµ
+ 369   1              TF0= 0;
+ 370   1              TL0 = 0xCD;             //ÉèÖÃ¶¨Ê±³õÖµ
+ 371   1              TH0 = 0xF8;             //ÉèÖÃ¶¨Ê±³õÖµ
  372   1      
  373   1      
- 374   1        T1Ms_clk();
- 375   1        mCtrClk();
- 376   1        ComClk();
+ 374   1              T1Ms_clk();
+ 375   1              mCtrClk();
+ 376   1              ComClk();
  377   1      }
  378          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    768    ----
+   CODE SIZE        =    778    ----
    CONSTANT SIZE    =    126    ----
    XDATA SIZE       =      7    ----
    PDATA SIZE       =   ----    ----

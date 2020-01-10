@@ -1,98 +1,98 @@
-C51 COMPILER V9.00   CLK                                                                   04/13/2019 14:32:10 PAGE 1   
+C51 COMPILER V9.59.0.0   CLK                                                               11/19/2019 17:35:36 PAGE 1   
 
 
-C51 COMPILER V9.00, COMPILATION OF MODULE CLK
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE CLK
 OBJECT MODULE PLACED IN ..\HEX\clk.obj
-COMPILER INVOKED BY: c:\Keil\C51\BIN\C51.EXE ..\SCR\clk.c BROWSE INCDIR(..\INC) DEBUG OBJECTEXTEND PRINT(.\clk.lst) TABS
-                    -(2) OBJECT(..\HEX\clk.obj)
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE ..\SCR\clk.c OPTIMIZE(9,SPEED) BROWSE INCDIR(..\INC) DEBUG OBJECTEXTEND 
+                    -PRINT(.\clk.lst) OBJECT(..\HEX\clk.obj)
 
 line level    source
 
    1          /****************************************************************************
-   2          * File:     clk.c                           *
-   3          * Created:    2017-02-13                          *
-   4          * Last Change:                                *
-   5          * Author:   chen zhi peng                         *
-   6          * Description:                                *
+   2          * File:                 clk.c                                                                                                           *
+   3          * Created:              2017-02-13                                                                                                      *
+   4          * Last Change:                                                                                                                          *
+   5          * Author:               chen zhi peng                                                                                           *
+   6          * Description:                                                                                                                          *
    7          ****************************************************************************/
    8          #include "clk.h"
    9          
-  10          u8 T10MS;     //10毫秒计量变量
-  11          u8 T100MS;    //100毫秒计量变量
-  12          u8 T1000MS;   //1000毫秒计量变量
+  10          u8 T10MS;               //10毫秒计量变量
+  11          u8 T100MS;              //100毫秒计量变量
+  12          u8 T1000MS;             //1000毫秒计量变量
   13          
-  14          //u16 xdata test;     //主程序在100MS内循环跑N次，此参数可观察单片机运行效率
-  15          //u16 xdata test_dly;   //主程序在100MS内循环跑N次，用作数码管显示使用
+  14          //u16 xdata test;                       //主程序在100MS内循环跑N次，此参数可观察单片机运行效率
+  15          //u16 xdata test_dly;           //主程序在100MS内循环跑N次，用作数码管显示使用
   16          
   17          
   18          
   19          void intclk()
   20          {
-  21   1        T10MS=0;
-  22   1        T100MS=0;
-  23   1        T1000MS=0;
+  21   1              T10MS=0;
+  22   1              T100MS=0;
+  23   1              T1000MS=0;
   24   1      }
   25          
   26          
   27          void T1Ms_clk()
   28          {
-  29   1        if ( T10MS )
-  30   1        {
-  31   2          T10MS--;    //1毫秒时钟
-  32   2        }
+  29   1              if ( T10MS )
+  30   1              {
+  31   2                      T10MS--;    //1毫秒时钟
+  32   2              }
   33   1      }
   34          //void test_clk()
   35          //{
-  36          //  test_dly=test;
-  37          //  test=0;
+  36          //      test_dly=test;
+  37          //      test=0;
   38          //}
   39          
   40          void clk()  //设备运行时钟
   41          {
-  42   1        if ( !T10MS )//由定时器产生1毫秒中断，计时10MS
-  43   1        {
-  44   2          T10MS=T10MS_TIME;
-  45   2          if ( T100MS )
-  46   2          {
-  47   3            T100MS--;
-  48   3          }
+  42   1              if ( !T10MS )//由定时器产生1毫秒中断，计时10MS
+  43   1              {
+  44   2                      T10MS=T10MS_TIME;
+  45   2                      if ( T100MS )
+  46   2                      {
+  47   3                              T100MS--;
+  48   3                      }
   49   2      
-  50   2          Buzz_clk();
-  51   2          Dg_clk();
-  52   2          Fz_clk();
-  53   2          Pos_clk();
-  54   2          Hup_clk();
-C51 COMPILER V9.00   CLK                                                                   04/13/2019 14:32:10 PAGE 2   
+  50   2                      Buzz_clk();
+  51   2                      Dg_clk();
+  52   2                      Fz_clk();
+  53   2                      Pos_clk();
+  54   2                      Hup_clk();
+C51 COMPILER V9.59.0.0   CLK                                                               11/19/2019 17:35:36 PAGE 2   
 
-  55   2          Hdw_clk();
-  56   2          Vup_clk();
-  57   2          UpCtClk();
-  58   2          BrakeClk();
-  59   2          Monitor_clk();//监控计数器
-  60   2        }
+  55   2                      Hdw_clk();
+  56   2                      Vup_clk();
+  57   2                      UpCtClk();
+  58   2                      BrakeClk();
+  59   2                      Monitor_clk();//监控计数器
+  60   2              }
   61   1      
-  62   1        if ( !T100MS )            //计时100MS
-  63   1        {
-  64   2          T100MS=T100MS_TIME;
-  65   2          if ( T1000MS )
-  66   2          {
-  67   3            T1000MS--;
-  68   3          }
+  62   1              if ( !T100MS )                                          //计时100MS
+  63   1              {
+  64   2                      T100MS=T100MS_TIME;
+  65   2                      if ( T1000MS )
+  66   2                      {
+  67   3                              T1000MS--;
+  68   3                      }
   69   2      
-  70   2          AtRun_clk();
-  71   2          err_clk();
-  72   2          DZP_clk();
-  73   2      //    test_clk();
-  74   2          DZP_clk();
-  75   2          mRunClk();
-  76   2          UpDcClk();
-  77   2        }
+  70   2                      AtRun_clk();
+  71   2                      err_clk();
+  72   2                      DZP_clk();
+  73   2      //              test_clk();
+  74   2                      DZP_clk();
+  75   2                      mRunClk();
+  76   2                      UpDcClk();
+  77   2              }
   78   1      
-  79   1        if ( !T1000MS )         //计时1000MS
-  80   1        {
-  81   2          T1000MS=T1000MS_TIME;
-  82   2        }
-  83   1      //  test++;             //主程序在100MS内循环跑N次，此参数可观察单片机运行效率
+  79   1              if ( !T1000MS )                                 //计时1000MS
+  80   1              {
+  81   2                      T1000MS=T1000MS_TIME;
+  82   2              }
+  83   1      //      test++;                                                 //主程序在100MS内循环跑N次，此参数可观察单片机运行效率
   84   1      }
   85          
 

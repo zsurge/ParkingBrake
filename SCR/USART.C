@@ -97,7 +97,11 @@ void Uart_Print ( u8 speakTask,u8 num )
 
 	switch ( speakTask )
 	{
-
+        case 1:
+            sen_buff[0]=0x28;  
+            sen_buff[1]=0x30+num;  
+            sen_buff[2]=0x29;  
+            break;
 		case 3:
           	sen_buff[0]=num + 63;
 			sen_buff[1]=0x30+SpeRinN/100%10;
@@ -105,22 +109,20 @@ void Uart_Print ( u8 speakTask,u8 num )
 			sen_buff[3]=0x30+SpeRinN%10;
 			sen_buff[4]=0x2c;
 		
-			sen_buff[5]=0x30+gRepairMotor.BasicSpringNum/100%10;
-			sen_buff[6]=0x30+gRepairMotor.BasicSpringNum/10%10;
-			sen_buff[7]=0x30+gRepairMotor.BasicSpringNum%10;
+			sen_buff[5]=0x30+gRepairMotor.CalcCounts/100%10;
+			sen_buff[6]=0x30+gRepairMotor.CalcCounts/10%10;
+			sen_buff[7]=0x30+gRepairMotor.CalcCounts%10;
 			sen_buff[8]=0x2c;            
-            sen_buff[9]=0x30+gRepairMotor.FlagValue%10;
+            sen_buff[9]=0x30+gRepairMotor.OverCount%10;
             sen_buff[10]=0x2c;
 			sen_buff[11]=0x30+gRepairMotor.CurrentCounts/100%10;
 			sen_buff[12]=0x30+gRepairMotor.CurrentCounts/10%10;
             sen_buff[13]=0x30+gRepairMotor.CurrentCounts%10;
             
             sen_buff[14]=0x2c;
-            sen_buff[15]=0x30+gRepairMotor.CalcCounts/10%10;
-            sen_buff[16]=0x30+gRepairMotor.CalcCounts%10;
-			sen_buff[17]=0x2C;
-            sen_buff[18]=0x30+gRepairMotor.OffsetSum/10%10;
-            sen_buff[19]=0x30+gRepairMotor.OffsetSum%10;
+            sen_buff[15]=0x30+gRepairMotor.OffsetSum/10%10;
+            sen_buff[16]=0x30+gRepairMotor.OffsetSum%10;
+			sen_buff[17]=0x3B;   
 			break;
 
 

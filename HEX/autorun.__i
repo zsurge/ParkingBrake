@@ -1,0 +1,1 @@
+"..\SCR\autorun.c" OPTIMIZE (9,SPEED) BROWSE INCDIR(..\INC) DEBUG OBJECTEXTEND PRINT(.\autorun.lst) OBJECT(..\HEX\autorun.obj)

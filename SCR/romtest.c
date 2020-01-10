@@ -170,7 +170,7 @@ bit SectotRT ( u16 dx, u8 nu, u8 tt )
 	{
 		return 0;
 	}
-	return 0;
+	
 
 }
 

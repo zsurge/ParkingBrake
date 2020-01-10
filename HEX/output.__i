@@ -1,0 +1,1 @@
+"..\SCR\output.c" OPTIMIZE (9,SPEED) BROWSE INCDIR(..\INC) DEBUG OBJECTEXTEND PRINT(.\output.lst) OBJECT(..\HEX\output.obj)

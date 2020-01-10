@@ -47,15 +47,14 @@
 #define	MACHI_MASTER				1			//主机
 
 
-
-
-
-
-
-
-
-
-
+//***************设备规格******************//
+#define FENCE_4M3                        0
+#define FENCE_4M2                        1
+#define FENCE_4M1                        2
+#define FENCE_4M0                        3
+#define FENCE_3M8                        4
+#define FENCE_3M5                        5
+#define FENCE_3M0                        6
 
 
 
@@ -136,7 +135,15 @@ extern volatile u8 xdata Even;				//事件
 extern volatile u8 xdata EveNu;				//事件个数
 extern volatile u8 xdata McuId;				//设备号
 
+typedef struct MOTOR_LIMIT
+{
+    u8 Two_Spring_Max_Num;//第8次记录的最大值，若超出此值，说明弹簧弹力不足
+    u8 Three_Spring_Offset_Sum;//3条弹簧偏移量和，超过此值，说明弹力不足
+    u8 Two_Spring_Offset_Sum;//2条弹簧偏称量和，超过此值，说明弹力不足   
+    u8 OverCnt;              //超过一个计算周期的次数，也就是每一次计算偏移量大于6的次数，超过此值，说明弹力不足
+}xdata MOTOR_LIMIT_STRU;
 
+extern volatile MOTOR_LIMIT_STRU gMotorLimit;  //判定当前是否需要抬闸
 
 
 
@@ -159,7 +166,7 @@ void Vup_clk();
 void BmRed();
 void InputTask();
 
-
+void SetLimit();
 
 
 

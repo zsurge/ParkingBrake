@@ -27,6 +27,9 @@ u8 xdata EveNu;				//事件个数
 
 u8 xdata McuId;				//设备号
 
+volatile MOTOR_LIMIT_STRU gMotorLimit;  //判定当前是否需要抬闸
+
+
 void intInput()
 {
 	HupNum=0;
@@ -46,6 +49,7 @@ void intInput()
 	EveNu=0;
 	McuId= 0;
 	DwSloBri= 0;
+    memset(&gMotorLimit,0x00,sizeof(gMotorLimit));    
 }
 
 void Dg_clk()
@@ -95,9 +99,91 @@ void Vup_clk()
 	}
 }
 
+/*****************************************************************************
+ 函 数 名  : void SetLimit
+ 功能描述  : 
+ 输入参数  : 无
+ 输出参数  : 无
+ 返 回 值  : 
+ 
+ 修改历史      :
+  1.日    期   : 2019年4月19日
+    作    者   : 张舵
+    修改内容   : 修改拨码开关所代表的含义，只有BM4 =0代表是主机 =1 代表是从机，
+              其它的每个值代表一种机芯和栅栏杆的规格，BM1/BM2/BM3都=1时代表不
+              使用报警功能
+*****************************************************************************/
+void SetLimit()
+{
+    u8 value = 0;
+    u8 bm1=0;
+    u8 bm2=0;
+    u8 bm3=0;
+
+    if(BM1)
+    {
+        bm1 = 1;
+    }
+    if(BM2)
+    {
+        bm2 = 1;
+    }
+    if(BM3)
+    {
+        bm3 = 1;
+    } 
+
+    value = (bm1<<2) + (bm2<<1) + bm3;  
+    
+    switch (value)
+    {
+        case FENCE_4M3:  
+            gMotorLimit.Two_Spring_Max_Num = 85;
+            gMotorLimit.Three_Spring_Offset_Sum = 8;
+            gMotorLimit.Two_Spring_Offset_Sum = 32; 
+            gMotorLimit.OverCnt = 2;
+
+            break;
+        case FENCE_4M2:
+            gMotorLimit.Two_Spring_Max_Num = 86;        //90;
+            gMotorLimit.Three_Spring_Offset_Sum = 15;   //20;
+            gMotorLimit.Two_Spring_Offset_Sum = 33;     //46; 
+            gMotorLimit.OverCnt = 2;
+
+            break;
+//        case FENCE_4M1:            
+//            break;
+        case FENCE_4M0:
+            gMotorLimit.Two_Spring_Max_Num = 86;
+            gMotorLimit.Three_Spring_Offset_Sum = 11;
+            gMotorLimit.Two_Spring_Offset_Sum = 35;
+            gMotorLimit.OverCnt = 2;
+
+            break;
+//        case FENCE_3M8:            
+//            break;
+        case FENCE_3M5:
+            gMotorLimit.Two_Spring_Max_Num = 86;
+            gMotorLimit.Three_Spring_Offset_Sum = 12;
+            gMotorLimit.Two_Spring_Offset_Sum = 35; 
+            gMotorLimit.OverCnt = 2;   
+
+            break;
+//        case FENCE_3M0:            
+//            break;
+        default:
+            gMotorLimit.Two_Spring_Max_Num = 250;
+            gMotorLimit.Three_Spring_Offset_Sum = 250;
+            gMotorLimit.Two_Spring_Offset_Sum = 250;
+            gMotorLimit.OverCnt = 250;
+            break;
+    }
+
+    
+}
 
 void BmRed()		//拨码参数读取
-{
+{     
 	if ( !BM4 )
 	{
 		McuId= MACHI_MASTER;
@@ -107,15 +193,17 @@ void BmRed()		//拨码参数读取
 		McuId= MACHI_VICE;
 	}
 
-	if ( !BM1 )
-	{
-		DwSloBri|=1;
-	}
-	if ( !BM2 )
-	{
-		DwSloBri|=2;
-	}
-
+/* BEGIN: Added by 张舵, 2019/4/19 */
+//这里不需要使用拨码开关来设置缓冲角度
+//	if ( !BM1 )
+//	{
+//		DwSloBri|=1;
+//	}
+//    
+//	if ( !BM2 )
+//	{
+//		DwSloBri|=2;
+//	}
 }
 
 

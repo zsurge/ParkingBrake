@@ -167,14 +167,23 @@
 #define M_SLOW	 	{ BigM5u= M_NA; BigM3u= M_EN; LitM= M_EN; }			//
 
 //电机监控
-#define START_POSITION 35   //从第50次进入中断开始计算
+#define START_POSITION 35   //从第35次进入中断开始计算
 #define END_POSITION (START_POSITION+TIMER_FRE*SPRING_CHECK_NUM ) //从第50次进入中断开始计算
 #define TIMER_FRE  5        //计算周期
-#define THREE_SPRING_LOWER_LIMIT 11//如果统计总的圈数差大于这个值，说明已经不是三根弹簧了
-#define TWO_SPRINT_LOWER_LIMIT 28//如果统计总的圈数差大于这个值，说明已经不是两根弹簧了
 #define BASIC_SPRING_NUM 39   //初始值
 #define BASIC_OFFSET_250MS 6 //每250ms测速环转到的圈数
 #define SPRING_CHECK_NUM 8//取样次数
+
+//#ifdef GAN_CHANG_4M2
+//#define TWO_SPRING_MIN_NUM 90   //两条弹簧在第8次查询的时候，最大是90转
+//#define THREE_SPRING_LOWER_LIMIT 20 //4.2米为20 //4.0米为11//如果统计总的圈数差大于这个值，说明已经不是三根弹簧了
+//#define TWO_SPRINT_LOWER_LIMIT 46//4.2米值为 46 //4.0米值为28//如果统计总的圈数差大于这个值，说明已经不是两根弹簧了
+//#else
+//#define TWO_SPRING_MIN_NUM 86   //两条弹簧在第8次查询的时候，最大是86转
+//#define THREE_SPRING_LOWER_LIMIT 11 //4.2米为20 //4.0米为11//如果统计总的圈数差大于这个值，说明已经不是三根弹簧了
+//#define TWO_SPRINT_LOWER_LIMIT 28//4.2米值为 46 //4.0米值为28//如果统计总的圈数差大于这个值，说明已经不是两根弹簧了
+//#endif
+
 
 typedef struct 
 {
@@ -184,9 +193,9 @@ typedef struct
 	u8 CalcCounts;      //计算次数
     u8 ExFlag;          //是否执行定时器的标志位
 	u8 Direction;       //电机转动方向	
-	u8 FlagValue;       //统计超限次数	
-	u8 BasicSpringNum;  //第一次落点的位置
+    u8 OverCount;          //偏移量超过一个周期的次数
 	u8 OutFlag;         //电平信号转换
+//	u8 BasicSpringNum;  //第一次落点的位置
 //	u8 CurrentMotorType;//当前电机类型
 //	u8 CurrentSprintType;//当前弹簧类型
 //	u8 CurrentMotorPosition;//当前电机位置

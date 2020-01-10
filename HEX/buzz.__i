@@ -1,0 +1,1 @@
+"..\SCR\buzz.c" OPTIMIZE (9,SPEED) BROWSE INCDIR(..\INC) DEBUG OBJECTEXTEND PRINT(.\buzz.lst) OBJECT(..\HEX\buzz.obj)

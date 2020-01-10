@@ -1,0 +1,1 @@
+"..\SCR\romtest.c" OPTIMIZE (9,SPEED) BROWSE INCDIR(..\INC) DEBUG OBJECTEXTEND PRINT(.\romtest.lst) OBJECT(..\HEX\romtest.obj)

@@ -1,3 +1,6 @@
----- test_clk Matches (2 in 1 files) ----
-clk.c (SCR) line 34 : void test_clk()
-clk in clk.c (SCR) : 		test_clk();
+---- DZP_UP Matches (5 in 3 files) ----
+Main.c (SCR) line 45 : //        DZP_UP;
+Main.c (SCR) line 60 : //        DZP_UP
+Main.c (SCR) line 72 : //        DZP_UP;
+OPutTask in output.c (SCR) : 			DZP_UP;
+output.h (INC) line 34 : #define	DZP_UP		{ DZP1=DZP_ON; DZP0= DZP_NA; }			//道闸抬闸反馈
